@@ -4,7 +4,7 @@ menu_id: social
 title: Zhi Zheng
 h1: ''
 logo:
-  subtitle: About Me
+  subtitle: 'About Me | tldr'
 giscus:
   data-mapping: number
   data-term: 22
