@@ -1,0 +1,35 @@
+Notes for myself:
+
+To Do List:
+
+- do something about the blog section or remove it
+- add more to the personalized section
+- finalize the projects section
+    - add a gallery
+
+- add some socials
+    - https://www.youtube.com/@zhizheng2913
+    - 
+===============================
+- deployment on github do:
+> hexo clear
+> hexo deploy
+===============================
+
+===============================
+- adding a new page
+> hexo new page <dir>/<name>
+===============================
+
+===============================
+- publishing a new article
+> hexo new post <name of post>
+    - if using images make sure to use the same naming scheme as add it to the assets folder
+===============================
+
+check the scaffolds for more specific posts
+
+useful links:
+https://hexo.io/docs/commands#generate
+https://xaoxuu-com.translate.goog/wiki/stellar/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp
+https://xaoxuu.com/wiki/stellar/

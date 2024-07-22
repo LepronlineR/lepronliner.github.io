@@ -1,0 +1,889 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>L2-regularized Logistic Regression Derived - Zhi Zheng</title>
+
+  
+    <meta name="description" content="Learn how the loss function for l2-regularized logistic regression is derived">
+<meta property="og:type" content="article">
+<meta property="og:title" content="L2-regularized Logistic Regression Derived">
+<meta property="og:url" content="http://lepronliner.github.io/2024/07/21/l2-regularized-lr-math/index.html">
+<meta property="og:site_name" content="Zhi Zheng">
+<meta property="og:description" content="Learn how the loss function for l2-regularized logistic regression is derived">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://lepronliner.github.io/assets/posts/l2-regularized-lr-math/sigmoid.png">
+<meta property="og:image" content="http://lepronliner.github.io/assets/posts/l2-regularized-lr-math/sigmoid_deriv.png">
+<meta property="article:published_time" content="2024-07-21T21:22:48.000Z">
+<meta property="article:modified_time" content="2024-07-22T01:39:18.574Z">
+<meta property="article:author" content="Zhi Zheng">
+<meta property="article:tag" content="math">
+<meta property="article:tag" content="machine-learning">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="pytorch">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://lepronliner.github.io/assets/posts/l2-regularized-lr-math/sigmoid.png">
+  
+  
+  
+  <meta name="keywords" content="math,machine-learning,python,pytorch">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/photos/butterfly.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Zhi Zheng</div><div class="sub normal cap">personal blog</div><div class="sub hover cap" style="opacity:0"> hello</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="Home" href="/" style="color:#1BCDFC"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M5.879 2.879C5 3.757 5 5.172 5 8v8c0 2.828 0 4.243.879 5.121C6.757 22 8.172 22 11 22h2c2.828 0 4.243 0 5.121-.879C19 20.243 19 18.828 19 16V8c0-2.828 0-4.243-.879-5.121C17.243 2 15.828 2 13 2h-2c-2.828 0-4.243 0-5.121.879M8.25 17a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75M9 12.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5zM8.25 9A.75.75 0 0 1 9 8.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 9" clip-rule="evenodd"/><path fill="currentColor" d="M5.235 4.058C5 4.941 5 6.177 5 8v8c0 1.823 0 3.058.235 3.942L5 19.924c-.975-.096-1.631-.313-2.121-.803C2 18.243 2 16.828 2 14v-4c0-2.829 0-4.243.879-5.121c.49-.49 1.146-.707 2.121-.803zm13.53 15.884C19 19.058 19 17.822 19 16V8c0-1.823 0-3.059-.235-3.942l.235.018c.975.096 1.631.313 2.121.803C22 5.757 22 7.17 22 9.999v4c0 2.83 0 4.243-.879 5.122c-.49.49-1.146.707-2.121.803z" opacity=".5"/></svg></a><a class="nav-item" title="Blogs" href="/blogs/" style="color:#3DC550"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M14.25 4.48v3.057c0 .111 0 .27.02.406a.936.936 0 0 0 .445.683a.96.96 0 0 0 .783.072c.13-.04.272-.108.378-.159L17 8.005l1.124.534c.106.05.248.119.378.16a.958.958 0 0 0 .783-.073a.936.936 0 0 0 .444-.683c.021-.136.021-.295.021-.406V3.031c.113-.005.224-.01.332-.013C21.154 2.98 22 3.86 22 4.933v11.21c0 1.112-.906 2.01-2.015 2.08c-.97.06-2.108.179-2.985.41c-1.082.286-1.99 1.068-3.373 1.436c-.626.167-1.324.257-1.627.323V5.174c.32-.079 1.382-.203 1.674-.371c.184-.107.377-.216.576-.323m5.478 8.338a.75.75 0 0 1-.546.91l-4 1a.75.75 0 0 1-.364-1.456l4-1a.75.75 0 0 1 .91.546" clip-rule="evenodd"/><path fill="currentColor" d="M18.25 3.151c-.62.073-1.23.18-1.75.336a8.2 8.2 0 0 0-.75.27v3.182l.75-.356l.008-.005a1.13 1.13 0 0 1 .492-.13c.047 0 .094.004.138.01c.175.029.315.1.354.12l.009.005l.749.356V3.647z"/><path fill="currentColor" d="M12 5.214c-.334-.064-1.057-.161-1.718-.339C8.938 4.515 8.05 3.765 7 3.487c-.887-.234-2.041-.352-3.018-.412C2.886 3.007 2 3.9 2 4.998v11.146c0 1.11.906 2.01 2.015 2.079c.97.06 2.108.179 2.985.41c.486.129 1.216.431 1.873.726c1.005.451 2.052.797 3.127 1.034z" opacity=".5"/><path fill="currentColor" d="M4.273 12.818a.75.75 0 0 1 .91-.545l4 1a.75.75 0 1 1-.365 1.455l-4-1a.75.75 0 0 1-.545-.91m.909-4.545a.75.75 0 1 0-.364 1.455l4 1a.75.75 0 0 0 .364-1.455z"/></svg></a><a class="nav-item" title="Explore" href="/projects/" style="color:#FA6400"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M20 12a8 8 0 1 1-16 0a8 8 0 0 1 16 0" opacity=".5"/><path fill="currentColor" d="M17.712 5.453c1.047-.193 2.006-.259 2.797-.152c.77.103 1.536.393 1.956 1.064c.446.714.312 1.542-.012 2.258c-.33.728-.918 1.499-1.672 2.268c-1.516 1.547-3.836 3.226-6.597 4.697c-2.763 1.472-5.495 2.484-7.694 2.92c-1.095.217-2.098.299-2.923.201c-.8-.095-1.6-.383-2.032-1.075c-.47-.752-.296-1.63.07-2.379c.375-.768 1.032-1.586 1.872-2.403L4 12.416c0 .219.083.71.168 1.146c.045.23.09.444.123.596c-.652.666-1.098 1.263-1.339 1.756c-.277.567-.208.825-.145.925c.072.116.305.305.937.38c.609.073 1.44.018 2.455-.183c2.02-.4 4.613-1.351 7.28-2.772c2.667-1.42 4.85-3.015 6.23-4.423c.694-.707 1.15-1.334 1.377-1.836c.233-.515.167-.75.107-.844c-.07-.112-.289-.294-.883-.374c-.542-.072-1.272-.041-2.163.112L16.87 5.656c.338-.101.658-.17.842-.203"/></svg></a><a class="nav-item" title="about" href="/about/" style="color:#F44336"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m13.629 20.472l-.542.916c-.483.816-1.69.816-2.174 0l-.542-.916c-.42-.71-.63-1.066-.968-1.262c-.338-.197-.763-.204-1.613-.219c-1.256-.021-2.043-.098-2.703-.372a5 5 0 0 1-2.706-2.706C2 14.995 2 13.83 2 11.5v-1c0-3.273 0-4.91.737-6.112a5 5 0 0 1 1.65-1.651C5.59 2 7.228 2 10.5 2h3c3.273 0 4.91 0 6.113.737a5 5 0 0 1 1.65 1.65C22 5.59 22 7.228 22 10.5v1c0 2.33 0 3.495-.38 4.413a5 5 0 0 1-2.707 2.706c-.66.274-1.447.35-2.703.372c-.85.015-1.275.022-1.613.219c-.338.196-.548.551-.968 1.262" opacity=".5"/><path fill="currentColor" d="M10.99 14.308c-1.327-.978-3.49-2.84-3.49-4.593c0-2.677 2.475-3.677 4.5-1.609c2.025-2.068 4.5-1.068 4.5 1.609c0 1.752-2.163 3.615-3.49 4.593c-.454.335-.681.502-1.01.502c-.329 0-.556-.167-1.01-.502"/></svg></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2024/07/21/l2-regularized-lr-math/"><span class="title">L2-regularized Logistic Regression Derived</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-07-21T21:22:48.000Z">2024-07-21</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2024-07-22T01:39:18.574Z">2024-07-21</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>L2-regularized Logistic Regression Derived</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="L2-regularized-Logistic-Regression"><a href="#L2-regularized-Logistic-Regression" class="headerlink" title="L2-regularized Logistic Regression"></a>L2-regularized Logistic Regression</h1><p>Logistic regression is a very popular algorithm as it is fast to use and generally reliable for regression problems. L2 regularization or ridge regression or more commonly known as weight decay, is a technique that modifies a loss function by adding a regularization term to penalize drastic changes in the weight fitting well with the data. Here, I provide the derivation for l2-regularized logistic regression</p>
+<p>In order to derive the loss for logistic regression, we need to compute the gradient and hessians of that loss function. First we can define the function as:</p>
+<blockquote>
+<p>$$ f(ω’) &#x3D; \frac{1}{n} \sum_{i&#x3D;1}^nlog(1 + exp(-y_i(ω_0 + ω^Tx_i))) + λ ||ω||_2^2 $$</p>
+</blockquote>
+<p>Furthermore, note that the bias is not regularized; therefore, we consider $ω_0 &#x3D; [ω_0; ω]$ as the vertical concatenation of the bias and feature coefficients. Before we find the gradient, it is imperative for us to break down the function to help. Moreover, let us define another separate function that will come into use later. </p>
+<h2 id="The-Sigmoid-Function-sigma"><a href="#The-Sigmoid-Function-sigma" class="headerlink" title="The Sigmoid Function ($\sigma$)"></a>The Sigmoid Function ($\sigma$)</h2><p>The sigmoid function, which is generally represented as $\sigma$, is $$\text{sigmoid}(x) &#x3D; \frac{e^x}{1 + e^x} &#x3D; \frac{exp(x)}{1 + exp(x)} &#x3D; \sigma(x)$$</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/posts/l2-regularized-lr-math/sigmoid.png" alt="visualized sigmoid function"/></div><div class="image-meta"><span class="image-caption center">visualized sigmoid function</span></div></div>
+
+<p>Prior to it’s now common use for machine learning as an “activation function”, in a general sense, it is just a function that maps a value (x) to another value between 0 and 1. In a binary problem, we see this as an arbitrary number that evaluates to either true or false according to the input value.</p>
+<p>Moreover, let us find the derivative of the sigmoid function (hint: we will need it later)</p>
+<blockquote>
+<p>I’m too lazy to add the derivation for this. here it is.<br>$$ \sigma’(x) &#x3D; \sigma(x)(1-\sigma(x)) $$</p>
+</blockquote>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/posts/l2-regularized-lr-math/sigmoid_deriv.png" alt="blue line is the derivative of the sigmoid function"/></div><div class="image-meta"><span class="image-caption center">blue line is the derivative of the sigmoid function</span></div></div>
+
+<h2 id="Computing-for-∇-w’-f"><a href="#Computing-for-∇-w’-f" class="headerlink" title="Computing for $∇_{w’}f$"></a>Computing for $∇_{w’}f$</h2><p>In order to find the gradient, we need to find the derivative of the function according to the bias and feature coefficients. The order does not matter much.</p>
+<blockquote>
+<p>$$ ∇_{w’}f &#x3D; [\frac{\partial f}{\partial w_0}; \frac{\partial f}{\partial w}] $$</p>
+</blockquote>
+<h3 id="Finding-frac-partial-f-partial-w-0"><a href="#Finding-frac-partial-f-partial-w-0" class="headerlink" title="Finding $\frac{\partial f}{\partial w_0}$"></a>Finding $\frac{\partial f}{\partial w_0}$</h3><p>Here we apply $\frac{\partial}{\partial w_0}$ and separate for simplicity </p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w_0})(\frac{1}{n} \sum_{i&#x3D;1}^n \log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + λ ||w||_2^2) $$</p>
+</blockquote>
+<p>we can ignore the summation since it applies to all n, it wont change the derivative (we will have to substitute it back later)</p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w_0})λ||w||_2^2) $$</p>
+</blockquote>
+<p>we can separate the into two parts to make it easier to derive overall</p>
+<ul>
+<li><p>Derive $(\frac{\partial}{\partial w_0})λ||w||_2^2$:</p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w_0})λ||w||_2^2 &#x3D; 0 $$</p>
+</blockquote>
+</li>
+<li><p>Derive $(\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))$:</p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) $$<br>apply the derivative due to log<br>$$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * \frac{\partial}{\partial w_0} (1 + \exp(-y_i(ω_0 + w^Tx_i))) $$<br>apply the derivative again due to the exponent<br>$$\frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * (\exp(-y_i(ω_0 + w^Tx_i)) * (\frac{\partial}{\partial w_0} * -y_iω_0 - y_iw^Tx_i)) $$<br>apply the derivative, we can remove the term on the right since it is $w^T$<br>$$\frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * \exp(-y_i(ω_0 + w^Tx_i)) * -y_i $$<br>combine the terms together<br>$$-y_i * \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} $$<br>using the sigmoid function we defined earlier, we can dress up the function<br>$$ -y_i * \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} \rightarrow -y_i *\sigma(-y_i(w_0 + w^Tx_i))$$</p>
+</blockquote>
+</li>
+</ul>
+<p>Then place all derived values back into $\frac{\partial f}{\partial w_0}$,</p>
+<blockquote>
+<p>$$ \frac{1}{n} \sum_{i&#x3D;1}^n ((\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))) + ((\frac{\partial}{\partial w_0})λ||w||_2^2) $$</p>
+</blockquote>
+<blockquote>
+<p>$$ \frac{1}{n} \sum_{i&#x3D;1}^n -y_i *\sigma(-y_i(w_0 + w^Tx_i)) $$</p>
+</blockquote>
+<blockquote>
+<p>$$ \frac{\partial f}{\partial w_0} &#x3D; - \frac{1}{n} \sum_{i&#x3D;1}^n y_i *\sigma(-y_i(w_0 + w^Tx_i)) $$</p>
+</blockquote>
+<h3 id="Finding-frac-partial-f-partial-w"><a href="#Finding-frac-partial-f-partial-w" class="headerlink" title="Finding $\frac{\partial f}{\partial w}$:"></a>Finding $\frac{\partial f}{\partial w}$:</h3><p>follows the same format as before</p>
+<blockquote>
+<p>$$(\frac{\partial}{\partial w})(\frac{1}{n} \sum_{i&#x3D;1}^n \log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + λ ||w||_2^2)$$</p>
+</blockquote>
+<blockquote>
+<p>$$\frac{1}{n} \sum_{i&#x3D;1}^n ((\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w})λ||w||_2^2) $$</p>
+</blockquote>
+<ul>
+<li><p>Derive $(\frac{\partial}{\partial w})λ||w||_2^2$:</p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w_0})λ||w||_2^2 &#x3D; 2\lambda w $$</p>
+</blockquote>
+</li>
+<li><p>Derive $(\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))$:</p>
+<blockquote>
+<p>$$ (\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) $$<br>apply the derivative due to log<br>$$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * \frac{\partial}{\partial w} (1 + \exp(-y_i(ω_0 + w^Tx_i))) $$<br>apply the derivative again due to the exponent<br>$$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * \exp(-y_i(ω_0 + w^Tx_i)) * (\frac{\partial}{\partial w} * -y_iω_0 - y_iw^Tx_i)) $$<br>apply the derivative, and we dont eliminate the right term this time<br>$$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} * \exp(-y_i(ω_0 + w^Tx_i)) * -y_ix_i $$<br>organize the function<br>$$ -y_ix_i * \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))}$$<br>using the sigmoid function,<br>$$ -y_ix_i * \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} \rightarrow -y_ix_i *\sigma(-y_i(w_0 + w^Tx_i))$$</p>
+</blockquote>
+</li>
+</ul>
+<p>Then place all derived values back into $\frac{\partial f}{\partial w}$,</p>
+<blockquote>
+<p>$$ \frac{1}{n} \sum_{i&#x3D;1}^n ((\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w})λ||w||_2^2)) $$</p>
+</blockquote>
+<blockquote>
+<p>$$\frac{1}{n} \sum_{i&#x3D;1}^n -y_i *\sigma(-y_i(w_0 + w^Tx_i)) + 2\lambda w $$</p>
+</blockquote>
+<blockquote>
+<p>$$\frac{\partial f}{\partial w} &#x3D; - \frac{1}{n} \sum_{i&#x3D;1}^n y_ix_i *\sigma(-y_i(w_0 + w^Tx_i)) + 2\lambda w $$</p>
+</blockquote>
+<h3 id="Getting-∇-w’-f"><a href="#Getting-∇-w’-f" class="headerlink" title="Getting $∇_{w’}f$"></a>Getting $∇_{w’}f$</h3><blockquote>
+<p>$$∇_{w’}f &#x3D; [\frac{\partial f}{\partial w_0}; \frac{\partial f}{\partial w}]$$<br>$$ &#x3D; [ - \frac{1}{n} \sum_{i&#x3D;1}^n y_i *\sigma(-y_i(w_0 + w^Tx_i)) ; - \frac{1}{n} \sum_{i&#x3D;1}^n y_ix_i *\sigma(-y_i(w_0 + w^Tx_i))+ 2\lambda w] $$</p>
+</blockquote>
+<p>we can combine these terms together to form:</p>
+<div class="tag-plugin colorful note" color="blue"><div class="title">A:</div><div class="body"><p>$$∇_{w’}f&#x3D; - \frac{1}{n} (\sum_{i&#x3D;1}^n y_i *\sigma(-y_i(w_0 + w^Tx_i)) * \begin{bmatrix} 1\\ x_i \end{bmatrix}) + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$</p></div></div>
+
+<h3 id="Computing-for-∇-w’-2f"><a href="#Computing-for-∇-w’-2f" class="headerlink" title="Computing for $ ∇_{w’}^2f$"></a>Computing for $ ∇_{w’}^2f$</h3><p>in order to compute the hessian, we can take a shortcut and find the derivative based on each part of the gradient according to the hessian matrix.</p>
+<blockquote>
+<p>$$ ∇_{w’}^2f &#x3D; \begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \end{bmatrix}$$</p>
+</blockquote>
+<p>we can say that $\frac{\partial^2 f}{\partial w_0 \partial w} &#x3D; \frac{\partial^2 f}{\partial w \partial w_0}$ due to the rule of derivatives</p>
+<p>For the regularization term, the only time we add $2\lambda$ is when the we’re taking $\frac{\partial^2 f}{\partial w^2}$. Therefore, in our matrix, we can just represent the 2nd row and 2nd column ($\frac{\partial^2 f}{\partial w^2}$) for the regularization term. That means we just set the regularization term as $ + \begin{bmatrix} 0 &amp; 0 \\ 0 &amp; 2\lambda \end{bmatrix}$.</p>
+<p>Using chain rule for $\sigma(-y_i(w_0 + w^Tx_i))$</p>
+<ul>
+<li>$\nabla_{w_0}$:<blockquote>
+<p>$$ \sigma’(-y_i(w_0 + w^Tx_i)) &#x3D; \sigma’ * (-y_i(w_0 + w^Tx_i))’\<br>&#x3D; -y_i * \sigma(1 - \sigma)<br>$$</p>
+</blockquote>
+</li>
+<li>$\nabla_w$:<blockquote>
+<p>$$ \sigma’(-y_i(w_0 + w^Tx_i)) &#x3D; \sigma’ * (-y_i(w_0 + w^Tx_i))’\<br>&#x3D; x_i * \sigma(1 - \sigma)<br>$$</p>
+</blockquote>
+</li>
+</ul>
+<p>Then we can say for the hessian matrix, we can replace the result of what the partial derivative is for each respective $w$ or $w_0$</p>
+<blockquote>
+<p>$$ ∇_{w’}^2f &#x3D; \begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \end{bmatrix}$$</p>
+</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w_0^2}$:</p>
+<ul>
+<li>$-y_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>
+<p>$$ &#x3D; - \frac{1}{n} (\sum_{i&#x3D;1}^n y_i * -y_i * \sigma(1 - \sigma) * \begin{bmatrix} 1\\ x_i \end{bmatrix}) + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$</p>
+</blockquote>
+<blockquote>
+<p>$$ &#x3D; \frac{1}{n} (\sum_{i&#x3D;1}^n y_i^2 * \sigma(1 - \sigma)) * 1 + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$</p>
+</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w^2}$:</p>
+<ul>
+<li>$x_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>
+<p>$$ &#x3D; - \frac{1}{n} (\sum_{i&#x3D;1}^n y_i * x_i * \sigma(1 - \sigma) * \begin{bmatrix} 1\\ x_i \end{bmatrix}) + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix}$$</p>
+</blockquote>
+<blockquote>
+<p>$$ &#x3D; \frac{1}{n} (\sum_{i&#x3D;1}^n y_i^2 * \sigma(1 - \sigma)) * x_i + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$</p>
+</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w \partial w_0} &#x3D; \frac{\partial^2 f}{\partial w_0 \partial w}$</p>
+<ul>
+<li>$x_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>
+<p>$$ &#x3D; - \frac{1}{n} (\sum_{i&#x3D;1}^n y_i * \sigma(1 - \sigma) * \begin{bmatrix} 1\\ x_i \end{bmatrix}) + 2\lambda $$<br>$$ &#x3D; - \frac{1}{n} (\sum_{i&#x3D;1}^n y_i * \sigma(1 - \sigma) * x_i) + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$<br>or<br>$$ &#x3D; \frac{1}{n} (\sum_{i&#x3D;1}^n y_i * x_i * \sigma(1 - \sigma)) * 1 + 2\lambda \begin{bmatrix} 0\\ w \end{bmatrix} $$</p>
+</blockquote>
+<p>We can put all of the options from the gradients due to the hessian matrix (representing $x_i$):</p>
+<blockquote>
+<p>$$ \begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \end{bmatrix} &#x3D; \begin{bmatrix} 1 &amp; x_i\\ x_i &amp; x_i^2 \end{bmatrix} $$</p>
+</blockquote>
+<p>Then we can put it together and form:</p>
+<div class="tag-plugin colorful note" color="blue"><div class="title">A:</div><div class="body"><p>$$ ∇_{w’}^2f &#x3D; \frac{1}{n} (\sum_{i&#x3D;1}^n y_i \sigma(-y_i(w_0 + w^Tx_i))(1 - \sigma(-y_i(w_0 + w^Tx_i))) * \begin{bmatrix} 1 &amp; x_i\\ x_i &amp; x_i^2 \end{bmatrix}) + \begin{bmatrix} 0 &amp; 0\\ 0 &amp; 2\lambda \end{bmatrix} $$</p></div></div>
+
+<h1 id="L2-Regularized-Multinomial-Logistic-Regression"><a href="#L2-Regularized-Multinomial-Logistic-Regression" class="headerlink" title="L2-Regularized Multinomial Logistic Regression"></a>L2-Regularized Multinomial Logistic Regression</h1><p>For an extra challenge, here we derive the gradients for the loss function of a l2-regularized multinomial logistic regression</p>
+<blockquote>
+<p>$$f(W, b) &#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n[y_i^T(Wx_i + b) - log(1^Texp(Wx_i + b))] + \lambda||W||_F^2$$</p>
+</blockquote>
+<h2 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h2><p>(To be updated)</p>
+<blockquote>
+<p>Let us represent the softmax function: $$\text{softmax}(x) &#x3D; \frac{exp(x)}{1^T exp(x)}$$</p>
+</blockquote>
+<h2 id="Computing-for-f"><a href="#Computing-for-f" class="headerlink" title="Computing for f"></a>Computing for f</h2><h3 id="Finding-nabla-W-f"><a href="#Finding-nabla-W-f" class="headerlink" title="Finding $\nabla_W f$:"></a>Finding $\nabla_W f$:</h3><blockquote>
+<p>$$ f(W, b) &#x3D; $$<br>$$ -\frac{1}{n}\sum_{i&#x3D;1}^n[(\nabla_W)y_i^T(Wx_i + b) - (\nabla_W)log(1^Texp(Wx_i + b))] + (\nabla_W) \lambda||W||_F^2$$</p>
+</blockquote>
+<ul>
+<li><p>Derive $\nabla_W λ||W||_F^2$:</p>
+<blockquote>
+<p>$$ &#x3D; 2\lambda W $$</p>
+</blockquote>
+</li>
+<li><p>Derive $\nabla_W y_i^T(Wx_i + b)$:</p>
+<blockquote>
+<p>$$ &#x3D; y_i^Tx_i $$</p>
+</blockquote>
+</li>
+<li><p>Derive $\nabla_W log(1^Texp(Wx_i + b))$:</p>
+<blockquote>
+<p>using the chain rule twice:<br>$$ \log’(1^T exp(Wx_i + b)) * \sum_{l &#x3D; 1}^K \nabla_W [exp(Wx_i + b)_l] $$</p>
+</blockquote>
+<ul>
+<li><p>apply the log</p>
+<blockquote>
+<p>$$ \frac{1}{1^T exp(Wx_i + b)} * \sum_{l &#x3D; 1}^K [exp(Wx_i + b)_l] * \nabla_W [&lt;w_l, x_i&gt;] $$</p>
+</blockquote>
+</li>
+<li><p>note that $ \nabla_W [&lt;w_l, x_i&gt;]$ is equivalent to $x_i$ since we are taking the cross product of a static $x_i$ given for all ls in the sum, and then the gradient of such would result in $x_i$</p>
+<blockquote>
+<p>$$ &#x3D; \frac{1}{1^T exp(Wx_i + b)} * \sum_{l &#x3D; 1}^K [exp(Wx_i + b)_l] * x_i$$</p>
+</blockquote>
+</li>
+<li><p>combine</p>
+<blockquote>
+<p>$$ &#x3D; \sum_{l &#x3D; 1}^K\frac{[exp(Wx_i + b)_l]}{1^T exp(Wx_i + b)} * x_i$$</p>
+</blockquote>
+</li>
+<li><p>use softmax</p>
+<blockquote>
+<p>$$ &#x3D; \sum_{l &#x3D; 1}^K softmax(Wx_i + b)_l * x_i$$</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>$$ &#x3D; softmax(Wx_i + b) * x_i$$</p>
+</blockquote>
+<p>plug in for the main equation</p>
+<blockquote>
+<p>$$ \nabla_W f(W, b) &#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n[y_i^Tx_i - softmax(Wx_i + b) * x_i] + 2\lambda W$$<br>$$&#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n(y_i^T - softmax(Wx_i + b)) * x_i + 2\lambda W $$</p>
+</blockquote>
+<h3 id="Finding-nabla-b-f"><a href="#Finding-nabla-b-f" class="headerlink" title="Finding $\nabla_b f$:"></a>Finding $\nabla_b f$:</h3><ul>
+<li><p>Derive $\nabla_b λ||W||_F^2$:</p>
+<blockquote>
+<p>$$ &#x3D; 0$$</p>
+</blockquote>
+</li>
+<li><p>Derive $\nabla_b y_i^T(Wx_i + b)$:</p>
+<blockquote>
+<p>$$ &#x3D; y_i$$</p>
+</blockquote>
+</li>
+<li><p>Derive $\nabla_b log(1^Texp(Wx_i + b))$:</p>
+<blockquote>
+<p>using the chain rule twice:<br>$$ &#x3D; \log’(1^T exp(Wx_i + b)) * \sum_{l &#x3D; 1}^K \nabla_W [exp(Wx_i + b)_l] $$</p>
+</blockquote>
+<ul>
+<li><p>apply the derivative again due to the exponent</p>
+<blockquote>
+<p>$$ \frac{1}{1^T exp(Wx_i + b)} * \sum_{l &#x3D; 1}^K * [exp(Wx_i + b)_l] * \nabla_W [&lt;w_l, x_i&gt;] $$<br>since we are finding the gradient in respect to b, we can cancel out terms:<br>$$ \frac{1}{1^T exp(Wx_i + b)} * [exp(Wx_i + b)_l] $$</p>
+</blockquote>
+</li>
+<li><p>add the summation back</p>
+<blockquote>
+<p>$$ \sum_{l &#x3D; 1}^K \frac{exp(Wx_i + b)_l}{1^T exp(Wx_i + b)} $$  </p>
+</blockquote>
+</li>
+<li><p>use softmax</p>
+<blockquote>
+<p>$$ \sum_{l &#x3D; 1}^K softmax(Wx_i + b)_l $$<br>$$ softmax(Wx_i + b) $$</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>Put it all together</p>
+<blockquote>
+<p>$$ \nabla_b f(W, b) &#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n y_i - softmax(Wx_i + b) $$</p>
+</blockquote>
+<h2 id="Both-results"><a href="#Both-results" class="headerlink" title="Both results"></a>Both results</h2><div class="tag-plugin colorful note" color="blue"><div class="title">$∇_Wf$</div><div class="body"><p>$$ &#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n(y_i - softmax(Wx_i + b))x_i^T + 2\lambda W $$</p></div></div>
+
+<div class="tag-plugin colorful note" color="blue"><div class="title">$∇_bf$</div><div class="body"><p>$$ &#x3D; -\frac{1}{n}\sum_{i&#x3D;1}^n(y_i - softmax(Wx_i + b)) $$</p></div></div>
+
+<h2 id="Empirically-verify-our-derivation-utilizing-PyTorch"><a href="#Empirically-verify-our-derivation-utilizing-PyTorch" class="headerlink" title="Empirically verify our derivation utilizing PyTorch"></a>Empirically verify our derivation utilizing PyTorch</h2><p>Here we will use PyTorch as a tool to evaluate the gradient, then we will apply our own solution to get a result. </p>
+<h3 id="Load-and-prepare-a-dataset"><a href="#Load-and-prepare-a-dataset" class="headerlink" title="Load and prepare a dataset"></a>Load and prepare a dataset</h3><!-- cell -->
+<p><strong>Using sklearn wine dataset and one hot encode the targets</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_wine</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> OneHotEncoder</span><br><span class="line"></span><br><span class="line">wine_data = load_wine()</span><br><span class="line">X_wine = wine_data.data</span><br><span class="line">Y_wine = wine_data.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># add to Y dim</span></span><br><span class="line">Y_wine = Y_wine.reshape(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">enc = OneHotEncoder(sparse_output=<span class="literal">False</span>)</span><br><span class="line">enc.fit(Y_wine)</span><br><span class="line">Y_onehot = enc.transform(Y_wine)</span><br><span class="line"></span><br><span class="line">n, d = X_wine.shape</span><br><span class="line">n, k = Y_onehot.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># convert to pytorch</span></span><br><span class="line">Y_onehot = torch.from_numpy(Y_onehot).to(torch.<span class="built_in">float</span>)</span><br><span class="line">X_wine = torch.from_numpy(X_wine).to(torch.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># init parameter tensor (w) with bias (w0 = 1)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights_wine</span>(<span class="params">d, k</span>):</span><br><span class="line">  w = torch.ones((d, k), device=device, requires_grad=<span class="literal">True</span>)</span><br><span class="line">  w = w/(<span class="built_in">len</span>(X_wine)) <span class="comment"># prevent overflow from exp</span></span><br><span class="line">  w.retain_grad()</span><br><span class="line">  <span class="keyword">return</span> w</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_bias_wine</span>(<span class="params">k</span>):</span><br><span class="line">  b = torch.ones((<span class="number">1</span>, k), device=device, requires_grad=<span class="literal">True</span>)</span><br><span class="line">  b = b/(<span class="built_in">len</span>(X_wine)) <span class="comment"># prevent overflow from exp</span></span><br><span class="line">  b.retain_grad()</span><br><span class="line">  <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line">W_test = init_weights_wine(d, k)</span><br><span class="line">b_test = init_bias_wine(k)</span><br></pre></td></tr></table></figure></div></div>
+
+<h3 id="Define-the-loss-function-for-MLR"><a href="#Define-the-loss-function-for-MLR" class="headerlink" title="Define the loss function for MLR"></a>Define the loss function for MLR</h3><p>Define the function so that we can call .backward() from pytorch and evaluate it from our answer.</p>
+<!-- cell -->
+<p><strong>Loss function</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the loss function for l2 regularized multinomial logistic regression</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f_multi</span>(<span class="params">X, Y, W, b, lambda_v=<span class="number">0</span></span>):</span><br><span class="line">    <span class="keyword">return</span> -torch.mean(torch.<span class="built_in">sum</span>((Y * torch.matmul(X, W) + b), dim=<span class="number">1</span>) - torch.logsumexp(torch.matmul(X, W) + b, dim=<span class="number">1</span>)) + lambda_v * torch.norm(W, <span class="string">&#x27;fro&#x27;</span>)**<span class="number">2</span></span><br></pre></td></tr></table></figure></div></div>
+
+<h3 id="Prepare-and-compare-both-our-solution-and-pytorch"><a href="#Prepare-and-compare-both-our-solution-and-pytorch" class="headerlink" title="Prepare and compare both our solution and pytorch"></a>Prepare and compare both our solution and pytorch</h3><!-- cell -->
+<p><strong>Evaluate the gradient using pytorch</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">W_pytorch = init_weights_wine(d, k)</span><br><span class="line">b_pytorch = init_bias_wine(k)</span><br><span class="line"></span><br><span class="line">W_pytorch.grad = <span class="literal">None</span></span><br><span class="line">b_pytorch.grad = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">loss = f_multi(X_wine, Y_onehot, W_pytorch, b_pytorch, lambda_v=<span class="number">1</span>)</span><br><span class="line">loss.backward()</span><br></pre></td></tr></table></figure></div></div>
+
+<!-- cell -->
+<p><strong>Define and evaluate our derivation</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the loss function for l2 regularized multinomial logistic regression</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f_multi_grad_w</span>(<span class="params">X, Y, W, b, lambda_v = <span class="number">0</span></span>):</span><br><span class="line">  logits = torch.matmul(X, W) + b</span><br><span class="line">  <span class="keyword">return</span> -torch.matmul((Y - torch.softmax(logits, dim=<span class="number">1</span>)).T, X) / <span class="built_in">len</span>(X) + <span class="number">2</span> * lambda_v * W</span><br><span class="line"></span><br><span class="line">my_W = init_weights_wine(d, k)</span><br><span class="line">my_b = init_bias_wine(k)</span><br><span class="line"></span><br><span class="line">myWGrad = f_multi_grad_w(X_wine, Y_onehot, my_W, my_b, lambda_v=<span class="number">1</span>)</span><br><span class="line">myBGrad = f_multi_grad_b(X_wine, Y_onehot, my_W, my_b)</span><br></pre></td></tr></table></figure></div></div>
+
+<h3 id="Empirical-Results"><a href="#Empirical-Results" class="headerlink" title="Empirical Results"></a>Empirical Results</h3><!-- cell -->
+<p><strong>Weight gradients</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.norm(W_pytorch.grad, <span class="string">&#x27;fro&#x27;</span>) - torch.norm(myWGrad, <span class="string">&#x27;fro&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div>
+<blockquote>
+<p>tensor(4.5776e-05, grad_fn&#x3D;<SubBackward0>)</p>
+</blockquote>
+<!-- cell -->
+<p><strong>Bias gradients</strong></p>
+<div class="tag-plugin colorful note" child="codeblock"><div class="body"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.norm(W_pytorch.grad, <span class="string">&#x27;fro&#x27;</span>) - torch.norm(myWGrad, <span class="string">&#x27;fro&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div>
+<blockquote>
+<p>tensor(-2.9802e-08, grad_fn&#x3D;<SubBackward0>)</p>
+</blockquote>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>This work is licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></p>
+</div>
+    </section>
+    
+    <section id="share">
+      <div class="header"><span>Share</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="http://lepronliner.github.io/2024/07/21/l2-regularized-lr-math/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;Copied!&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+      </div>
+    </section>
+    </div>
+</article>
+
+
+<div class="related-wrap" id="related-posts"></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p><span id="busuanzi_container_site_pv">Total viewers: <span id="busuanzi_value_site_pv"></span> </span></p>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<p>Created by <a href="/">Zhi Zheng</a> with <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1">Stellar 1.29.1</a>.</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#L2-regularized-Logistic-Regression"><span class="toc-text">L2-regularized Logistic Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Sigmoid-Function-sigma"><span class="toc-text">The Sigmoid Function ($\sigma$)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Computing-for-%E2%88%87-w%E2%80%99-f"><span class="toc-text">Computing for $∇_{w’}f$</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-frac-partial-f-partial-w-0"><span class="toc-text">Finding $\frac{\partial f}{\partial w_0}$</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-frac-partial-f-partial-w"><span class="toc-text">Finding $\frac{\partial f}{\partial w}$:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-%E2%88%87-w%E2%80%99-f"><span class="toc-text">Getting $∇_{w’}f$</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Computing-for-%E2%88%87-w%E2%80%99-2f"><span class="toc-text">Computing for $ ∇_{w’}^2f$</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#L2-Regularized-Multinomial-Logistic-Regression"><span class="toc-text">L2-Regularized Multinomial Logistic Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax"><span class="toc-text">Softmax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Computing-for-f"><span class="toc-text">Computing for f</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-nabla-W-f"><span class="toc-text">Finding $\nabla_W f$:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-nabla-b-f"><span class="toc-text">Finding $\nabla_b f$:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Both-results"><span class="toc-text">Both results</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Empirically-verify-our-derivation-utilizing-PyTorch"><span class="toc-text">Empirically verify our derivation utilizing PyTorch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Load-and-prepare-a-dataset"><span class="toc-text">Load and prepare a dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Define-the-loss-function-for-MLR"><span class="toc-text">Define the loss function for MLR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prepare-and-compare-both-our-solution-and-pytorch"><span class="toc-text">Prepare and compare both our solution and pytorch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Empirical-Results"><span class="toc-text">Empirical Results</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"post","path":"/search.json","content":false,"codeblock":false,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    processEscapes: true
+  }
+});
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Ctrl+C`,
+        success_text: `✔️`,
+        toast: `Saved on Clipboard`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
