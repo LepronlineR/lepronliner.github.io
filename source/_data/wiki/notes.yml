@@ -1,0 +1,7 @@
+name: memo
+title: memo
+icon: 
+cover:
+coverpage: [cover, title, description] # 封面页显示的内容
+
+base_dir: /notes/

@@ -1,0 +1,93 @@
+
+
+######## Sidebar ########
+sidebar:
+  logo:
+    avatar: '[config.avatar](/about/)' # you can set avatar link in _config.yml or '[https://xxx.png](/about/)'
+    title: '[config.title](/)' # you can set html tag like: '[<img no-lazy height="32px" src="xxx"/>](/)'
+  menu:
+    # post: '[btn.blog](/)'
+    # wiki: '[btn.wiki](/wiki/)'
+    # friends: '[友链](/friends/)'
+    # about: '[关于](/about/)'
+  # Sidebar widgets
+  widget_layout:
+    index: [welcome, recent] # for home/wiki/categories/tags/archives/404 pages
+    page: [welcome, toc] # for pages using 'layout:page'
+    post: [toc, repo_info] # for pages using 'layout:post'
+    wiki: [toc, repo_info, wiki_more] # for pages using 'layout:wiki'
+  widgets:
+    # Recent update
+    recent:
+      layout: recent
+      rss: # /atom.xml # npm i hexo-generator-feed
+      limit: 5 # Count of posts
+    # TOC (valid only in layout:post/wiki)
+    toc:
+      layout: toc
+      list_number: false
+      min_depth: 2
+      max_depth: 5
+      fallback: recent # Use a backup widget when toc does not exist.
+    # welcome
+    welcome:
+      layout: markdown
+      
+menubar:
+  columns: 4 
+    # How many items in a row: 
+    # You can add more according to your own needs, just meet the following format 
+  items:
+  - id: home # Highlighted menu_id in the page 
+    theme: '#1BCDFC' # The color when highlighted is only valid when fill="currentColor" in svg 
+    icon: solar:documents-bold-duotone # Supports svg/img tags, which can be defined in the icons.yml file, and also supports the URL of external images 
+    title : Home # Title 
+    url: / # Jump link, supports relative paths and absolute paths 
+  - id: blogs 
+    theme: '#3DC550' 
+    icon: solar:notebook-bookmark-bold-duotone 
+    title: Blogs 
+    url: /blogs/ 
+  - id: projects 
+    theme: '#FA6400' 
+    icon: solar:planet-bold-duotone 
+    title: Explore 
+    url: /projects/ 
+  - id: about 
+    theme: '#F44336' 
+    icon: solar:chat-square-like-bold-duotone 
+    title: about 
+    url: /about/
+
+search:
+  service: local_search # local_search, todo...
+  local_search: # use indexing: false to be unsearchable
+    field: all # post, page, all
+    path: /search.json
+    content: true # search the content
+    codeblock: false # search code blocks
+
+article:
+  share: [link]
+  type: tech
+  auto_cover: true
+  license: 'This work is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)'
+  
+  # npm i hexo-related-popular-posts 
+  related_posts: 
+    enable: true 
+    title: Read more
+
+footer:
+   content: |
+    Created by [{author.name}](/) with [{theme.name} {theme.version}]({theme.tree}).
+
+style:
+  leftbar: 
+    background-image: # /assets/photos/photo_nahwah_1.jpg
+    blur-px: 100px # blur radius 
+    blur-bg: var(--alpha60) # blur color
+  border-radius:
+    bar: 4px
+    card: 4px
+    block: 4px
