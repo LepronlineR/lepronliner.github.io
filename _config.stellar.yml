@@ -67,6 +67,12 @@ search:
     content: true # search the content
     codeblock: false # search code blocks
 
+copycode: 
+  enable: true 
+  js: /js/plugins/copycode.js 
+  default_text: 'Ctrl+C' # Button display text 
+  success_text: '✔️' # Copy success information
+
 article:
   share: [link]
   type: tech
@@ -77,9 +83,11 @@ article:
   related_posts: 
     enable: true 
     title: Read more
-
+    
 footer:
-   content: |
+  content: |
+    <span id="busuanzi_container_site_pv">Total viewers: <span id="busuanzi_value_site_pv"></span> </span>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     Created by [{author.name}](/) with [{theme.name} {theme.version}]({theme.tree}).
 
 style:
