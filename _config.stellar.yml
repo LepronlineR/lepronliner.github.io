@@ -1,4 +1,4 @@
-
+favicon: /source/favicon.ico
 
 ######## Sidebar ########
 sidebar:
@@ -62,16 +62,10 @@ menubar:
 search:
   service: local_search # local_search, todo...
   local_search: # use indexing: false to be unsearchable
-    field: all # post, page, all
+    field: post # post, page, all
     path: /search.json
-    content: true # search the content
+    content: false # search the content
     codeblock: false # search code blocks
-
-copycode: 
-  enable: true 
-  js: /js/plugins/copycode.js 
-  default_text: 'Ctrl+C' # Button display text 
-  success_text: '✔️' # Copy success information
 
 article:
   share: [link]
@@ -99,3 +93,10 @@ style:
     bar: 4px
     card: 4px
     block: 4px
+
+plugins:
+  copycode: 
+    enable: true 
+    default_text: 'Ctrl+C' # Button display text 
+    success_text: '✔️' # Copy success information
+    toast: 'Saved on Clipboard'

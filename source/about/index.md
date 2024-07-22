@@ -28,7 +28,11 @@ I previously worked as a Game Developer/Programmer for a small local indie compa
 
 If you want to learn more about me personally I have an extra page about myself here:
 
-{% link https://xaoxuu.com/blog/20221029/ desc:true %}
+{% link https://lepronliner.github.io/about/me About Me More icon:/assets/photos/pfp.jpg%}
+
+Click here if you like nature:
+
+{% link https://lepronliner.github.io/hike Hiking Photos icon:/assets/hikes/Bear%20Mountain/1.jpg %}
 
 {% quot icon:hashtag Cirriculum Vitae %}
 
