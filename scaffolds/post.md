@@ -18,7 +18,7 @@ poster: # Poster (optional, full-image cover card)
 # Plugins
 sticky: # The larger the number, the closer it is to the front
 mermaid:
-katex: 
+katex:
 mathjax: 
 
 # Optional

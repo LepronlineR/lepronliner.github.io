@@ -26,6 +26,8 @@ My name is Zhi Zheng,
 
 I previously worked as a Game Developer/Programmer for a small local indie company (Rather Be Fishing), at downtown Troy, NY. My interests are machine learning (especially reinforcement learning), software development, low level applications, game development, and mathematics. This blog is a personal storage, please take any information presented with a degree of uncertainty.
 
+If you want to learn more about me personally 
+
 {% quot icon:hashtag Cirriculum Vitae %}
 
 **Professional Career**
