@@ -2,10 +2,12 @@ Notes for myself:
 
 To Do List:
 
-- do something about the blog section or remove it
-- add more to the personalized section
-- finalize the projects section
-    - add a gallery
+- add a wiki (this will include several blog series or specific blogs with tags (for instance cooking))
+
+- finalize the projects section (remove the projects and make it not visible)
+    - add a gallery with a link
+
+- 
 
 - add some socials
     - https://www.youtube.com/@zhizheng2913
@@ -26,6 +28,33 @@ To Do List:
 > hexo new post <name of post>
     - if using images make sure to use the same naming scheme as add it to the assets folder
 ===============================
+
+                    ====================== COLUMNS =========================
+
+    To create a column for multiple articles do this:
+
+    1. Create a folder in the folder and put the description files of each column in it. 
+    The file name is the project blog/source/_data/'s :topicid
+
+    source/_data/topic/id.yml
+    ```
+    name:  Stellar  # A shorter name will be displayed on the breadcrumb navigation 
+    title:  Stellar  -  Everyone's independent blog  # The full column title will be displayed on the list page 
+    description:  Knowledge and experience sharing related to building an independent blog, as well as advanced usage of  Stellar  and notes on version updates. 
+    order_by:  -date  # The default is to sort in reverse order by release date
+    ```
+
+    2. Publish an article 
+    ```
+    --- 
+    title:  This is the title of the article 
+    topic:  id  # This is the column id, corresponding to blog/source/_data/topic/id.yml 
+    ---
+
+    Article Content
+    ```
+
+
 
 check the scaffolds for more specific posts
 
