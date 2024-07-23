@@ -26,13 +26,9 @@ My name is Zhi Zheng,
 
 I previously worked as a Game Developer/Programmer for a small local indie company (Rather Be Fishing), at downtown Troy, NY. My interests are machine learning (especially reinforcement learning), software development, low level applications, game development, and mathematics. This blog is a personal storage, please take any information presented with a degree of uncertainty.
 
-If you want to learn more about me personally I have an extra page about myself here:
+If you're looking for my projects page:
 
-{% link https://lepronliner.github.io/about/me About Me More icon:/assets/photos/pfp.jpg%}
-
-Click here if you like nature:
-
-{% link https://lepronliner.github.io/hike Hiking Photos icon:/assets/hikes/Bear%20Mountain/1.jpg %}
+{% link /projects/ Projects %}
 
 {% quot icon:hashtag Cirriculum Vitae %}
 
@@ -55,6 +51,17 @@ I worked with IDEA lab with Dr. Ameres on the [Campfire](https://empac.rpi.edu/p
 {% box The Bronx Highschool of Science ------------ (July 2016 - May 2020) %} 
 > G.E.D.
 {% endbox %}
+
+{% quot icon:hashtag Extras %}
+
+If you want to learn more about me personally I have an extra page about myself here:
+
+{% link /about/me About Me More icon:/assets/photos/pfp.jpg%}
+
+Click here if you like nature:
+
+{% link /hike/ Hiking Photos icon:/assets/hikes/Bear%20Mountain/1.jpg %}
+
 
 {% quot icon:hashtag Contact Me %}
 

@@ -1,7 +1,7 @@
 ---
 title: L2-regularized Logistic Regression Derived
 tags: [math, machine-learning, python, pytorch]
-categories: []
+categories: [Machine Learning]
 poster:
   topic: null
   headline: null

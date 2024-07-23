@@ -14,4 +14,8 @@ indent: false
 indexing: false
 ---
 
-This page is under construction.
+# Projects
+
+This is a work in progress, have many projects that will need to be cleaned up for presentation. 
+
+{% albums projects size:xl %}

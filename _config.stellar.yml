@@ -39,7 +39,7 @@ sidebar:
       layout: markdown
       
 menubar:
-  columns: 4 
+  columns: 3
     # How many items in a row: 
     # You can add more according to your own needs, just meet the following format 
   items:
@@ -49,18 +49,18 @@ menubar:
     title : Home # Title 
     url: / # Jump link, supports relative paths and absolute paths 
   - id: blogs 
-    theme: '#3DC550' 
+    theme: '#F44336'
     icon: solar:notebook-bookmark-bold-duotone 
     title: Blogs 
-    url: /blogs/ 
-  - id: projects 
-    theme: '#FA6400' 
-    icon: solar:planet-bold-duotone 
-    title: Explore 
-    url: /projects/ 
+    url: /blogs/
+  #- id: projects 
+  #  theme: '#FA6400' 
+  #  icon: solar:planet-bold-duotone 
+  #  title: Explore 
+  #  url: /projects/ 
   - id: about 
-    theme: '#F44336' 
-    icon: solar:chat-square-like-bold-duotone 
+    theme: '#3DC550' 
+    icon: solar:smile-circle-bold-duotone
     title: about 
     url: /about/
 
@@ -85,19 +85,27 @@ article:
     
 footer:
   content: |
-    <span id="busuanzi_container_site_pv">Total viewers: <span id="busuanzi_value_site_pv"></span> </span>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     Created by [{author.name}](/) with [{theme.name} {theme.version}]({theme.tree}).
 
 style:
+  text-align: left
+  smooth_scroll: true
+  codeblock:
+    scrollbar: 0px
+  font-size:
+    body: 1rem
   leftbar: 
-    background-image: # /assets/photos/photo_nahwah_1.jpg
-    blur-px: 100px # blur radius 
-    blur-bg: var(--alpha60) # blur color
+    background-image: url('/assets/hikes/Ramapo%20Valley/3.jpg')
+    blur-px: 10px
+    blur-bg: var(--alpha60)
   border-radius:
     bar: 4px
     card: 4px
     block: 4px
+
+loading: 
+  loading: loading 
+  error: loading failed, please try again later.
 
 plugins:
   copycode: 
