@@ -18,6 +18,16 @@ description: The Campfire is a multi-dimensional visualization tool developed by
 {% banner bg:/assets/projects/campfire/1.jpg %}
 {% endbanner %}
 
+# Abstract
+
+The *Campfire* is a multi-dimensional display hardware developed by Dr. Ameres to simulate and display unique visualizations. This is a custom visualization tool that parses the total amount of dialogue between a character as a weight and simulating the connection between the relationship between various characters as a dynamic Force Directed Graph constrained to the shape of the display. This visualization includes interactability to see particular connections between various characters.
+
+{% folders %} 
+<!-- folder Technology/Hardware Stack --> 
+- Unity 2021 & C#
+- Campfire
+{% endfolders %}
+
 # Introduction
 
 The *Campfire* is a visualization tool developed by the Rensselaer IDEA in order to demonstrate a multi-user, collaborative environment. [1, 2] Therefore, several ideas including graphs, were proposed to be incorporated into the campfire identity. One of which is a force-directed graph, implemented to suit the specifications of the campfire. This graph algorithm, a force-directed graph, offers dynamic usage and generation [3], with a geometric constraint we are able to reduce the visual complexity of the graph as well as making it suitable for the campfire. This is done by using the edges of the campfire as a constraint.
@@ -64,7 +74,7 @@ This section is under many constant updates and can variable change over time, c
 
 {% link https://github.com/LepronlineR/FDGUnity/ GitHub icon:/assets/photos/github.png %}
 
-### Data Parsing
+## Data Parsing
 
 The data provided by the interaction of characters between ASOIAF is given by the edges and nodes. Represented as:
 {% grid %} 
@@ -122,7 +132,7 @@ public class Data {
 ```
 {% endbox %}
 
-### Nodes and Edges
+## Nodes and Edges
 Before parsing the data into the graph, it is imperative that we should define the general use cases for the node and edge data that we can parse into that creates the graph. Furthermore, note that we inherit unity's monobehaviour s.t. it can utilize GameObjects and can be physics objects.
 <!-- cell -->
 {% box child:codeblock %}
@@ -145,7 +155,7 @@ public class Edge {
 ```
 {% endbox %}
 
-### Graph
+## Graph
 
 Here, all we need to do is to create a dictionary that can abstract all of the data for our use case
 <!-- cell -->
@@ -238,7 +248,7 @@ void generateGraphFromNodeData(Dictionary<string, NodeData> nodeData){
 ```
 {% endbox %}
 
-### Rendering
+## Rendering
 
 To show a connection between a node and the edge, we can add a LineRenderer to the edge as well as a spline (for that {% mark visual curve %}). 
 <!-- cell -->
