@@ -1,0 +1,52 @@
+html, body {
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+    height: 100%; /* Ensure body takes full height */
+    background-color: #1c1c1c; /* Darker background for the entire page */
+  }
+  
+  #cli-container {
+    width: 100%;
+    max-width: 100%; /* Make sure it doesn’t exceed the viewport width */
+    margin: 0; /* Remove any default margin */
+    padding: 10px;
+    background-color: #000000; /* Darkest background for terminal */
+    color: #e0e0e0; /* Light gray text color for better contrast */
+    font-family: 'Ubuntu Mono', monospace; /* Ubuntu Mono font */
+    border: 1px solid #333333; /* Darker border to match terminal */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Darker shadow for depth */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+  }
+  
+  #cli-output {
+    height: 300px;
+    overflow-y: auto;
+    border: none; /* No border for output area */
+    padding: 10px;
+    background-color: #000000; /* Match terminal background */
+    color: #e0e0e0; /* Match text color */
+    white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    position: relative; /* Position relative for prompt alignment */
+  }
+  
+  .cli-prompt {
+    color: #8c9440; /* Prompt color */
+  }
+  
+  #cli-input-container {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center align items vertically */
+  }
+  
+  #cli-input {
+    width: calc(100% - 50px); /* Adjust width to account for prompt space */
+    padding: 10px;
+    border: none; /* Remove border */
+    background-color: #000000; /* Match terminal background */
+    color: #e0e0e0; /* Match text color */
+    font-family: 'Ubuntu Mono', monospace; /* Ubuntu Mono font */
+    font-size: 1em; /* Consistent font size */
+    outline: none; /* Remove outline */
+    box-sizing: border-box; /* Include padding in the width calculation */
+  }
+  
