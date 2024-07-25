@@ -252,7 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
       else
         return `<span style="color: #00ffff;">${node.getKey()}</span>`;
     } else {
-      return `<span style="color: #e1f00f;">${node.getKey()}</span>`;
+      if(node.getKey().endsWith('.page'))
+        return `<span style="color: #e1f00f;">${node.getKey()}</span>`;
+      else
+      return `<span style="color: #ff00d7;">${node.getKey()}</span>`;
     }
   }
 
