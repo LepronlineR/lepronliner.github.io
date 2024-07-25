@@ -4,24 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let username = 'username';
   const hostname = 'DESKTOP';
-  let directory = '~';
+  let directory = window.location.pathname;
 
   const jsonFilePath = '../assets/cli/cli.json';
 
   // Read and parse the JSON file
+  // (attrition to ascii art: asciiart.eu)
   let cliJson;
   let cliASCII;
   let cliFortunes;
 
-  // Function to fetch and load the JSON data
   async function initCLI() {
     try {
-      // Fetch the JSON data
+      // fetch and load the JSON data
       const response = await fetch(jsonFilePath);
       
       // Check if the response is successful
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('json fetch error');
       }
 
       // Parse the JSON data and store it in the global variable
@@ -144,20 +144,12 @@ document.addEventListener('DOMContentLoaded', () => {
           return failCase;
         }
       case 'fortune':
-        return getFortune();
+        return cliFortunes[Math.floor(Math.random() * cliFortunes.length)];
       case 'ascii':
-        return getAsciiArt();
+        return `<pre>${cliASCII[Math.floor(Math.random() * cliASCII.length)]}</pre>`;
       default:
         return failCase;
     }
-  }
-
-  function getFortune() {
-    return cliFortunes[Math.floor(Math.random() * cliFortunes.length)];
-  }
-
-  function getAsciiArt() {
-    return `<pre>${cliASCII[Math.floor(Math.random() * cliASCII.length)]}</pre>`;
   }
 
   initCLI();
