@@ -1,0 +1,31 @@
+{
+    "/": [
+        { "~": [
+            { "about": [
+                { "aboutme1.page": "/about/" },
+                { "misc": [
+                    { "aboutme2.page": "/about/me/" },
+                    { "pictures.page": "/about/pictures/" }
+                ]}
+                ]
+            }, 
+            { "resume": [
+                { "resume.page": "/assets/resume.pdf" }
+                ]
+            },
+            { "portfolio": [
+                { "portfolio.page": "/portfolio/" }
+                ]
+            },
+            { "projects": [
+                { "projects.page": "/projects/" }
+                ]
+            },
+            { "home": [
+                { "home.page": "/" }
+                ]
+            }
+            ] 
+        }
+    ] 
+}
