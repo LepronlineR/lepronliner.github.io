@@ -1,0 +1,61 @@
+html, body {
+  margin: 0;
+  padding: 0; 
+  height: 100%; 
+}
+
+#cli-container {
+  width: 100%;
+  max-width: 100%; 
+  margin: 0;
+  padding: 10px;
+  background-color: #000000; 
+  color: #e0e0e0; 
+  font-family: 'Ubuntu Mono', monospace; 
+  border: 1px solid #333333; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
+  box-sizing: border-box;
+}
+
+#cli-output {
+  height: 300px;
+  overflow-y: auto;
+  border: none; 
+  padding: 10px;
+  background-color: #000000; 
+  color: #e0e0e0;
+}
+
+#cli-input-container {
+  display: flex; 
+  align-items: center; 
+}
+
+.cli-prompt, .cli-default, .cli-directory, .cli-input-command {
+  display: inline;
+  white-space: nowrap;
+}
+
+.cli-prompt {
+  color: #00ff22;
+}
+
+.cli-directory {
+  color: #0011ff;
+}
+
+.cli-default {
+  color: #e0e0e0;
+}
+
+#cli-input {
+  flex: 1;
+  border: none; 
+  background-color: #000000; 
+  color: #e0e0e0; 
+  font-family: 'Ubuntu Mono', monospace; 
+  font-size: 1em; 
+  outline: none; 
+  width: auto;
+  margin-left: 8px;
+}

@@ -18,6 +18,8 @@ indexing: false
 {% banner About Me bg:/assets/banners/banner_kyoto.jpg avatar:/assets/photos/pfp.jpg %}
 {% endbanner %}
 
+{% CLI %}
+
 <br>
 
 {% quot icon:hashtag Introduction %}
