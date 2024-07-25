@@ -4,9 +4,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let username = 'username';
   const hostname = 'DESKTOP';
-  let directory = `~`;
+  let directory = '~';
+
+  const usageMsg = 
+  `<pre>
+   /$$$$$$$$       /$$$$$$  /$$       /$$$$$$      
+  |_____ $$       /$$__  $$| $$      |_  $$_/   Z-CLI  
+       /$$/      | $$  \__/| $$        | $$     
+      /$$//$$$$$$| $$      | $$        | $$     A custom CLI developed for the purposes
+     /$$/|______/| $$      | $$        | $$       of this demonstration
+    /$$/         | $$    $$| $$        | $$     
+   /$$$$$$$$     |  $$$$$$/| $$$$$$$$ /$$$$$$   Usage: Z <command> [options]
+  |________/      \______/ |________/|______/     Example Usage: Z --help ascii
+
+  Commands:
+    fortune \t Tell me a fortune.
+    ascii \t Generate some ascii art.
+  </pre>`;
 
   function initCLI() {
+    // add the usage first
+    const usage = document.createElement('div');
+    usage.id = 'cli-usage';
+    usage.innerHTML = `<span class="cli-output">${usageMsg}</span>`
+    output.appendChild(usage);
+
     appendInput();
   }
 
@@ -100,14 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getAsciiArt() {
-    return `
+    return `<pre>
       _    _      _ 
      | |  | |    | |
      | |  | | ___| | ___ ___  _ __ ___   ___ 
      | |/\\| |/ _ \\ |/ __/ _ \\| '_ \` _ \\ / _ \\
      \\  /\\  /  __/ | (_| (_) | | | | | |  __/
       \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|
-    `;
+    </pre>`;
   }
 
   initCLI();

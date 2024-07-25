@@ -18,7 +18,7 @@ html, body {
 }
 
 #cli-output {
-  height: 300px;
+  height: 600px;
   overflow-y: auto;
   border: none; 
   padding: 10px;
@@ -45,6 +45,10 @@ html, body {
 }
 
 .cli-default {
+  color: #e0e0e0;
+}
+
+.cli-usage {
   color: #e0e0e0;
 }
 
