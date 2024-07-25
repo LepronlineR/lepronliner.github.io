@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
     help        Displays this help message or help for a specific command as an option.
-    open        Opens a .page file. (UNDER CONSTRUCTION)
+    open        Opens a .page file.
     read        Reads a .text file. (UNDER CONSTRUCTION)
     fortune     Tell me a fortune.
     ascii       Generate some ascii art.
@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(args.length == 3){
           const helpCommands = {
             'help' : 'Help does not need help!',
+            'open' : 'Usage: z open [file-name] \nDescription: \n \t Opens a valid page for a file as long as the link for the file-name is correct. \nOptions: \n \t N/A',
             'fortune' : 'Usage: z fortune \nDescription: \n \t Outputs a random fortune for you. \nOptions: \n \t N/A',
             'ascii' : 'Usage: z ascii \nDescription: \n \t Outputs a random ascii image. \nOptions: \n \t N/A',
             'username' : 'Usage: z username [input] \nDescription: \n \t Changes the terminal username as the [input], usernames with \n \t 20 or less characters are accepted. \nOptions: \n \t N/A',
@@ -171,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return usageMsg;
         }
       }],
-      
+      ['open', (args) => args.length == 3 ? handleFileOpen(args[2]) : failCase],      
       ['fortune', (args) => args.length == 2 ? cliFortunes[Math.floor(Math.random() * cliFortunes.length)] : failCase],
       ['ascii', (args) => args.length == 2 ? cliASCII[Math.floor(Math.random() * cliASCII.length)] : failCase ],
       ['username', (args) => {
@@ -192,6 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* HANDLING SPECIFIC CLI COMMANDS */
   function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}`}
+
+  function handleFileOpen(filename) {
+    const file = directoryStructure.findNode(filename);
+    if(file != null){
+      window.open(file.getValue(), '_self');
+      return '';
+    } else {
+      return 'Error: file does not exist or user inputted incorrect file.'
+    }
+  }
 
   /* DIRECTORY SYSTEM */
   
