@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
     help        Displays this help message or help for a specific command as an option.
+    open        Opens a .page file. (UNDER CONSTRUCTION)
+    read        Reads a .text file. (UNDER CONSTRUCTION)
     fortune     Tell me a fortune.
     ascii       Generate some ascii art.
     username    Changes the username.
@@ -169,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return usageMsg;
         }
       }],
+      
       ['fortune', (args) => args.length == 2 ? cliFortunes[Math.floor(Math.random() * cliFortunes.length)] : failCase],
       ['ascii', (args) => args.length == 2 ? cliASCII[Math.floor(Math.random() * cliASCII.length)] : failCase ],
       ['username', (args) => {
@@ -251,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if ((i + 1) % numColumns == 0) {
           output += '\n';
       } else {
-          output += '\t';
+          output += '\t\t';
       }
     }
     return output;
@@ -261,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastSlashIndex = path.lastIndexOf('/');
     if (lastSlashIndex === -1) { return path; }
     return path.substring(0, lastSlashIndex);
-}
+  }
 
   function handleCDCommand(args){
     const errorText = 'cd command is incorrect';
