@@ -124,32 +124,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleCLICommands(args) {
-    const failCase = 'Command or flag is wrong or does not exist. For help, use the \'z help\' or for more specific command help use \'z help [command]\'';
-    
-    switch (args[1]) {
-      case 'help':
-        // handle help cases for different commands
-        if(args.length == 3) {
-          switch(args[2]){
-            case 'help':
-              return 'Help does not need help!';
-            case 'fortune':
-              return ''
-            default:
-              return failCase;
-          }
-        } else if(args.length == 2) {
+    const failCase = 'Command or flag is wrong or does not exist. \nFor help, use the \'z help\' or for more specific command help use \'z help [command]\'';
+    const commandHandler = new Map([
+      ['help', (args) => {
+        if(args.length == 3){
+          const helpCommands = {
+            'help' : 'Help does not need help!',
+            'fortune' : 'Usage: z fortune \nDescription: \n \t Outputs a random fortune for you. \nOptions: \n \t N/A',
+            'ascii' : 'Usage: z ascii \nDescription: \n \t Outputs a random ascii image. \nOptions: \n \t N/A',
+          };
+          return helpCommands[args[2]] || failCase;
+        } else if(args.length == 2){
           return usageMsg;
-        } else {
-          return failCase;
         }
-      case 'fortune':
-        return cliFortunes[Math.floor(Math.random() * cliFortunes.length)];
-      case 'ascii':
-        return `<pre>${cliASCII[Math.floor(Math.random() * cliASCII.length)]}</pre>`;
-      default:
-        return failCase;
-    }
+      }],
+      ['fortune', (args) => args.length === 2 ? cliFortunes[Math.floor(Math.random() * cliFortunes.length)] : failCase],
+      ['ascii', (args) => args.length === 2 ? cliASCII[Math.floor(Math.random() * cliASCII.length)] : failCase ]
+    ])
+
+    var getHandlerResult = commandHandler.get(args[1]);
+
+    return `<pre>${getHandlerResult ? getHandlerResult(args) : failCase}</pre>`;
   }
 
   initCLI();
