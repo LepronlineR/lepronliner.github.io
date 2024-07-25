@@ -6,31 +6,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const hostname = 'DESKTOP';
   let directory = '~';
 
+  const jsonFilePath = '../assets/cli/cli.json';
+
+  // Read and parse the JSON file
+  let cliJson;
+  let cliASCII;
+  let cliFortunes;
+
+  // Function to fetch and load the JSON data
+  async function initCLI() {
+    try {
+      // Fetch the JSON data
+      const response = await fetch(jsonFilePath);
+      
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      // Parse the JSON data and store it in the global variable
+      cliJson = await response.json();
+
+      // add the usage first
+      const usage = document.createElement('div');
+      usage.id = 'cli-usage';
+      usage.innerHTML = `<span class="cli-output">${usageMsg}</span>`
+      output.appendChild(usage);
+
+      cliASCII = cliJson["ascii-art"].map(item => item.ascii);
+      cliFortunes = cliJson["fortunes"].map(item => item.fortune);
+
+      appendInput();
+    } catch (error) {
+      console.error('Error fetching or parsing the JSON data:', error);
+    }
+  }
+  
+
   const usageMsg = 
   `<pre>
-   /$$$$$$$$       /$$$$$$  /$$       /$$$$$$      
-  |_____ $$       /$$__  $$| $$      |_  $$_/   Z-CLI  
-       /$$/      | $$  \__/| $$        | $$     
-      /$$//$$$$$$| $$      | $$        | $$     A custom CLI developed for the purposes
-     /$$/|______/| $$      | $$        | $$       of this demonstration
-    /$$/         | $$    $$| $$        | $$     
-   /$$$$$$$$     |  $$$$$$/| $$$$$$$$ /$$$$$$   Usage: Z <command> [options]
-  |________/      \______/ |________/|______/     Example Usage: Z --help ascii
+   /<span style="color: #00ffff;">$$$$$$$$</span>             /<span style="color: #00ffff;">$$$$$$</span>   /<span style="color: #00ffff;">$$</span>       /<span style="color: #00ffff;">$$$$$$</span>      
+  |_____ <span style="color: #00ffff;">$$</span>             /<span style="color: #00ffff;">$$</span>__  <span style="color: #00ffff;">$$</span> | <span style="color: #00ffff;">$$</span>      |_  <span style="color: #00ffff;">$$</span>_/   <span style="font-weight: bold; text-decoration: underline;">Z-CLI</span> 
+       /<span style="color: #00ffff;">$$</span>/            | <span style="color: #00ffff;">$$</span>  \\__/ | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>     
+      /<span style="color: #00ffff;">$$</span>/    /<span style="color: #c300ff;">$$$$$$</span>  | <span style="color: #00ffff;">$$</span>       | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>     A custom CLI developed for the
+     /<span style="color: #00ffff;">$$</span>/    |______/  | <span style="color: #00ffff;">$$</span>       | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>      purposes of this demonstration
+    /<span style="color: #00ffff;">$$</span>/               | <span style="color: #00ffff;">$$</span>    <span style="color: #00ffff;">$$</span> | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>     
+   /<span style="color: #00ffff;">$$$$$$$$</span>           |  <span style="color: #00ffff;">$$$$$$</span>/ | <span style="color: #00ffff;">$$$$$$$$</span> /<span style="color: #00ffff;">$$$$$$</span>   Usage: z &lt;command&gt; [options]
+  |________/            \______/   |________/ |______/     Example Usage: z help ascii
 
-  Commands:
-    fortune \t Tell me a fortune.
-    ascii \t Generate some ascii art.
+  <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
+    help        Displays this help message or help for a specific command as an option.
+    fortune     Tell me a fortune.
+    ascii       Generate some ascii art.
   </pre>`;
-
-  function initCLI() {
-    // add the usage first
-    const usage = document.createElement('div');
-    usage.id = 'cli-usage';
-    usage.innerHTML = `<span class="cli-output">${usageMsg}</span>`
-    output.appendChild(usage);
-
-    appendInput();
-  }
 
   function appendInput() {
     const inputContainer = document.createElement('div');
@@ -45,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     output.appendChild(inputContainer);
     input.focus();
 
-    // Add event listener to focus input when container is clicked
+    // focus input when container is clicked
     container.addEventListener('click', () => {
       input.focus();
     });
@@ -82,54 +110,54 @@ document.addEventListener('DOMContentLoaded', () => {
     let response;
     const args = command.split(' ');
     const cmd = args[0];
-    const flag = args.length > 1 ? args[1] : null;
 
     switch (cmd) {
       case 'z':
-        response = handleZCommand(flag);
-        break;
-      case 'help':
-        response = 'Available commands: z -help, z -fortune, z -ascii';
+        response = handleCLICommands(args);
         break;
       default:
-        response = `Unknown command: ${command}`;
+        response = `${command}: command not found`;
         break;
     }
     
     return response;
   }
 
-  function handleZCommand(flag) {
-    switch (flag) {
-      case '-help':
-        return 'Commands: -help, -fortune, -ascii';
-      case '-fortune':
+  function handleCLICommands(args) {
+    const failCase = 'Command or flag is wrong or does not exist. For help, use the \'z help\' or for more specific command help use \'z help [command]\'';
+    
+    switch (args[1]) {
+      case 'help':
+        // handle help cases for different commands
+        if(args.length == 3) {
+          switch(args[2]){
+            case 'help':
+              return 'Help does not need help!';
+            case 'fortune':
+              return ''
+            default:
+              return failCase;
+          }
+        } else if(args.length == 2) {
+          return usageMsg;
+        } else {
+          return failCase;
+        }
+      case 'fortune':
         return getFortune();
-      case '-ascii':
+      case 'ascii':
         return getAsciiArt();
       default:
-        return 'Invalid flag. Use -help for available commands.';
+        return failCase;
     }
   }
 
   function getFortune() {
-    const fortunes = [
-      "You will have a great day!",
-      "Good things are coming your way.",
-      "You will achieve your goals."
-    ];
-    return fortunes[Math.floor(Math.random() * fortunes.length)];
+    return cliFortunes[Math.floor(Math.random() * cliFortunes.length)];
   }
 
   function getAsciiArt() {
-    return `<pre>
-      _    _      _ 
-     | |  | |    | |
-     | |  | | ___| | ___ ___  _ __ ___   ___ 
-     | |/\\| |/ _ \\ |/ __/ _ \\| '_ \` _ \\ / _ \\
-     \\  /\\  /  __/ | (_| (_) | | | | | |  __/
-      \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|
-    </pre>`;
+    return `<pre>${cliASCII[Math.floor(Math.random() * cliASCII.length)]}</pre>`;
   }
 
   initCLI();
