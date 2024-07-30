@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
     help        Displays this help message or help for a specific command as an option.
     open        Opens a .page file.
-    read        Reads a .text file. (UNDER CONSTRUCTION)
+    read        Reads a .text file.
     fortune     Tell me a fortune.
     ascii       Generate some ascii art.
     username    Changes the username.
@@ -86,10 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputContainer = document.createElement('div');
     inputContainer.id = 'cli-input-container';
     inputContainer.innerHTML = prompter;
+    inputContainer.width = output.scrollHeight + 'px';
 
     const input = document.createElement('input');
-    input.type = 'text';
+    input.type = 'textarea';
     input.id = 'cli-input';
+    input.rows = '10';
+    input.cols = '50';
 
     inputContainer.appendChild(input);
     output.appendChild(inputContainer);
@@ -163,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const helpCommands = {
             'help' : 'Help does not need help!',
             'open' : 'Usage: z open [file-name] \nDescription: \n \t Opens a valid page for a file as long as the link for the file-name is correct. \nOptions: \n \t N/A',
+            'read' : 'Usage: z read [textfile-name] \nDescription: \n \t Reads a valid page for a file as long as the link for the file-name is correct. \nOptions: \n \t N/A',            
             'fortune' : 'Usage: z fortune \nDescription: \n \t Outputs a random fortune for you. \nOptions: \n \t N/A',
             'ascii' : 'Usage: z ascii \nDescription: \n \t Outputs a random ascii image. \nOptions: \n \t N/A',
             'username' : 'Usage: z username [input] \nDescription: \n \t Changes the terminal username as the [input], usernames with \n \t 20 or less characters are accepted. \nOptions: \n \t N/A',
@@ -172,7 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return usageMsg;
         }
       }],
-      ['open', (args) => args.length == 3 ? handleFileOpen(args[2]) : failCase],      
+      ['open', (args) => args.length == 3 ? handleFileOpen(args[2]) : failCase],
+      ['read', (args) => args.length == 3 ? handleFileRead(args[2]) : failCase],     
       ['fortune', (args) => args.length == 2 ? cliFortunes[Math.floor(Math.random() * cliFortunes.length)] : failCase],
       ['ascii', (args) => args.length == 2 ? cliASCII[Math.floor(Math.random() * cliASCII.length)] : failCase ],
       ['username', (args) => {
@@ -194,8 +199,24 @@ document.addEventListener('DOMContentLoaded', () => {
   /* HANDLING SPECIFIC CLI COMMANDS */
   function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}`}
 
-  function handleFileOpen(filename) {
+  function handleFileRead(filename){
+    if(!filename.endsWith(".text"))
+      return 'Error: cannot read files without the .text extension.';
+
     const file = directoryStructure.findNode(filename);
+    if(file != null){
+      return file.getValue();
+    } else {
+      return 'Error: file does not exist or user inputted incorrect file.'
+    }
+  }
+
+  function handleFileOpen(filename) {
+    if(!filename.endsWith(".page"))
+      return 'Error: cannot open files without the .page extension.';
+
+    const file = directoryStructure.findNode(filename);
+    
     if(file != null){
       window.open(file.getValue(), '_self');
       return '';
@@ -252,7 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
       else
         return `<span style="color: #00ffff;">${node.getKey()}</span>`;
     } else {
-      return `<span style="color: #e1f00f;">${node.getKey()}</span>`;
+      if(node.getKey().endsWith('.page'))
+        return `<span style="color: #e1f00f;">${node.getKey()}</span>`;
+      else
+      return `<span style="color: #ff00d7;">${node.getKey()}</span>`;
     }
   }
 
