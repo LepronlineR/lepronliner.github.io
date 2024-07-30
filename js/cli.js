@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  const kernel_commands = ["ls", "cd", "clear"];
+  const z_commands = ["help", "open", "read", "fortune", "ascii", "username"];
 
   const usageMsg = 
   `<pre>
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
     help        Displays this help message or help for a specific command as an option.
     open        Opens a .page file.
-    read        Reads a .text file. (UNDER CONSTRUCTION)
+    read        Reads a .text file.
     fortune     Tell me a fortune.
     ascii       Generate some ascii art.
     username    Changes the username.
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   Please report any bugs to my personal contacts :)
   </pre>`;
 
-  function appendInput() {
+  function appendInput(priorInput = "") {
     const prompter = `<span class="cli-prompt">${username}@${hostname}</span><span class="cli-default">:</span><span class="cli-directory">${directory}</span><span class="cli-default">$ </span>`;
 
     const inputContainer = document.createElement('div');
@@ -88,8 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
     inputContainer.innerHTML = prompter;
 
     const input = document.createElement('input');
-    input.type = 'text';
+    input.type = 'textarea';
     input.id = 'cli-input';
+    input.value = priorInput;
 
     inputContainer.appendChild(input);
     output.appendChild(inputContainer);
@@ -124,8 +127,59 @@ document.addEventListener('DOMContentLoaded', () => {
         appendInput();
         event.preventDefault();
       }
+      
+      /*
+      if (event.key === 'Tab') { // autocomplete functionality for changing directories
+        const command = input.value.trim();
+        let response = '';
+        // determine the context of the command
+        response = handleContext(command);
+        // create the entered prompt + command
+        const newOutput = document.createElement('div');
+        newOutput.innerHTML = prompter + `<span class="cli-input-command">${command} </span>`;
+        output.appendChild(newOutput);
+
+        if (response) {
+          const responseOutput = document.createElement('div');
+          responseOutput.innerHTML = response;
+          output.appendChild();
+        }
+
+        inputContainer.remove();
+        appendInput(input.value);
+        event.preventDefault();
+      }*/
     });
     output.scrollTop = output.scrollHeight;
+  }
+
+  function generateColumnHTMLElementFromArray(arr, columns = 4){
+    let result = '';
+    for(let x = 0; x < arr.length; x++){
+      result += arr[x];
+      if((i + 1) % columns == 0){
+        result += '\n';
+      } else {
+        result += '\t\t';
+      }
+    }
+
+    return result;
+  }
+
+  function handleContext(command) {
+    let response;
+    const args = command.split(' ');
+
+    // no commands entered
+    if(args.length == 0){
+      console.log("hi");
+      response = generateColumnHTMLElementFromArray(kernel_commands);
+    } else if(args.length == 1 && args[1] === 'z') {
+      response = generateColumnHTMLElementFromArray(z_commands);
+    }
+
+    return `<pre>${response}</pre>`;
   }
 
   function handleCommand(command) {
@@ -163,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const helpCommands = {
             'help' : 'Help does not need help!',
             'open' : 'Usage: z open [file-name] \nDescription: \n \t Opens a valid page for a file as long as the link for the file-name is correct. \nOptions: \n \t N/A',
+            'read' : 'Usage: z read [textfile-name] \nDescription: \n \t Reads a valid page for a file as long as the link for the file-name is correct. \nOptions: \n \t N/A',            
             'fortune' : 'Usage: z fortune \nDescription: \n \t Outputs a random fortune for you. \nOptions: \n \t N/A',
             'ascii' : 'Usage: z ascii \nDescription: \n \t Outputs a random ascii image. \nOptions: \n \t N/A',
             'username' : 'Usage: z username [input] \nDescription: \n \t Changes the terminal username as the [input], usernames with \n \t 20 or less characters are accepted. \nOptions: \n \t N/A',
@@ -172,7 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return usageMsg;
         }
       }],
-      ['open', (args) => args.length == 3 ? handleFileOpen(args[2]) : failCase],      
+      ['open', (args) => args.length == 3 ? handleFileOpen(args[2]) : failCase],
+      ['read', (args) => args.length == 3 ? handleFileRead(args[2]) : failCase],     
       ['fortune', (args) => args.length == 2 ? cliFortunes[Math.floor(Math.random() * cliFortunes.length)] : failCase],
       ['ascii', (args) => args.length == 2 ? cliASCII[Math.floor(Math.random() * cliASCII.length)] : failCase ],
       ['username', (args) => {
@@ -194,8 +250,24 @@ document.addEventListener('DOMContentLoaded', () => {
   /* HANDLING SPECIFIC CLI COMMANDS */
   function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}`}
 
-  function handleFileOpen(filename) {
+  function handleFileRead(filename){
+    if(!filename.endsWith(".text"))
+      return 'Error: cannot read files without the .text extension.';
+
     const file = directoryStructure.findNode(filename);
+    if(file != null){
+      return file.getValue();
+    } else {
+      return 'Error: file does not exist or user inputted incorrect file.'
+    }
+  }
+
+  function handleFileOpen(filename) {
+    if(!filename.endsWith(".page"))
+      return 'Error: cannot open files without the .page extension.';
+
+    const file = directoryStructure.findNode(filename);
+    
     if(file != null){
       window.open(file.getValue(), '_self');
       return '';
