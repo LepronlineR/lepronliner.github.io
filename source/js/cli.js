@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  const kernel_commands = ["ls", "cd", "clear"];
+  const z_commands = ["help", "open", "read", "fortune", "ascii", "username"];
 
   const usageMsg = 
   `<pre>
@@ -80,19 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
   Please report any bugs to my personal contacts :)
   </pre>`;
 
-  function appendInput() {
+  function appendInput(priorInput = "") {
     const prompter = `<span class="cli-prompt">${username}@${hostname}</span><span class="cli-default">:</span><span class="cli-directory">${directory}</span><span class="cli-default">$ </span>`;
 
     const inputContainer = document.createElement('div');
     inputContainer.id = 'cli-input-container';
     inputContainer.innerHTML = prompter;
-    inputContainer.width = output.scrollHeight + 'px';
 
     const input = document.createElement('input');
     input.type = 'textarea';
     input.id = 'cli-input';
-    input.rows = '10';
-    input.cols = '50';
+    input.value = priorInput;
 
     inputContainer.appendChild(input);
     output.appendChild(inputContainer);
@@ -127,8 +127,59 @@ document.addEventListener('DOMContentLoaded', () => {
         appendInput();
         event.preventDefault();
       }
+      
+      /*
+      if (event.key === 'Tab') { // autocomplete functionality for changing directories
+        const command = input.value.trim();
+        let response = '';
+        // determine the context of the command
+        response = handleContext(command);
+        // create the entered prompt + command
+        const newOutput = document.createElement('div');
+        newOutput.innerHTML = prompter + `<span class="cli-input-command">${command} </span>`;
+        output.appendChild(newOutput);
+
+        if (response) {
+          const responseOutput = document.createElement('div');
+          responseOutput.innerHTML = response;
+          output.appendChild();
+        }
+
+        inputContainer.remove();
+        appendInput(input.value);
+        event.preventDefault();
+      }*/
     });
     output.scrollTop = output.scrollHeight;
+  }
+
+  function generateColumnHTMLElementFromArray(arr, columns = 4){
+    let result = '';
+    for(let x = 0; x < arr.length; x++){
+      result += arr[x];
+      if((i + 1) % columns == 0){
+        result += '\n';
+      } else {
+        result += '\t\t';
+      }
+    }
+
+    return result;
+  }
+
+  function handleContext(command) {
+    let response;
+    const args = command.split(' ');
+
+    // no commands entered
+    if(args.length == 0){
+      console.log("hi");
+      response = generateColumnHTMLElementFromArray(kernel_commands);
+    } else if(args.length == 1 && args[1] === 'z') {
+      response = generateColumnHTMLElementFromArray(z_commands);
+    }
+
+    return `<pre>${response}</pre>`;
   }
 
   function handleCommand(command) {

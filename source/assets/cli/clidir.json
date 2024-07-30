@@ -11,7 +11,7 @@
                     ]
                 }, 
                 { "resume": [
-                    { "resume.page": "/assets/resume.pdf" }
+                    { "resume.page": "/assets/zhizheng_resume_sd.pdf" }
                     ]
                 },
                 { "portfolio": [
@@ -29,12 +29,21 @@
                 ]
             },
             { "portfolio": [
-                { "introduction.text": "<span style=\"font-weight: bold; text-decoration: underline;\">Introduction:</span>\n Welcome to my portfolio! I previously worked as a Game Developer/Programmer \n \tfor a small local indie company (Rather Be Fishing), at downtown Troy, NY. My \n \tinterests are machine learning (especially reinforcement learning), \n \tsoftware development, low level applications, game development, and mathematics. This blog is a personal storage, \n \tplease take any information presented with a degree of uncertainty. I spend my free time doing various things, from playing guitar to hiking or playing volleyball." },
-                { "cv.text": "(put cv text here)" },
+                { "intro.text": "<span style=\"font-weight: bold; text-decoration: underline;\">Introduction:</span>\n \tWelcome to my portfolio! I previously worked as a Game Developer/Programmer \n \tfor a small local indie company (Rather Be Fishing), at downtown Troy, NY. \n \tMy interests are machine learning (especially reinforcement learning), \n \tsoftware development, low level applications, game development, and mathematics. \n \tI spend my free time doing various things, from playing guitar to hiking." },
+                { "cv.text": "Professional Career: \n \t Rather Be Fishing -------- (Sept. 2023 - Mar. 2024)\n \t\tWorked as a contract Game Developer using UE5. I mainly implement various \n \t\tgame systems, and a custom dinosaur skeleton builder." },
+                { "degree.text": "Education: \n \t Rensselaer Polytechnic Institute -------- (Aug. 2020 - May 2024) \n \t\tM.S. in Computer Science\n \t\tB.S in Computer Science and Game Development"},
                 { "resume.page": "/assets/zhizheng_resume_sd.pdf" },
                 { "projects.page": "/projects/ "},
-                { "skills.text": "(put skills here)" },
-                { "contacts.text": "(put contacts here)" }
+                { "skills": [
+                    {"gamedev.text": "Unity 2022-23, Unreal Engine 5.3, Godot 3"},
+                    {"programming.text": "Java, C++, C, C#, JS, TS, Python, SQL (postgreSQL, mySQL)"},
+                    {"qa.text": "Postman, MongoDB Compass, JUnit, XAMPP"},
+                    {"vc.text": "Git, GitLab, Perforce, Plastic SCM"},
+                    {"ml.text": "PyTorch, TensorFlow, OpenAI Gym, Pandas, Numpy"},
+                    {"misc.text": "OpenCV, HDF5"}
+
+                ]},
+                { "contacts.text": "Email: zhizheng835@gmail.com\nLinkedIn: linkedin.com/zhizheng1\nGithub: github.com/LepronlineR" }
             ]}
             ] 
         }
