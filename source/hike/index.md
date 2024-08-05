@@ -13,7 +13,15 @@ Hiking is fun. Here is a compendium of images sorted as a gallery.
 ## 2024
 
 {% gallery %} 
-![Bear Mountain, NY - 07/06](/assets/hikes/Bear%20Mountain/1.jpg) 
+
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/1.jpg) 
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/2.jpg)
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/3.jpg)
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/4.jpg)
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/5.jpg)
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/6.jpg)
+![Bull Mountain, NY - 07/27](/assets/hikes/Bull%20Mountain/7.jpg)
+![Bear Mountain, NY - 07/06](/assets/hikes/Bear%20Mountain/1.jpg)
 ![Bear Mountain, NY - 07/06](/assets/hikes/Bear%20Mountain/2.jpg)
 ![Bear Mountain, NY - 07/06](/assets/hikes/Bear%20Mountain/3.jpg)
 ![Bear Mountain, NY - 07/06](/assets/hikes/Bear%20Mountain/4.jpg)
