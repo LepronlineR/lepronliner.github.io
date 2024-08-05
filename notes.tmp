@@ -1,14 +1,13 @@
 Notes for myself:
 
+BUGS
+- cursor does not appear at the end after arrow key movement
+    - tried to use setSelectionRange and failed
+
 To Do List:
 
-- CLI
-    - add some simple linux commands
-
-    - create a fake directory system that redirects
 
 - add a wiki (this will include several blog series or specific blogs with tags (for instance cooking))
-
 
 - 
 
