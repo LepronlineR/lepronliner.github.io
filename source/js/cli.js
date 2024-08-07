@@ -111,21 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
             
             switch(event.key) {
                 case "Enter":
-                    const input_ = input.value.trim();
+                    const input_text = input.value.trim();
                     let response = '';
                     
                     // handle an input command for the CLI
-                    if (input_) {
-                        response = parseInput(input_);
+                    if (input_text) {
+                        response = parseInput(input_text);
                     }
             
                     // create the entered prompt + command
                     const newOutput = document.createElement('div');
-                    newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_} </span>`;
+                    newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
                     output.appendChild(newOutput);
                     
                     // add a new input to save all inputs
-                    savedInputs.push(input_);
+                    savedInputs.push(input_text);
                     savedInputsTracker = savedInputs.length;
             
                     if (response) {
@@ -359,6 +359,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             return '';
+        }
+
+        if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
+            args[1] = args[1].substring(2);
         }
     
         const toDirName = directoryStructure.findNode(args[1]);
