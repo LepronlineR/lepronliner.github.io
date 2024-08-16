@@ -289,9 +289,15 @@ document.addEventListener('DOMContentLoaded', () => {
         //  i.e. path/to/directory 
         findDirectory(directories) { 
             var paths = directories.split('/');
+            if(paths[0] == '.') // remove starting dir
+                paths.shift();
+            
+            console.log(paths);
+
             var target = this;
             for(const path of paths){
-                target = target.findNode(path);
+                if(path)
+                    target = target.findNode(path);
             }
             return target;
         }
@@ -390,11 +396,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // separate the directory to a list of nodes instead of manually checking (use the same system for LS)
         // TODO 
 
-        if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
-            args[1] = args[1].substring(2);
-        }
-    
-        const toDirName = directoryStructure.findNode(args[1]);
+        //if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
+        //    args[1] = args[1].substring(2);
+        //}
+
+        const toDirName = directoryStructure.findDirectory(args[1]);
+        if(toDirName == undefined) 
+            return `cd: '${args[1]}': No such file or directory`;
+
         const homeNode = directoryStructure.findNode('~');
     
         // edge case if the username is there
@@ -403,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
             directory = '~';
         } else if(toDirName != null){
             directoryStructure = toDirName;
-            directory += (`/${toDirName.getKey()}`);
+            directory += (`/${args[1]}`);
         }
     
         return '';
