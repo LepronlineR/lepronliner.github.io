@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ls          List the directory.
         cd          Change the directory.
         clear       Clears the output.
+        echo        Echo.
+
+    Here are some example commands you can enter: [z help] [cd portfolio]
     </pre>`;
 
     async function initCLI() {
@@ -172,10 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 response = handleCLICommands(args);
                 break;
             case 'ls':
-                response = handleLSCommand();
+                response = handleLSCommand(args);
                 break;
             case 'cd':
                 response = handleCDCommand(args);
+                break;
+            case 'echo':
+                response = command.substring(5);
                 break;
             case 'clear':
                 response = '';
@@ -278,6 +284,23 @@ document.addEventListener('DOMContentLoaded', () => {
         getAllChildren(){ return this.children; }
     
         findNode(key){ return this.children.find(node => node.getKey() == key); }
+        
+        // given a list of directories return if this list is true, otherwise null
+        //  i.e. path/to/directory 
+        findDirectory(directories) { 
+            var paths = directories.split('/');
+            if(paths[0] == '.') // remove starting dir
+                paths.shift();
+            
+            console.log(paths);
+
+            var target = this;
+            for(const path of paths){
+                if(path)
+                    target = target.findNode(path);
+            }
+            return target;
+        }
     }
 
     function parseJSONToDirectoryTree(dir){
@@ -317,8 +340,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handleLSCommand(numColumns = 4){
-        const currentDir = directoryStructure.getAllChildren();
+    function handleLSCommand(args, numColumns = 4){
+
+        var currentDir;
+        if(args.length > 1) { 
+            let res = directoryStructure.findDirectory(args[1]);
+            if(res == undefined) return `ls: cannot access '${args[1]}': No such file or directory`;
+            currentDir = res.getAllChildren();
+        } else {
+            currentDir = directoryStructure.getAllChildren();
+        }
+        
         var output = '';
         for (let i = 0; i < currentDir.length; i++) {
             output += formatLSOutputValue(currentDir[i]);
@@ -361,11 +393,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
 
-        if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
-            args[1] = args[1].substring(2);
-        }
-    
-        const toDirName = directoryStructure.findNode(args[1]);
+        // separate the directory to a list of nodes instead of manually checking (use the same system for LS)
+        // TODO 
+
+        //if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
+        //    args[1] = args[1].substring(2);
+        //}
+
+        const toDirName = directoryStructure.findDirectory(args[1]);
+        if(toDirName == undefined) 
+            return `cd: '${args[1]}': No such file or directory`;
+
         const homeNode = directoryStructure.findNode('~');
     
         // edge case if the username is there
@@ -374,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
             directory = '~';
         } else if(toDirName != null){
             directoryStructure = toDirName;
-            directory += (`/${toDirName.getKey()}`);
+            directory += (`/${args[1]}`);
         }
     
         return '';
