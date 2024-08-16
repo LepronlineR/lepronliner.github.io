@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 response = handleCLICommands(args);
                 break;
             case 'ls':
-                response = handleLSCommand();
+                response = handleLSCommand(args);
                 break;
             case 'cd':
                 response = handleCDCommand(args);
@@ -284,6 +284,17 @@ document.addEventListener('DOMContentLoaded', () => {
         getAllChildren(){ return this.children; }
     
         findNode(key){ return this.children.find(node => node.getKey() == key); }
+        
+        // given a list of directories return if this list is true, otherwise null
+        //  i.e. path/to/directory 
+        findDirectory(directories) { 
+            var paths = directories.split('/');
+            var target = this;
+            for(const path of paths){
+                target = target.findNode(path);
+            }
+            return target;
+        }
     }
 
     function parseJSONToDirectoryTree(dir){
@@ -323,8 +334,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handleLSCommand(numColumns = 4){
-        const currentDir = directoryStructure.getAllChildren();
+    function handleLSCommand(args, numColumns = 4){
+
+        var currentDir;
+        if(args.length > 1) { 
+            let res = directoryStructure.findDirectory(args[1]);
+            if(res == undefined) return `ls: cannot access '${args[1]}': No such file or directory`;
+            currentDir = res.getAllChildren();
+        } else {
+            currentDir = directoryStructure.getAllChildren();
+        }
+        
         var output = '';
         for (let i = 0; i < currentDir.length; i++) {
             output += formatLSOutputValue(currentDir[i]);
