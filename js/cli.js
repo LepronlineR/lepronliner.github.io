@@ -243,7 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!filename.endsWith(".text"))
             return 'Error: cannot read files without the .text extension.';
 
-        const file = directoryStructure.findNode(filename);
+        const file = directoryStructure.findDirectory(filename);
+        if(file == undefined) return `cannot access '${file}': No such file or directory`;
+        
         if(file != null){
             return file.getValue();
         } else {
@@ -254,9 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFileOpen(filename) {
         if(!filename.endsWith(".page"))
             return 'Error: cannot open files without the .page extension.';
-    
-        const file = directoryStructure.findNode(filename);
         
+        const file = directoryStructure.findDirectory(filename);
+        if(file == undefined) return `cannot access '${file}': No such file or directory`;
+
+        // handle directory structure
         if(file != null){
             window.open(file.getValue(), '_self');
             return '';
@@ -292,8 +296,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if(paths[0] == '.') // remove starting dir
                 paths.shift();
             
-            console.log(paths);
-
             var target = this;
             for(const path of paths){
                 if(path)
