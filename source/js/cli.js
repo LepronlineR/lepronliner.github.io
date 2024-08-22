@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const output = document.getElementById('cli-output');
     const container = document.getElementById('cli-container');
-    
-    const kernel_commands = ["ls", "cd", "clear"];
-    const z_commands = ["help", "open", "read", "fortune", "ascii", "username"];
 
     // Read and parse the JSON file
     // (attrition to ascii art: asciiart.eu)
@@ -394,13 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return '';
         }
-
-        // separate the directory to a list of nodes instead of manually checking (use the same system for LS)
-        // TODO 
-
-        //if (args[1].startsWith('./')) { // case that inputs start with ./ for the directory location
-        //    args[1] = args[1].substring(2);
-        //}
 
         const toDirName = directoryStructure.findDirectory(args[1]);
         if(toDirName == undefined) 
