@@ -11,7 +11,7 @@ indent: false
 indexing: false
 ---
 
-{% banner About Me bg:/assets/banners/banner_kyoto_2.jpg avatar:/assets/photos/pfp2.jpg %}
+{% banner About Me bg:/assets/banners/banner_kyoto_2.jpg avatar:/assets/photos/pfp.jpg %}
 {% endbanner %}
 
 {% quot icon:hashtag Hobbies %}
