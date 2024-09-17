@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 output.textContent = '';
                 break;
             default:
-                response = `${command}: command not found`;
+                response = `${command}: command not found. Are you trying to use a z command? Usage is: z <command>`;
                 break;
         }
         
