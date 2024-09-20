@@ -23,6 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let savedInputs = [];
     let savedInputsTracker = 0;
 
+    // commands
+    const commands = {
+        "ls": {}, 
+        "cd": {}, 
+        "clear": {}, 
+        "echo": {}, 
+        "z": {"help":{}, 
+              "open":{}, 
+              "read":{}, 
+              "fortune":{}, 
+              "ascii":{}, 
+              "username":{}
+            }
+    }
+
     const usageMsg = 
     `<pre>
      /<span style="color: #00ffff;">$$$$$$$$</span>             /<span style="color: #00ffff;">$$$$$$</span>   /<span style="color: #00ffff;">$$</span>       /<span style="color: #00ffff;">$$$$$$</span>      
@@ -110,33 +125,35 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('keydown', (event) => {
             
             switch(event.key) {
-                case "Enter":
-                    const input_text = input.value.trim();
-                    let response = '';
-                    
-                    // handle an input command for the CLI
-                    if (input_text) {
-                        response = parseInput(input_text);
+                case "Enter": 
+                    {
+                        const input_text = input.value.trim();
+                        let response = '';
+                        
+                        // handle an input command for the CLI
+                        if (input_text) {
+                            response = parseInput(input_text);
+                        }
+                
+                        // create the entered prompt + command
+                        const newOutput = document.createElement('div');
+                        newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
+                        output.appendChild(newOutput);
+                        
+                        // add a new input to save all inputs
+                        savedInputs.push(input_text);
+                        savedInputsTracker = savedInputs.length;
+                
+                        if (response) {
+                            const responseOutput = document.createElement('div');
+                            responseOutput.innerHTML = response;
+                            output.appendChild(responseOutput);
+                        }
+                
+                        inputContainer.remove();
+                        appendInput();
+                        event.preventDefault();
                     }
-            
-                    // create the entered prompt + command
-                    const newOutput = document.createElement('div');
-                    newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
-                    output.appendChild(newOutput);
-                    
-                    // add a new input to save all inputs
-                    savedInputs.push(input_text);
-                    savedInputsTracker = savedInputs.length;
-            
-                    if (response) {
-                        const responseOutput = document.createElement('div');
-                        responseOutput.innerHTML = response;
-                        output.appendChild(responseOutput);
-                    }
-            
-                    inputContainer.remove();
-                    appendInput();
-                    event.preventDefault();
                     break;
                 case "ArrowUp":
                     if(savedInputsTracker > 0){
@@ -149,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case "Tab":
+                    {
+                        const input_text = input.value;
+                        var args = input_text.split(' ');
+                        let response = autofillInput(args);
+                    }
                     break;
                 default:
                     break;
@@ -157,6 +179,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         output.scrollTop = output.scrollHeight;
     }
+
+    //
+    // AUTOFILL INPUTS
+    //
+    function autofillInput(args){
+        
+        // recursively find the command that needs to be autofilled
+        let currentCommand = commands;
+        let i = 0;
+        while (i < args.length) {
+            // Check if the current key exists in the current layer
+            if (currentCommand.hasOwnProperty(args[i])) {
+                currentCommand = currentCommand[args[i]]; // Move to the next layer
+                i++;
+            } else {
+                break;
+            }
+        }
+
+        console.log(args);
+        console.log(Object.keys(currentCommand));
+
+
+        let response = '';
+
+        return `<pre>${response}</pre>`;
+    }
+
+    //
+    // HANDLING COMMAND AUTOCOMPELTE
+    //
+
+
+    function printCommandAutocomplete(autocompletedCommands) {
+        if (autocomplete.length == 1) {
+            return autocompletedCommands[0] + '\n';
+        }
+
+        var output = '';
+
+        for (let i = 0; i < currentDir.length; i++) {
+            output += autocompletedCommands[i];
+    
+            if ((i + 1) % numColumns == 0) {
+                output += '\n';
+            } else {
+                output += '\t\t';
+            }
+        }
+
+        return output;
+    }
+
 
     //
     // PARSE INPUTS
@@ -191,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return `<pre>${response}</pre>`;
     }
-
     //
     // HANDLING SPECIFIC Z-COMMANDS
     //
