@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const index = input_text.lastIndexOf(' ');
                         input.value = input_text.substring(0, index + 1) + autofill;
-                        
+
                         setTimeout(() => {
                             input.focus();
                         }, 0); 
@@ -227,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(autofillCommands.length == 1){
             return autofillCommands[0];
+        } else {
+
         }
 
         return ;
@@ -488,6 +490,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     directory = removeLastDirectory(directory);
                 }
             }
+            return '';
+        } else if(args[1] === '.') {
             return '';
         }
 
