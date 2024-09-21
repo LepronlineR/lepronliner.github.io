@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch(event.key) {
                 case "Enter": 
                     {
+                        event.preventDefault();
                         const input_text = input.value.trim();
                         let response = '';
                         
@@ -156,20 +157,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case "ArrowUp":
+                    event.preventDefault();
                     if(savedInputsTracker > 0){
                         input.value = savedInputs[--savedInputsTracker];
                     }
                     break;
                 case "ArrowDown":
+                    event.preventDefault();
                     if(savedInputsTracker < savedInputs.length - 1){
                         input.value = savedInputs[++savedInputsTracker];
                     }
                     break;
                 case "Tab":
                     {
+                        event.preventDefault();
                         const input_text = input.value;
                         var args = input_text.split(' ');
-                        let response = autofillInput(args);
+                        let autofill = autofillInput(args);
+
+                        const index = input_text.lastIndexOf(' ');
+                        input.value = input_text.substring(0, index + 1) + autofill;
+                        
+                        setTimeout(() => {
+                            input.focus();
+                        }, 0); 
+
+                        // replace autofill
+
                     }
                     break;
                 default:
@@ -198,13 +212,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // if (args[args.length - 1] ==)
+
         console.log(args);
         console.log(Object.keys(currentCommand));
 
+        let autofillCommands = [];
 
-        let response = '';
+        for(var str of Object.keys(currentCommand)){
+            if(str.startsWith(args[args.length - 1])){
+                autofillCommands.push(str);
+            }
+        }
 
-        return `<pre>${response}</pre>`;
+        if(autofillCommands.length == 1){
+            return autofillCommands[0];
+        }
+
+        return ;
     }
 
     //
