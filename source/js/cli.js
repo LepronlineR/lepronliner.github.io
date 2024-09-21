@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
        /<span style="color: #00ffff;">$$</span>/    |______/  | <span style="color: #00ffff;">$$</span>       | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>      purposes of this demonstration
       /<span style="color: #00ffff;">$$</span>/               | <span style="color: #00ffff;">$$</span>    <span style="color: #00ffff;">$$</span> | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>     
      /<span style="color: #00ffff;">$$$$$$$$</span>           |  <span style="color: #00ffff;">$$$$$$</span>/ | <span style="color: #00ffff;">$$$$$$$$</span> /<span style="color: #00ffff;">$$$$$$</span>   Usage: z &lt;command&gt; [options]
-    |________/            \______/   |________/ |______/     Example Usage: z help ascii
+    |________/            \______/   |________/ |______/     
   
     <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
         help        Displays this help message or help for a specific command as an option.
@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fortune     Tell me a fortune.
         ascii       Generate some ascii art.
         username    Changes the username.
+        
+    Example Usage: z help ascii
   
     <span style="font-weight: bold; text-decoration: underline;">Kernel Commands: </span> (not a part of the cli usage)
         ls          List the directory.
@@ -335,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return getHandlerResult ? getHandlerResult(args) : failCase;
     }
 
-    function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}`}
+    function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}` }
 
     function handleFileRead(filename){
         if(!filename.endsWith(".text"))
@@ -496,9 +498,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const toDirName = directoryStructure.findDirectory(args[1]);
-        if(toDirName == undefined) 
-            return `cd: '${args[1]}': No such file or directory`;
-
         const homeNode = directoryStructure.findNode('~');
     
         // edge case if the username is there
@@ -508,6 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if(toDirName != null){
             directoryStructure = toDirName;
             directory += (`/${args[1]}`);
+        } else {
+            return `cd: '${args[1]}': No such file or directory`;
         }
     
         return '';
