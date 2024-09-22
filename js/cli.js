@@ -23,6 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let savedInputs = [];
     let savedInputsTracker = 0;
 
+    // autofill setting
+    let autofillShow = false;
+
+    // commands
+    const commands = {
+        "ls": {}, 
+        "cd": {}, 
+        "clear": {}, 
+        "echo": {}, 
+        "z": {"help":{}, 
+              "open":{}, 
+              "read":{}, 
+              "fortune":{}, 
+              "ascii":{}, 
+              "username":{}
+            }
+    }
+
     const usageMsg = 
     `<pre>
      /<span style="color: #00ffff;">$$$$$$$$</span>             /<span style="color: #00ffff;">$$$$$$</span>   /<span style="color: #00ffff;">$$</span>       /<span style="color: #00ffff;">$$$$$$</span>      
@@ -32,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
        /<span style="color: #00ffff;">$$</span>/    |______/  | <span style="color: #00ffff;">$$</span>       | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>      purposes of this demonstration
       /<span style="color: #00ffff;">$$</span>/               | <span style="color: #00ffff;">$$</span>    <span style="color: #00ffff;">$$</span> | <span style="color: #00ffff;">$$</span>        | <span style="color: #00ffff;">$$</span>     
      /<span style="color: #00ffff;">$$$$$$$$</span>           |  <span style="color: #00ffff;">$$$$$$</span>/ | <span style="color: #00ffff;">$$$$$$$$</span> /<span style="color: #00ffff;">$$$$$$</span>   Usage: z &lt;command&gt; [options]
-    |________/            \______/   |________/ |______/     Example Usage: z help ascii
+    |________/            \______/   |________/ |______/     
   
     <span style="font-weight: bold; text-decoration: underline;">Commands:</span>
         help        Displays this help message or help for a specific command as an option.
@@ -41,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fortune     Tell me a fortune.
         ascii       Generate some ascii art.
         username    Changes the username.
+        
+    Example Usage: z help ascii
   
     <span style="font-weight: bold; text-decoration: underline;">Kernel Commands: </span> (not a part of the cli usage)
         ls          List the directory.
@@ -108,35 +128,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         input.addEventListener('keydown', (event) => {
-            
             switch(event.key) {
-                case "Enter":
-                    const input_text = input.value.trim();
-                    let response = '';
-                    
-                    // handle an input command for the CLI
-                    if (input_text) {
-                        response = parseInput(input_text);
+                case "Enter": 
+                    {
+                        const input_text = input.value.trim();
+                        let response = '';
+                        
+                        // handle an input command for the CLI
+                        if (input_text) {
+                            response = parseInput(input_text);
+                        }
+                
+                        // create the entered prompt + command
+                        const newOutput = document.createElement('div');
+                        newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
+                        output.appendChild(newOutput);
+                        
+                        // add a new input to save all inputs
+                        savedInputs.push(input_text);
+                        savedInputsTracker = savedInputs.length;
+                
+                        if (response) {
+                            const responseOutput = document.createElement('div');
+                            responseOutput.innerHTML = response;
+                            output.appendChild(responseOutput);
+                        }
+                
+                        inputContainer.remove();
+                        appendInput();
+                        event.preventDefault();
                     }
-            
-                    // create the entered prompt + command
-                    const newOutput = document.createElement('div');
-                    newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
-                    output.appendChild(newOutput);
-                    
-                    // add a new input to save all inputs
-                    savedInputs.push(input_text);
-                    savedInputsTracker = savedInputs.length;
-            
-                    if (response) {
-                        const responseOutput = document.createElement('div');
-                        responseOutput.innerHTML = response;
-                        output.appendChild(responseOutput);
-                    }
-            
-                    inputContainer.remove();
-                    appendInput();
-                    event.preventDefault();
                     break;
                 case "ArrowUp":
                     if(savedInputsTracker > 0){
@@ -149,14 +170,109 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case "Tab":
+                    {
+                        const input_text = input.value;
+                        var args = input_text.split(' ');
+                        let autofill = autofillInput(args);
+
+                        if(autofillShow && autofill.length > 1) {
+                            // display possible autofill values
+                            let response = printCommandAutocomplete(autofill);
+
+                            // create the entered prompt + command
+                            const newOutput = document.createElement('div');
+                            newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
+                            output.appendChild(newOutput);
+                            
+                            // add a new input to save all inputs
+                            savedInputs.push(input_text);
+                            savedInputsTracker = savedInputs.length;
+                    
+                            if (response) {
+                                const responseOutput = document.createElement('div');
+                                responseOutput.innerHTML = response;
+                                output.appendChild(responseOutput);
+                            }
+                    
+                            inputContainer.remove();
+                            appendInput(input_text);
+
+                        } else if(autofill.length == 1) {
+                            // autofill input val
+                            input.value = input_text.substring(0, input_text.lastIndexOf(' ') + 1) + autofill[0];
+
+                            setTimeout(() => {
+                                input.focus();
+                            }, 0); 
+                        }
+                        event.preventDefault();
+                    }
                     break;
                 default:
                     break;
             }
 
+            // show all possible autofill options if the user presses tab twice
+            if(event.key === "Tab")
+                autofillShow = true;
+            else
+                autofillShow = false;
         });
         output.scrollTop = output.scrollHeight;
     }
+
+    //
+    // AUTOFILL INPUTS
+    //
+    function autofillInput(args){
+        
+        // recursively find the command that needs to be autofilled
+        let currentCommand = commands;
+        let i = 0;
+        while (i < args.length) {
+            // Check if the current key exists in the current layer
+            if (currentCommand.hasOwnProperty(args[i])) {
+                currentCommand = currentCommand[args[i]]; // Move to the next layer
+                i++;
+            } else {
+                break;
+            }
+        }
+
+        // if (args[args.length - 1] ==)
+
+        let autofillCommands = [];
+
+        for(var str of Object.keys(currentCommand)){
+            if(str.startsWith(args[args.length - 1])){
+                autofillCommands.push(str);
+            }
+        }
+
+        return autofillCommands;
+    }
+
+    //
+    // HANDLING COMMAND AUTOCOMPELTE
+    //
+
+
+    function printCommandAutocomplete(autocompletedCommands, numColumns = 4) {
+        var output = '';
+
+        for (let i = 0; i < autocompletedCommands.length; i++) {
+            output += autocompletedCommands[i];
+    
+            if ((i + 1) % numColumns == 0) {
+                output += '\n';
+            } else {
+                output += '\t\t';
+            }
+        }
+
+        return `<pre>${output}</pre>`;
+    }
+
 
     //
     // PARSE INPUTS
@@ -191,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return `<pre>${response}</pre>`;
     }
-
     //
     // HANDLING SPECIFIC Z-COMMANDS
     //
@@ -234,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return getHandlerResult ? getHandlerResult(args) : failCase;
     }
 
-    function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}`}
+    function handleUserNameChange(name) { username = name; return `Successfully changed username to: ${name}` }
 
     function handleFileRead(filename){
         if(!filename.endsWith(".text"))
@@ -390,12 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             return '';
+        } else if(args[1] === '.') {
+            return '';
         }
 
         const toDirName = directoryStructure.findDirectory(args[1]);
-        if(toDirName == undefined) 
-            return `cd: '${args[1]}': No such file or directory`;
-
         const homeNode = directoryStructure.findNode('~');
     
         // edge case if the username is there
@@ -405,6 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if(toDirName != null){
             directoryStructure = toDirName;
             directory += (`/${args[1]}`);
+        } else {
+            return `cd: '${args[1]}': No such file or directory`;
         }
     
         return '';
