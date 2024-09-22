@@ -41,6 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
     }
 
+    const directoryCommands = {
+        "ls": [],
+        "cd": [],
+        "z": {
+            "open": [".page"],
+            "read": [".text"]
+        }
+    }
+
     const usageMsg = 
     `<pre>
      /<span style="color: #00ffff;">$$$$$$$$</span>             /<span style="color: #00ffff;">$$$$$$</span>   /<span style="color: #00ffff;">$$</span>       /<span style="color: #00ffff;">$$$$$$</span>      
@@ -69,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         echo        Echo.
 
     Here are some example commands you can enter: [z help] [cd portfolio]
+        * Please note that there are various notable bugs in this system. 
+        Sorry for the inconvenience.
     </pre>`;
 
     async function initCLI() {
@@ -239,11 +250,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // if (args[args.length - 1] ==)
-
         let autofillCommands = [];
+        let currentAutofillCommands = Object.keys(currentCommand);
 
-        for(var str of Object.keys(currentCommand)){
+        console.log(currentAutofillCommands);
+
+        // autofill directory commands
+        if (Object.keys(currentCommand).length === 0 && Object.keys(directoryCommands).includes(args[args.length - 2])) {
+            let dirCommands = directoryCommands[args[args.length - 2]];
+            if (dirCommands.length === 0){ // accept all files in directory
+                currentAutofillCommands = directoryStructure.getAllChildrenKey();
+            } else { // accept only files with .<extension>
+                currentAutofillCommands = directoryStructure.getAllChildrenKey().filter(item => 
+                    dirCommands.some(ext => item.trim.endsWith(ext))
+                );
+            }
+        }
+
+        // autofill commands
+        for(var str of currentAutofillCommands){
             if(str.startsWith(args[args.length - 1])){
                 autofillCommands.push(str);
             }
@@ -394,10 +419,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         setParent(parent) { this.parent = parent; }
+        setValue(value) { this.value = value; }
         getKey(){ return this.key; }
         getValue(){ return this.value; }
         getParent(){ return this.parent; }
         getAllChildren(){ return this.children; }
+        
+        getAllChildrenKey() { 
+            let res = [];
+            for(var child of this.children){
+                res.push(child.getKey());
+            }
+            return res; 
+        }
     
         findNode(key){ return this.children.find(node => node.getKey() == key); }
         
