@@ -32,9 +32,9 @@ Imagine that you have a knight on A1, and you need to map out the possible movem
 
 {% grid %} 
 <!-- cell --> 
-{% image width:100px /assets/posts/swapping-knights/single.png %}
+{% image width:100px /assets/posts/swapping-knights/knights_single.png %}
 <!-- cell --> 
-{% image width:100px /assets/posts/swapping-knights/possible_moves.png %}
+{% image width:100px /assets/posts/swapping-knights/knights_possible_moves.png %}
 {% endgrid %}
 
 Then, imagine our board as a graph, with each position on the board as a vertex.
