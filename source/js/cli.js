@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let savedInputs = [];
     let savedInputsTracker = 0;
 
+    // autofill setting
+    let autofillShow = false;
+
     // commands
     const commands = {
         "ls": {}, 
@@ -125,11 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         input.addEventListener('keydown', (event) => {
-            
             switch(event.key) {
                 case "Enter": 
                     {
-                        event.preventDefault();
                         const input_text = input.value.trim();
                         let response = '';
                         
@@ -159,39 +160,63 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case "ArrowUp":
-                    event.preventDefault();
                     if(savedInputsTracker > 0){
                         input.value = savedInputs[--savedInputsTracker];
                     }
                     break;
                 case "ArrowDown":
-                    event.preventDefault();
                     if(savedInputsTracker < savedInputs.length - 1){
                         input.value = savedInputs[++savedInputsTracker];
                     }
                     break;
                 case "Tab":
                     {
-                        event.preventDefault();
                         const input_text = input.value;
                         var args = input_text.split(' ');
                         let autofill = autofillInput(args);
 
-                        const index = input_text.lastIndexOf(' ');
-                        input.value = input_text.substring(0, index + 1) + autofill;
+                        if(autofillShow && autofill.length > 1) {
+                            // display possible autofill values
+                            let response = printCommandAutocomplete(autofill);
 
-                        setTimeout(() => {
-                            input.focus();
-                        }, 0); 
+                            // create the entered prompt + command
+                            const newOutput = document.createElement('div');
+                            newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
+                            output.appendChild(newOutput);
+                            
+                            // add a new input to save all inputs
+                            savedInputs.push(input_text);
+                            savedInputsTracker = savedInputs.length;
+                    
+                            if (response) {
+                                const responseOutput = document.createElement('div');
+                                responseOutput.innerHTML = response;
+                                output.appendChild(responseOutput);
+                            }
+                    
+                            inputContainer.remove();
+                            appendInput(input_text);
 
-                        // replace autofill
+                        } else if(autofill.length == 1) {
+                            // autofill input val
+                            input.value = input_text.substring(0, input_text.lastIndexOf(' ') + 1) + autofill[0];
 
+                            setTimeout(() => {
+                                input.focus();
+                            }, 0); 
+                        }
+                        event.preventDefault();
                     }
                     break;
                 default:
                     break;
             }
 
+            // show all possible autofill options if the user presses tab twice
+            if(event.key === "Tab")
+                autofillShow = true;
+            else
+                autofillShow = false;
         });
         output.scrollTop = output.scrollHeight;
     }
@@ -216,9 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // if (args[args.length - 1] ==)
 
-        console.log(args);
-        console.log(Object.keys(currentCommand));
-
         let autofillCommands = [];
 
         for(var str of Object.keys(currentCommand)){
@@ -227,13 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if(autofillCommands.length == 1){
-            return autofillCommands[0];
-        } else {
-
-        }
-
-        return ;
+        return autofillCommands;
     }
 
     //
@@ -241,14 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //
 
 
-    function printCommandAutocomplete(autocompletedCommands) {
-        if (autocomplete.length == 1) {
-            return autocompletedCommands[0] + '\n';
-        }
-
+    function printCommandAutocomplete(autocompletedCommands, numColumns = 4) {
         var output = '';
 
-        for (let i = 0; i < currentDir.length; i++) {
+        for (let i = 0; i < autocompletedCommands.length; i++) {
             output += autocompletedCommands[i];
     
             if ((i + 1) % numColumns == 0) {
@@ -258,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        return output;
+        return `<pre>${output}</pre>`;
     }
 
 
