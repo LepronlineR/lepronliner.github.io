@@ -1,6 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const output = document.getElementById('cli-output');
     const container = document.getElementById('cli-container');
+    
+    if(!container){
+        return;
+    }
+
+    CLI(container);
+});
+
+
+function CLI(container){
+    const output = document.getElementById('cli-output');
 
     // Read and parse the JSON file
     // (attrition to ascii art: asciiart.eu)
@@ -41,6 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
     }
 
+    const directoryCommands = {
+        "ls": [],
+        "cd": [],
+        "z": {
+            "open": [".page"],
+            "read": [".text"]
+        }
+    }
+
     const usageMsg = 
     `<pre>
      /<span style="color: #00ffff;">$$$$$$$$</span>             /<span style="color: #00ffff;">$$$$$$</span>   /<span style="color: #00ffff;">$$</span>       /<span style="color: #00ffff;">$$$$$$</span>      
@@ -69,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         echo        Echo.
 
     Here are some example commands you can enter: [z help] [cd portfolio]
+        * Please note that there are various notable bugs in this system. 
+        Sorry for the inconvenience.
     </pre>`;
 
     async function initCLI() {
@@ -172,20 +193,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 case "Tab":
                     {
                         const input_text = input.value;
-                        var args = input_text.split(' ');
-                        let autofill = autofillInput(args);
+                        let [possibleAutofillResults, autofillText] = autofillInput(input_text);
 
-                        if(autofillShow && autofill.length > 1) {
+                        if(autofillShow && possibleAutofillResults.length > 1) {
                             // display possible autofill values
-                            let response = printCommandAutocomplete(autofill);
+                            let response = printCommandAutocomplete(possibleAutofillResults);
 
                             // create the entered prompt + command
                             const newOutput = document.createElement('div');
-                            newOutput.innerHTML = prompter + `<span class="cli-input-command">${input_text} </span>`;
+                            newOutput.innerHTML = prompter + `<span class="cli-input-command">${autofillText} </span>`;
                             output.appendChild(newOutput);
                             
                             // add a new input to save all inputs
-                            savedInputs.push(input_text);
+                            savedInputs.push(autofillText);
                             savedInputsTracker = savedInputs.length;
                     
                             if (response) {
@@ -195,11 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                     
                             inputContainer.remove();
-                            appendInput(input_text);
+                            appendInput(autofillText);
 
-                        } else if(autofill.length == 1) {
+                        } else if(possibleAutofillResults.length == 1) {
                             // autofill input val
-                            input.value = input_text.substring(0, input_text.lastIndexOf(' ') + 1) + autofill[0];
+                            input.value = autofillText;
 
                             setTimeout(() => {
                                 input.focus();
@@ -224,9 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //
     // AUTOFILL INPUTS
     //
-    function autofillInput(args){
-        
+    function autofillInput(text_input){
         // recursively find the command that needs to be autofilled
+        const args = text_input.split(' ');
         let currentCommand = commands;
         let i = 0;
         while (i < args.length) {
@@ -239,17 +259,81 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // if (args[args.length - 1] ==)
+        let possibleAutofillResults = [];
+        let currentAutofillCommands = Object.keys(currentCommand);
+        let wordToAutofill = args[args.length - 1];
+        let directoryCommand = getCommandResult(args, directoryCommands);
 
-        let autofillCommands = [];
+        
 
-        for(var str of Object.keys(currentCommand)){
-            if(str.startsWith(args[args.length - 1])){
-                autofillCommands.push(str);
+        // autofill directory commands
+        // ... <directory-command> <path>
+        if(directoryCommand != null) {
+            const localDirectory = directoryStructure.unrestrictedFindDirectory(wordToAutofill);
+            const dirPathArr = wordToAutofill.split('/');
+            
+            currentAutofillCommands = localDirectory.getAllChildrenKey();
+            wordToAutofill = dirPathArr[dirPathArr.length - 1];
+
+            /* TODO: if the directory ends with .page or .text highlight the text
+            const directoryName = args[args.length - 2];
+            if (directoryCommand.length === 0) {
+                // accept all files in directory
+                currentAutofillCommands = localDirectory.getAllChildrenKey();
+                wordToAutofill = dirPathArr[dirPathArr.length - 1];
+            } else {
+                // accept only files with .<extension>
+                currentAutofillCommands = localDirectory.getAllChildrenKey().filter(item => 
+                    directoryCommand.some(ext => item.trim.endsWith(ext))
+                );
+                wordToAutofill = dirPathArr[dirPathArr.length - 1];
+            }
+            */
+        }
+        
+        // autofill commands
+        for(var str of currentAutofillCommands){
+            if(str.startsWith(wordToAutofill)){
+                possibleAutofillResults.push(str);
             }
         }
 
-        return autofillCommands;
+        // outputs the autofill results (if there are multiple inputs it just returns the text input)
+        let autofill = text_input;
+
+        if (possibleAutofillResults.length == 1){
+            const replacement = args[args.length - 1];
+            if (replacement != wordToAutofill){
+                autofill = text_input.replace(wordToAutofill, possibleAutofillResults[0]);
+            } else {
+                autofill = text_input.substring(0, text_input.lastIndexOf(' ') + 1) + possibleAutofillResults[0];
+            }
+        }
+
+        return [possibleAutofillResults, autofill];
+    }
+
+    // Function to get command results
+    function getCommandResult(parts, commands) {
+        const command = parts[0]; // Main command
+        const subCommand = parts[1]; // Sub-command
+
+        // Check if the main command exists
+        if (commands[command]) {
+            // Return the array if there's a valid sub-command
+            if (subCommand && Array.isArray(commands[command][subCommand])) {
+                return commands[command][subCommand];
+            }
+
+            // If there's a sub-command but it's not an array, return the sub-command object
+            if (subCommand && typeof commands[command][subCommand] === "object") {
+                return commands[command][subCommand]; // Return the object for further processing
+            }
+
+            return [];
+        }
+
+        return null; // Command not found
     }
 
     //
@@ -394,10 +478,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         setParent(parent) { this.parent = parent; }
+        setValue(value) { this.value = value; }
         getKey(){ return this.key; }
         getValue(){ return this.value; }
         getParent(){ return this.parent; }
         getAllChildren(){ return this.children; }
+        
+        getAllChildrenKey() { 
+            let res = [];
+            for(var child of this.children){
+                res.push(child.getKey());
+            }
+            return res; 
+        }
     
         findNode(key){ return this.children.find(node => node.getKey() == key); }
         
@@ -413,6 +506,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(path)
                     target = target.findNode(path);
             }
+            return target;
+        }
+
+        // given a list of directories return if the list includes "some" path to directory path/*/* --> returns path
+        // otherwise, return this directory
+        unrestrictedFindDirectory(directories){
+            var paths = directories.split('/');
+            if(paths[0] == '.') // remove starting dir
+                paths.shift();
+            
+            var target = this;
+            var temp;
+            for(const path of paths){
+                temp = target.findNode(path);
+                if(path && temp)
+                    target = temp;
+                else
+                    break
+            }
+
+            if (target === undefined)
+                return this;
+
             return target;
         }
     }
@@ -527,4 +643,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initCLI();
-});
+}
