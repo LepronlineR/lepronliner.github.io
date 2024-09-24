@@ -8,4 +8,4 @@ public/
 _multiconfig.yml
 *.tmp
 /source/assets
-*.make
+makefile
