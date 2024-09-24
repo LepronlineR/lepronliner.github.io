@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    initCLI(container);
+    CLI(container);
 });
 
 
-function initCLI(container){
+function CLI(container){
     const output = document.getElementById('cli-output');
 
     // Read and parse the JSON file
@@ -262,27 +262,34 @@ function initCLI(container){
         let possibleAutofillResults = [];
         let currentAutofillCommands = Object.keys(currentCommand);
         let wordToAutofill = args[args.length - 1];
+        let directoryCommand = getCommandResult(args, directoryCommands);
+
+        
 
         // autofill directory commands
         // ... <directory-command> <path>
-        if(Object.keys(currentCommand).length === 0 && Object.keys(directoryCommands).includes(args[args.length - 2])) {
-            const directoryName = args[args.length - 2];
+        if(directoryCommand != null) {
             const localDirectory = directoryStructure.unrestrictedFindDirectory(wordToAutofill);
             const dirPathArr = wordToAutofill.split('/');
-            const dirCommands = directoryCommands[directoryName];
+            
+            currentAutofillCommands = localDirectory.getAllChildrenKey();
+            wordToAutofill = dirPathArr[dirPathArr.length - 1];
 
-            if (dirCommands.length === 0) {
+            /* TODO: if the directory ends with .page or .text highlight the text
+            const directoryName = args[args.length - 2];
+            if (directoryCommand.length === 0) {
                 // accept all files in directory
                 currentAutofillCommands = localDirectory.getAllChildrenKey();
                 wordToAutofill = dirPathArr[dirPathArr.length - 1];
             } else {
                 // accept only files with .<extension>
                 currentAutofillCommands = localDirectory.getAllChildrenKey().filter(item => 
-                    dirCommands.some(ext => item.trim.endsWith(ext))
+                    directoryCommand.some(ext => item.trim.endsWith(ext))
                 );
                 wordToAutofill = dirPathArr[dirPathArr.length - 1];
             }
-        } 
+            */
+        }
         
         // autofill commands
         for(var str of currentAutofillCommands){
@@ -293,7 +300,6 @@ function initCLI(container){
 
         // outputs the autofill results (if there are multiple inputs it just returns the text input)
         let autofill = text_input;
-        console.log(wordToAutofill);
 
         if (possibleAutofillResults.length == 1){
             const replacement = args[args.length - 1];
@@ -303,9 +309,31 @@ function initCLI(container){
                 autofill = text_input.substring(0, text_input.lastIndexOf(' ') + 1) + possibleAutofillResults[0];
             }
         }
-        // text_input.substring(0, text_input.lastIndexOf(' ') + 1) + autofill[0];
 
         return [possibleAutofillResults, autofill];
+    }
+
+    // Function to get command results
+    function getCommandResult(parts, commands) {
+        const command = parts[0]; // Main command
+        const subCommand = parts[1]; // Sub-command
+
+        // Check if the main command exists
+        if (commands[command]) {
+            // Return the array if there's a valid sub-command
+            if (subCommand && Array.isArray(commands[command][subCommand])) {
+                return commands[command][subCommand];
+            }
+
+            // If there's a sub-command but it's not an array, return the sub-command object
+            if (subCommand && typeof commands[command][subCommand] === "object") {
+                return commands[command][subCommand]; // Return the object for further processing
+            }
+
+            return [];
+        }
+
+        return null; // Command not found
     }
 
     //
