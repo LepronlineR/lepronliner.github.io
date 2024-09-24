@@ -1,6 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const output = document.getElementById('cli-output');
     const container = document.getElementById('cli-container');
+    
+    if(!container){
+        return;
+    }
+
+    initCLI(container);
+});
+
+
+function initCLI(container){
+    const output = document.getElementById('cli-output');
 
     // Read and parse the JSON file
     // (attrition to ascii art: asciiart.eu)
@@ -184,8 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         const input_text = input.value;
                         let [possibleAutofillResults, autofillText] = autofillInput(input_text);
-                        console.log(possibleAutofillResults);
-                        console.log(autofillText);
 
                         if(autofillShow && possibleAutofillResults.length > 1) {
                             // display possible autofill values
@@ -607,4 +615,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initCLI();
-});
+}
