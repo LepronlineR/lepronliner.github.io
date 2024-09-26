@@ -470,10 +470,17 @@ function CLI(container){
     // DIRECTORY SYSTEM
     //
 
+    // ENUM for types 
+    const OSType = Object.freeze({
+        FILE: Symbol('File'),
+        DIR: Symbol('Directory')
+    });
+
     class DirectoryNode {
-        constructor(key, value, children = []){
+        constructor(key, value, ostype, children = []){
             this.key = key;
             this.value = value;
+            this.ostype = ostype;
             this.children = children;
         }
     
@@ -550,9 +557,9 @@ function CLI(container){
                     const [child] = Object.keys(item);
                     return createNode(child, item[child]);
                 });
-                return new DirectoryNode(k, null, children);
+                return new DirectoryNode(k, null, OSType.DIR, children);
             } else {
-                return new DirectoryNode(k, v, []);
+                return new DirectoryNode(k, v, OSType.FILE, []);
             }
         }
     
@@ -611,7 +618,6 @@ function CLI(container){
     }
 
     function handleCDCommand(args){
-        console.log(args);
         const errorText = 'cd command is incorrect';
         if(args.length > 2) {
             return errorText;
