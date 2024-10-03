@@ -512,8 +512,6 @@ function CLI(container){
                 return res;
             }, []);
 
-            console.log(directories);
-            console.log(paths);
 
             if(paths[0] == '.') // remove starting dir
                 paths.shift();
@@ -523,7 +521,7 @@ function CLI(container){
                 if(path)
                     target = target.findNode(path);
             }
-            console.log(target);
+
             return target;
         }
 
