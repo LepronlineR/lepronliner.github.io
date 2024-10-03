@@ -304,7 +304,7 @@ function CLI(container){
         if (possibleAutofillResults.length == 1){
             const replacement = args[args.length - 1];
             if (replacement != wordToAutofill){
-                autofill = text_input.replace(wordToAutofill, possibleAutofillResults[0]);
+                autofill = text_input.replace(/[^\/]+$/, possibleAutofillResults[0]);
             } else {
                 autofill = text_input.substring(0, text_input.lastIndexOf(' ') + 1) + possibleAutofillResults[0];
             }
@@ -470,10 +470,17 @@ function CLI(container){
     // DIRECTORY SYSTEM
     //
 
+    // ENUM for types 
+    const OSType = Object.freeze({
+        FILE: Symbol('File'),
+        DIR: Symbol('Directory')
+    });
+
     class DirectoryNode {
-        constructor(key, value, children = []){
+        constructor(key, value, ostype, children = []){
             this.key = key;
             this.value = value;
+            this.ostype = ostype;
             this.children = children;
         }
     
@@ -497,7 +504,15 @@ function CLI(container){
         // given a list of directories return if this list is true, otherwise null
         //  i.e. path/to/directory 
         findDirectory(directories) { 
-            var paths = directories.split('/');
+            var paths = directories.split('/').reduce((res, path, idx, arr) => {
+                if(path && idx < arr.length - 1)
+                    path += '/';
+                
+                res.push(path)
+                return res;
+            }, []);
+
+
             if(paths[0] == '.') // remove starting dir
                 paths.shift();
             
@@ -506,13 +521,19 @@ function CLI(container){
                 if(path)
                     target = target.findNode(path);
             }
+
             return target;
         }
 
         // given a list of directories return if the list includes "some" path to directory path/*/* --> returns path
         // otherwise, return this directory
         unrestrictedFindDirectory(directories){
-            var paths = directories.split('/');
+            var paths = directories.split('/').reduce((res, path) => {
+                if(path)
+                    res.push(path + '/');
+                return res;
+            }, []);
+
             if(paths[0] == '.') // remove starting dir
                 paths.shift();
             
@@ -540,9 +561,9 @@ function CLI(container){
                     const [child] = Object.keys(item);
                     return createNode(child, item[child]);
                 });
-                return new DirectoryNode(k, null, children);
+                return new DirectoryNode(k, null, OSType.DIR, children);
             } else {
-                return new DirectoryNode(k, v, []);
+                return new DirectoryNode(k, v, OSType.FILE, []);
             }
         }
     
@@ -637,6 +658,11 @@ function CLI(container){
             directory += (`/${args[1]}`);
         } else {
             return `cd: '${args[1]}': No such file or directory`;
+        }
+
+        // Remove the last character if it is '/'
+        if (directory.charAt(directory.length - 1) === '/') {
+            directory = directory.slice(0, -1);
         }
     
         return '';
