@@ -504,11 +504,16 @@ function CLI(container){
         // given a list of directories return if this list is true, otherwise null
         //  i.e. path/to/directory 
         findDirectory(directories) { 
-            var paths = directories.split('/').reduce((res, path) => {
-                if(path)
-                    res.push(path + '/');
+            var paths = directories.split('/').reduce((res, path, idx, arr) => {
+                if(path && idx < arr.length - 1)
+                    path += '/';
+                
+                res.push(path)
                 return res;
             }, []);
+
+            console.log(directories);
+            console.log(paths);
 
             if(paths[0] == '.') // remove starting dir
                 paths.shift();
@@ -518,6 +523,7 @@ function CLI(container){
                 if(path)
                     target = target.findNode(path);
             }
+            console.log(target);
             return target;
         }
 
