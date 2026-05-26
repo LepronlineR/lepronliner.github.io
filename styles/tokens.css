@@ -1,0 +1,17 @@
+﻿/* Design tokens */
+:root {
+  color-scheme: dark;
+  --ink: #f4f7fb;
+  --muted: #a8b3c4;
+  --bg: #0d1016;
+  --panel: rgba(15, 20, 28, 0.78);
+  --panel-solid: #151a22;
+  --line: rgba(244, 247, 251, 0.14);
+  --green: #60d394;
+  --amber: #f4d35e;
+  --coral: #ee6c4d;
+  --blue: #59c3c3;
+  --paper: #f5f7f2;
+  --paper-ink: #1a1d24;
+  --paper-muted: #5c6675;
+}

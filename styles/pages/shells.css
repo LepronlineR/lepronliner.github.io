@@ -1,0 +1,7 @@
+﻿/* Page shell backgrounds */
+.simple-page,
+.blog-page {
+  background: var(--paper);
+  color: var(--paper-ink);
+  transition: background 180ms ease, color 180ms ease;
+}

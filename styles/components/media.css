@@ -1,0 +1,28 @@
+﻿/* Embedded media helpers */
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.video-embed {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 8px;
+}
+
+.media-placeholder {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  padding: 18px;
+  border: 1px dashed rgba(26, 29, 36, 0.22);
+  border-radius: 8px;
+  background: #f8faf9;
+  text-align: center;
+}
+
+.media-placeholder span {
+  color: var(--paper-muted);
+  font-size: 0.85rem;

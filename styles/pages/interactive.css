@@ -1,0 +1,96 @@
+﻿/* Interactive island page */
+.interactive-page {
+  --ink: #f8ecd8;
+  --muted: #b9ad9d;
+  --green: #f07835;
+  --amber: #ffb05e;
+  --blue: #d69b55;
+  --bg: #070809;
+  --line: rgba(248, 236, 216, 0.16);
+  overflow: hidden;
+  background: #070809;
+  color: var(--ink);
+}
+
+.interactive-page .site-header {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(7, 8, 9, 0.86), rgba(7, 8, 9, 0));
+}
+
+.interactive-page .site-header::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(240, 120, 53, 0.12), transparent),
+    rgba(7, 8, 9, 0.62);
+}
+
+.interactive-page .nav-links a::after {
+  background: var(--green);
+}
+
+.interactive-page .hero-shell {
+  min-height: 100svh;
+  padding: 0;
+  border-bottom: 0;
+  cursor: grab;
+  touch-action: none;
+}
+
+.interactive-page .hero-shell.is-orbiting {
+  cursor: grabbing;
+}
+
+.interactive-page #mountain-canvas {
+  background:
+    radial-gradient(circle at 50% 88%, rgba(0, 92, 112, 0.22), transparent 35%),
+    linear-gradient(180deg, #000713 0%, #00131f 45%, #000204 100%);
+}
+
+.interactive-page .scene-label {
+  color: #f8ecd8;
+  border-color: rgba(248, 236, 216, 0.34);
+  background: rgba(10, 8, 6, 0.72);
+  box-shadow: 0 0 22px rgba(240, 120, 53, 0.14);
+}
+
+.interactive-page .scene-label::after {
+  background: rgba(240, 120, 53, 0.82);
+}
+
+.interactive-page .scene-label:hover,
+.interactive-page .scene-label.is-selected {
+  border-color: rgba(240, 120, 53, 0.96);
+  box-shadow: 0 0 30px rgba(240, 120, 53, 0.32);
+}
+
+.interactive-page .scene-card {
+  position: absolute;
+  right: auto;
+  bottom: auto;
+  left: 18px;
+  top: 84px;
+  z-index: 80;
+  width: min(260px, calc(100% - 44px));
+  padding: 11px 12px;
+  color: var(--ink);
+  border-color: rgba(248, 236, 216, 0.18);
+  background: rgba(8, 7, 6, 0.72);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+}
+
+.interactive-page .panel-kicker {
+  color: var(--blue);
+}
+
+.interactive-page .scene-card p:not(.panel-kicker) {
+  color: var(--muted);
+}
+
+.scene-card-link {
+  display: inline-flex;
+  margin-top: 10px;
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 780;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
