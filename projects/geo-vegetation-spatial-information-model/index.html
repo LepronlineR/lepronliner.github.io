@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="An agricultural analysis tool that visualizes vegetation and precipitation data over time.">
+    <title>Geo-Vegetation Spatial Information Model | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page project-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a class="is-active" aria-current="page" href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="post-wrap project-detail-wrap">
+      <section class="post-hero post-hero-image project-hero-image">
+        <div class="post-title-box">
+          <p class="eyebrow">Project</p>
+          <h1>Geo-Vegetation Spatial Information Model</h1>
+          <p class="post-meta">April 1, 2024</p>
+        </div>
+      </section>
+      <article class="post-content project-content">
+        <h2>Geo-Vegetation Spatial Information Model</h2>
+<p>This is a small project in Xinformatics at RPI, the project looks at new ways to visualize data. We try to use a spatial information model in a way to analyze agricultural data, specifically trying to see a way if we can match vegetation with precipitation. By doing this, it'll be easier to see the correlation between the two data points in a 3D visualization.</p>
+<p>The application includes a legend, checkboxes for enabling and disabling data layers, and a calendar for inspecting a particular date. The data pipeline pulls from NASA, NOAA, and USGS sources.</p>
+<p>We hosted all of the data in AWS.</p>
+<p><a href="https://xinfo.vercel.app">View the information model</a></p>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>

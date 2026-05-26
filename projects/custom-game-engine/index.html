@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A multithreaded custom game engine built with C, the Windows API, and Vulkan.">
+    <title>Custom Game Engine | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page project-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a class="is-active" aria-current="page" href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="post-wrap project-detail-wrap">
+      <section class="post-hero post-hero-image project-hero-image">
+        <div class="post-title-box">
+          <p class="eyebrow">Project</p>
+          <h1>Custom Game Engine</h1>
+          <p class="post-meta">December 1, 2022</p>
+        </div>
+      </section>
+      <article class="post-content project-content">
+        <h2>Custom Game Engine</h2>
+<p>This is a multithreaded custom game engine using the Windows API and Vulkan as the graphics backend.</p>
+<p>The engine includes memory-leak detection that reports allocation locations, asynchronous file decompression using LZ4, CPU profiling that exports Chrome trace output, and a small demo with bounding boxes.</p>
+<p>This is still a WIP, hopefully it will be revived soon :)</p>
+<p><a href="https://github.com/LepronlineR/pdb-sim">GitHub Link</a></p>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>

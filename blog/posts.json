@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Swapping Knights",
+    "description": "Solve interesting chess problems with graph theory",
+    "tags": [
+      "math",
+      "computer science",
+      "problem solving",
+      "python",
+      "chess",
+      "graph theory"
+    ],
+    "cover": "/assets/blogs/knights/knights_cycle.png",
+    "url": "/blog/swapping-knights.html",
+    "date": "2024-08-22T18:58:18.000Z"
+  },
+  {
+    "title": "Peaceful Rooks",
+    "description": "Solve chess problems with insight, visualization, and pattern matching",
+    "tags": [
+      "math",
+      "computer science",
+      "problem solving",
+      "python",
+      "chess"
+    ],
+    "cover": "/assets/blogs/rooks/rook-example.png",
+    "url": "/blog/peaceful-rooks.html",
+    "date": "2024-08-22T00:09:12.000Z"
+  },
+  {
+    "title": "L2-regularized Logistic Regression Derived",
+    "description": "Learn how the loss function for l2-regularized logistic regression is derived",
+    "tags": [
+      "math",
+      "machine-learning",
+      "python",
+      "pytorch"
+    ],
+    "cover": "/assets/blogs/l2reg/l2reg.png",
+    "url": "/blog/l2-regularized-lr-math.html",
+    "date": "2024-07-21T17:22:48.000Z"
+  }
+]

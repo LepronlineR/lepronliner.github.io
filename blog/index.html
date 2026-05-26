@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Technical writing from Zhi Zheng.">
+    <title>Blog | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a href="/projects/">Projects</a>
+        <a class="is-active" aria-current="page" href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="blog-wrap">
+    <section class="blog-hero">
+      <p class="eyebrow">Blog</p>
+      <h1>Notes and derivations</h1>
+      <p class="post-summary">Math, machine learning, graphics, game systems, and problem solving.</p>
+    </section>
+    <section class="tag-filter-panel" aria-label="Filter posts by tag">
+      <div class="tag-filter-header">
+        <p class="eyebrow">Filter</p>
+        <p class="blog-filter-status" data-filter-status>Showing 3 posts</p>
+      </div>
+      <div class="tag-filter-list" data-tag-filters>
+        <button class="tag-filter-button" type="button" data-tag="chess" aria-pressed="false">chess <span>2</span></button>
+<button class="tag-filter-button" type="button" data-tag="computer-science" aria-pressed="false">computer science <span>2</span></button>
+<button class="tag-filter-button" type="button" data-tag="graph-theory" aria-pressed="false">graph theory <span>1</span></button>
+<button class="tag-filter-button" type="button" data-tag="machine-learning" aria-pressed="false">machine-learning <span>1</span></button>
+<button class="tag-filter-button" type="button" data-tag="math" aria-pressed="false">math <span>3</span></button>
+<button class="tag-filter-button" type="button" data-tag="problem-solving" aria-pressed="false">problem solving <span>2</span></button>
+<button class="tag-filter-button" type="button" data-tag="python" aria-pressed="false">python <span>3</span></button>
+<button class="tag-filter-button" type="button" data-tag="pytorch" aria-pressed="false">pytorch <span>1</span></button>
+      </div>
+    </section>
+    <section class="blog-list" aria-label="Blog posts">
+      <a class="blog-card" href="/blog/swapping-knights.html" data-tags="math computer-science problem-solving python chess graph-theory">
+    <span class="blog-card-image" style="background-image: url('/assets/blogs/knights/knights_cycle.png')"></span>
+    <span class="blog-card-body">
+      <span class="date">Aug 22, 2024</span>
+      <span class="blog-card-title">Swapping Knights</span>
+      <span class="post-summary">Solve interesting chess problems with graph theory</span>
+      <span class="tag-row"><span>math</span><span>computer science</span><span>problem solving</span><span>python</span></span>
+    </span>
+  </a>
+<a class="blog-card" href="/blog/peaceful-rooks.html" data-tags="math computer-science problem-solving python chess">
+    <span class="blog-card-image" style="background-image: url('/assets/blogs/rooks/rook-example.png')"></span>
+    <span class="blog-card-body">
+      <span class="date">Aug 22, 2024</span>
+      <span class="blog-card-title">Peaceful Rooks</span>
+      <span class="post-summary">Solve chess problems with insight, visualization, and pattern matching</span>
+      <span class="tag-row"><span>math</span><span>computer science</span><span>problem solving</span><span>python</span></span>
+    </span>
+  </a>
+<a class="blog-card" href="/blog/l2-regularized-lr-math.html" data-tags="math machine-learning python pytorch">
+    <span class="blog-card-image" style="background-image: url('/assets/blogs/l2reg/l2reg.png')"></span>
+    <span class="blog-card-body">
+      <span class="date">Jul 21, 2024</span>
+      <span class="blog-card-title">L2-regularized Logistic Regression Derived</span>
+      <span class="post-summary">Learn how the loss function for l2-regularized logistic regression is derived</span>
+      <span class="tag-row"><span>math</span><span>machine-learning</span><span>python</span><span>pytorch</span></span>
+    </span>
+  </a>
+    </section>
+  </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    <script src="/scripts/blog-filter.js" defer></script>
+  </body>
+</html>

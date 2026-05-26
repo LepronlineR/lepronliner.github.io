@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Project showcase for Zhi Zheng.">
+    <title>Projects | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page project-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a class="is-active" aria-current="page" href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="project-showcase-wrap">
+    <section class="blog-hero project-showcase-hero">
+      <p class="eyebrow">Projects</p>
+      <h1>Project Showcase</h1>
+      <p class="post-summary">A hidden project index for the island experience.</p>
+    </section>
+    <section class="project-showcase-grid" aria-label="Project showcase">
+      <a class="project-showcase-card" href="/projects/terrain-generator/">
+    <span class="project-showcase-image is-empty"></span>
+    <span class="project-showcase-body">
+      <span class="date">Jul 2024</span>
+      <span class="project-showcase-title">Terrain Generator using OpenGL</span>
+      <span class="post-summary">Project notes and implementation details.</span>
+    </span>
+  </a>
+<a class="project-showcase-card" href="/projects/campfire/">
+    <span class="project-showcase-image" style="background-image: url('/assets/projects/campfire/fig-1.png')"></span>
+    <span class="project-showcase-body">
+      <span class="date">Jul 2024</span>
+      <span class="project-showcase-title">Implementing a Constrained Force-directed Graph on The Campfire</span>
+      <span class="post-summary">The Campfire is a multi-dimensional visualization tool developed by RPI IDEA, this is a project I worked on that uses a force directed graph in a circular constraint that displays the connection between individual edges.</span>
+    </span>
+  </a>
+<a class="project-showcase-card" href="/projects/geo-vegetation-spatial-information-model/">
+    <span class="project-showcase-image is-empty"></span>
+    <span class="project-showcase-body">
+      <span class="date">Apr 2024</span>
+      <span class="project-showcase-title">Geo-Vegetation Spatial Information Model</span>
+      <span class="post-summary">An agricultural analysis tool that visualizes vegetation and precipitation data over time.</span>
+    </span>
+  </a>
+<a class="project-showcase-card" href="/projects/messozoic-systems/">
+    <span class="project-showcase-image is-empty"></span>
+    <span class="project-showcase-body">
+      <span class="date">Mar 2024</span>
+      <span class="project-showcase-title">Messozoic Systems</span>
+      <span class="post-summary">Gameplay systems work for Messozoic, including serialization, UI, inventory, and skeletal base-building mechanics.</span>
+    </span>
+  </a>
+<a class="project-showcase-card" href="/projects/custom-game-engine/">
+    <span class="project-showcase-image is-empty"></span>
+    <span class="project-showcase-body">
+      <span class="date">Dec 2022</span>
+      <span class="project-showcase-title">Custom Game Engine</span>
+      <span class="post-summary">A multithreaded custom game engine built with C, the Windows API, and Vulkan.</span>
+    </span>
+  </a>
+    </section>
+  </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>

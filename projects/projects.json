@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Terrain Generator using OpenGL",
+    "description": "",
+    "cover": "",
+    "url": "/projects/terrain-generator/",
+    "date": "2024-07-23T16:50:53.000Z"
+  },
+  {
+    "title": "Implementing a Constrained Force-directed Graph on The Campfire",
+    "description": "The Campfire is a multi-dimensional visualization tool developed by RPI IDEA, this is a project I worked on that uses a force directed graph in a circular constraint that displays the connection between individual edges.",
+    "cover": "/assets/projects/campfire/fig-1.png",
+    "url": "/projects/campfire/",
+    "date": "2024-07-23T15:13:44.000Z"
+  },
+  {
+    "title": "Geo-Vegetation Spatial Information Model",
+    "description": "An agricultural analysis tool that visualizes vegetation and precipitation data over time.",
+    "cover": "",
+    "url": "/projects/geo-vegetation-spatial-information-model/",
+    "date": "2024-04-01T00:00:00.000Z"
+  },
+  {
+    "title": "Messozoic Systems",
+    "description": "Gameplay systems work for Messozoic, including serialization, UI, inventory, and skeletal base-building mechanics.",
+    "cover": "",
+    "url": "/projects/messozoic-systems/",
+    "date": "2024-03-01T00:00:00.000Z"
+  },
+  {
+    "title": "Custom Game Engine",
+    "description": "A multithreaded custom game engine built with C, the Windows API, and Vulkan.",
+    "cover": "",
+    "url": "/projects/custom-game-engine/",
+    "date": "2022-12-01T00:00:00.000Z"
+  }
+]

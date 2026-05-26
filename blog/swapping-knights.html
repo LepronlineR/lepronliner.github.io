@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Solve interesting chess problems with graph theory">
+    <title>Swapping Knights | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a href="/projects/">Projects</a>
+        <a class="is-active" aria-current="page" href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="post-wrap">
+      <section class="post-hero post-hero-image" style="background-image: url('/assets/blogs/knights/knights_cycle.png')">
+        <div class="post-title-box">
+          <p class="eyebrow">Blog</p>
+          <h1>Swapping Knights</h1>
+          <p class="post-meta">August 22, 2024 &middot; math, computer science, problem solving, python, chess, graph theory</p>
+        </div>
+      </section>
+      <article class="post-content">
+        <h2>Swapping Knights</h2>
+<p>You have a chess configuration as:</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights_one.png" alt="knights one" loading="lazy"></figure>
+<p>How can you move the knights in any order so that it can look like:</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights_two.png" alt="knights two" loading="lazy"></figure>
+<p>That is:</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights.png" alt="knights" loading="lazy"></figure>
+<h2>Visualization &amp; Solution</h2>
+<p>Imagine that you have a knight on A1, and you need to map out the possible movements for this knight. At the start it can only move to either B3 or C2. Let's just take the path B3. Then we take C1, A2, C3, B1, A3, C2, A1. As you can see, our knight took an entire tour around this board and returned to the original position. This must mean that if we start the knight on any tile that is not B2, you can always reach some other point. Furthermore, if you are perceptive enough, you can tell that for a path of a single knight, we visited every position except for B2 once.</p>
+<div class="post-grid"> 
+<figure class="post-image" style="--image-width: 100px"><img src="/assets/blogs/knights/knights_single.png" alt="knights single" loading="lazy"></figure>
+<figure class="post-image" style="--image-width: 100px"><img src="/assets/blogs/knights/knights_possible_moves.png" alt="knights possible moves" loading="lazy"></figure>
+</div>
+<p>Then, imagine our board as a graph, with each position on the board as a vertex.</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights_graph.png" alt="knights graph" loading="lazy"></figure>
+<p>Using the last piece of information we gained, if the look at the board with a perspective of a graph, we can ascertain that the graph is representative of a cycle, and the path of the knight is an eulerian cycle.</p>
+<p>Let's take the first configuration and add the other knights in their respective positions on the board and expand the board into a graph. We have:</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights_cycle.png" alt="This graph is undirected. Ignore the arrows." loading="lazy"><figcaption>This graph is undirected. Ignore the arrows.</figcaption></figure>
+<p>From this graph, the white knight at A3 can go from A3 to C2 as well as A3 to B1. However, the white knight cannot move from C2 to A1 since the black knight is blocking the path.</p>
+<p>Now here is the second configuration we want to achieve with the knights in their respective positions on the board:</p>
+<figure class="post-image"><img src="/assets/blogs/knights/knights_cycle_impossible.png" alt="This graph is undirected. Ignore the arrows." loading="lazy"><figcaption>This graph is undirected. Ignore the arrows.</figcaption></figure>
+<p>As you can see, this configuration requires the neighboring knights to be of different color. However, achieving this configuration from the first configuration is impossible since one of the knights will have to swap places with another knight.</p>
+<h3>Solution</h3>
+<p>Therefore, we cannot move the knights in any way to achieve our configuration.</p>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>

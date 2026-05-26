@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Learn how the loss function for l2-regularized logistic regression is derived">
+    <title>L2-regularized Logistic Regression Derived | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a href="/projects/">Projects</a>
+        <a class="is-active" aria-current="page" href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="post-wrap">
+      <section class="post-hero post-hero-image" style="background-image: url('/assets/blogs/l2reg/l2reg.png')">
+        <div class="post-title-box">
+          <p class="eyebrow">Blog</p>
+          <h1>L2-regularized Logistic Regression Derived</h1>
+          <p class="post-meta">July 21, 2024 &middot; math, machine-learning, python, pytorch</p>
+        </div>
+      </section>
+      <article class="post-content">
+        <h2>L2-regularized Logistic Regression</h2>
+<p>Logistic regression is a very popular algorithm as it is fast to use and generally reliable for regression problems. L2 regularization or ridge regression or more commonly known as weight decay, is a technique that modifies a loss function by adding a regularization term to penalize drastic changes in the weight fitting well with the data. Here, I provide the derivation for l2-regularized logistic regression</p>
+<p>In order to derive the loss for logistic regression, we need to compute the gradient and hessians of that loss function. First we can define the function as:</p>
+<blockquote>$$ f(ω') = \frac{1}{n} \sum_{i=1}^nlog(1 + exp(-y_i(ω_0 + ω^Tx_i))) + λ ||ω||_2^2 $$</blockquote>
+<p>Furthermore, note that the bias is not regularized; therefore, we consider $ω_0 = [ω_0; ω]$ as the vertical concatenation of the bias and feature coefficients. Before we find the gradient, it is imperative for us to break down the function to help. Moreover, let us define another separate function that will come into use later.</p>
+<h3>The Sigmoid Function ($\sigma$)</h3>
+<p>The sigmoid function, which is generally represented as $\sigma$, is $$\text{sigmoid}(x) = \frac{e^x}{1 + e^x} = \frac{exp(x)}{1 + exp(x)} = \sigma(x)$$</p>
+<figure class="post-image"><img src="/assets/blogs/l2reg/sigmoid.png" alt="visualized sigmoid function" loading="lazy"><figcaption>visualized sigmoid function</figcaption></figure>
+<p>Prior to it's now common use for machine learning as an &quot;activation function&quot;, in a general sense, it is just a function that maps a value (x) to another value between 0 and 1. In a binary problem, we see this as an arbitrary number that evaluates to either true or false according to the input value.</p>
+<p>Moreover, let us find the derivative of the sigmoid function (hint: we will need it later)</p>
+<blockquote>I'm too lazy to add the derivation for this. here it is. </blockquote>
+<p>$$ \sigma'(x) = \sigma(x)(1-\sigma(x)) $$</p>
+<figure class="post-image"><img src="/assets/blogs/l2reg/sigmoid_deriv.png" alt="blue line is the derivative of the sigmoid function" loading="lazy"><figcaption>blue line is the derivative of the sigmoid function</figcaption></figure>
+<h3>Computing for $∇_{w'}f$</h3>
+<p>In order to find the gradient, we need to find the derivative of the function according to the bias and feature coefficients. The order does not matter much.</p>
+<blockquote>$$ ∇_{w'}f = [\frac{\partial f}{\partial w_0}; \frac{\partial f}{\partial w}] $$</blockquote>
+<h4>Finding $\frac{\partial f}{\partial w_0}$</h4>
+<p>Here we apply $\frac{\partial}{\partial w_0}$ and separate for simplicity</p>
+<blockquote>$$ (\frac{\partial}{\partial w_0})(\frac{1}{n} \sum_{i=1}^n \log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + λ ||w||_2^2) $$</blockquote>
+<p>we can ignore the summation since it applies to all n, it wont change the derivative (we will have to substitute it back later)</p>
+<blockquote>$$ (\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w_0})λ||w||_2^2) $$</blockquote>
+<p>we can separate the into two parts to make it easier to derive overall</p>
+<ul>
+<li>Derive $(\frac{\partial}{\partial w_0})λ||w||_2^2$:</li>
+</ul>
+<blockquote>$$ (\frac{\partial}{\partial w_0})λ||w||_2^2 = 0 $$</blockquote>
+<ul>
+<li>Derive $(\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))$:</li>
+</ul>
+<blockquote>$$ (\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) $$ </blockquote>
+<p>apply the derivative due to log $$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} <em> \frac{\partial}{\partial w_0} (1 + \exp(-y_i(ω_0 + w^Tx_i))) $$ apply the derivative again due to the exponent $$\frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} </em> (\exp(-y_i(ω_0 + w^Tx_i)) <em> (\frac{\partial}{\partial w_0} </em> -y_iω_0 - y_iw^Tx_i)) $$ apply the derivative, we can remove the term on the right since it is $w^T$ $$\frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} <em> \exp(-y_i(ω_0 + w^Tx_i)) </em> -y_i $$ combine the terms together $$-y_i <em> \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} $$ using the sigmoid function we defined earlier, we can dress up the function $$ -y_i </em> \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} \rightarrow -y_i *\sigma(-y_i(w_0 + w^Tx_i))$$</p>
+<p>Then place all derived values back into $\frac{\partial f}{\partial w_0}$,</p>
+<blockquote>$$ \frac{1}{n} \sum_{i=1}^n ((\frac{\partial}{\partial w_0})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))) + ((\frac{\partial}{\partial w_0})λ||w||_2^2) $$</blockquote>
+<blockquote>$$ \frac{1}{n} \sum_{i=1}^n -y_i *\sigma(-y_i(w_0 + w^Tx_i)) $$</blockquote>
+<blockquote>$$ \frac{\partial f}{\partial w_0} = - \frac{1}{n} \sum_{i=1}^n y_i *\sigma(-y_i(w_0 + w^Tx_i)) $$</blockquote>
+<h4>Finding $\frac{\partial f}{\partial w}$:</h4>
+<p>follows the same format as before</p>
+<blockquote>$$(\frac{\partial}{\partial w})(\frac{1}{n} \sum_{i=1}^n \log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + λ ||w||_2^2)$$</blockquote>
+<blockquote>$$\frac{1}{n} \sum_{i=1}^n ((\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w})λ||w||_2^2) $$</blockquote>
+<ul>
+<li>Derive $(\frac{\partial}{\partial w})λ||w||_2^2$:</li>
+</ul>
+<blockquote>$$ (\frac{\partial}{\partial w_0})λ||w||_2^2 = 2\lambda w $$</blockquote>
+<ul>
+<li>Derive $(\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i)))$:</li>
+</ul>
+<blockquote>$$ (\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) $$</blockquote>
+<p>apply the derivative due to log $$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} <em> \frac{\partial}{\partial w} (1 + \exp(-y_i(ω_0 + w^Tx_i))) $$ apply the derivative again due to the exponent $$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} </em> \exp(-y_i(ω_0 + w^Tx_i)) <em> (\frac{\partial}{\partial w} </em> -y_iω_0 - y_iw^Tx_i)) $$ apply the derivative, and we dont eliminate the right term this time $$ \frac{1}{1 + \exp(-y_i(ω_0 + w^Tx_i))} <em> \exp(-y_i(ω_0 + w^Tx_i)) </em> -y_ix_i $$ organize the function $$ -y_ix_i <em> \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))}$$ using the sigmoid function, $$ -y_ix_i </em> \frac{\exp(-y_i(ω_0 + w^Tx_i))}{1 + \exp(-y_i(ω_0 + w^Tx_i))} \rightarrow -y_ix_i *\sigma(-y_i(w_0 + w^Tx_i))$$</p>
+<p>Then place all derived values back into $\frac{\partial f}{\partial w}$,</p>
+<blockquote>$$ \frac{1}{n} \sum_{i=1}^n ((\frac{\partial}{\partial w})\log(1 + \exp(-y_i(ω_0 + w^Tx_i))) + ((\frac{\partial}{\partial w})λ||w||_2^2)) $$</blockquote>
+<blockquote>$$\frac{1}{n} \sum_{i=1}^n -y_i *\sigma(-y_i(w_0 + w^Tx_i)) + 2\lambda w $$</blockquote>
+<blockquote>$$\frac{\partial f}{\partial w} = - \frac{1}{n} \sum_{i=1}^n y_ix_i *\sigma(-y_i(w_0 + w^Tx_i)) + 2\lambda w $$</blockquote>
+<h4>Getting $∇_{w'}f$</h4>
+<blockquote>$$∇_{w'}f = [\frac{\partial f}{\partial w_0}; \frac{\partial f}{\partial w}]$$</blockquote>
+<blockquote>$$ = [ - \frac{1}{n} \sum_{i=1}^n y_i <em>\sigma(-y_i(w_0 + w^Tx_i)) ; - \frac{1}{n} \sum_{i=1}^n y_ix_i </em>\sigma(-y_i(w_0 + w^Tx_i))+ 2\lambda w] $$</blockquote>
+<p>we can combine these terms together to form:</p>
+<blockquote>A: $$∇_{w'}f= - \frac{1}{n} (\sum_{i=1}^n y_i *\sigma(-y_i(w_0 + w^Tx_i)) * \\begin{bmatrix} 1\\\ x_i \\end{bmatrix}) + 2\lambda \\begin{bmatrix} 0\\\ w \\end{bmatrix} $$</blockquote>
+<h4>Computing for $ ∇_{w'}^2f$</h4>
+<p>in order to compute the hessian, we can take a shortcut and find the derivative based on each part of the gradient according to the hessian matrix.</p>
+<blockquote>$$ ∇_{w'}^2f = \\begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \\end{bmatrix}$$</blockquote>
+<p>we can say that $\frac{\partial^2 f}{\partial w_0 \partial w} = \frac{\partial^2 f}{\partial w \partial w_0}$ due to the rule of derivatives</p>
+<p>For the regularization term, the only time we add $2\lambda$ is when the we're taking $\frac{\partial^2 f}{\partial w^2}$. Therefore, in our matrix, we can just represent the 2nd row and 2nd column ($\frac{\partial^2 f}{\partial w^2}$) for the regularization term. That means we just set the regularization term as $ + \\begin{bmatrix} 0 &amp; 0 \\\ 0 &amp; 2\lambda \\end{bmatrix}$.</p>
+<p>Using chain rule for $\sigma(-y_i(w_0 + w^Tx_i))$</p>
+<ul>
+<li>$\nabla_{w_0}$:</li>
+</ul>
+<blockquote>$$ \sigma'(-y_i(w_0 + w^Tx_i)) = \sigma' * (-y_i(w_0 + w^Tx_i))'\\</blockquote>
+<p>= -y_i * \sigma(1 - \sigma) $$</p>
+<ul>
+<li>$\nabla_w$:</li>
+</ul>
+<blockquote>$$ \sigma'(-y_i(w_0 + w^Tx_i)) = \sigma' * (-y_i(w_0 + w^Tx_i))'\\</blockquote>
+<p>= x_i * \sigma(1 - \sigma) $$</p>
+<p>Then we can say for the hessian matrix, we can replace the result of what the partial derivative is for each respective $w$ or $w_0$</p>
+<blockquote>$$ ∇_{w'}^2f = \\begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \\end{bmatrix}$$</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w_0^2}$:</p>
+<ul>
+<li>$-y_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>$$ = - \frac{1}{n} (\sum_{i=1}^n y_i <em> -y_i </em> \sigma(1 - \sigma) * \\begin{bmatrix} 1\\\ x_i \\end{bmatrix}) + 2\lambda \\begin{bmatrix} 0\\\ w \\end{bmatrix} $$</blockquote>
+<blockquote>$$ = \frac{1}{n} (\sum_{i=1}^n y_i^2 <em> \sigma(1 - \sigma)) </em> 1 + 2\lambda \\begin{bmatrix} 0\\\ w \end{bmatrix} $$</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w^2}$:</p>
+<ul>
+<li>$x_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>$$ = - \frac{1}{n} (\sum_{i=1}^n y_i <em> x_i </em> \sigma(1 - \sigma) * \\begin{bmatrix} 1\\\ x_i \\end{bmatrix}) + 2\lambda \\begin{bmatrix} 0\\\ w \end{bmatrix}$$</blockquote>
+<blockquote>$$ = \frac{1}{n} (\sum_{i=1}^n y_i^2 <em> \sigma(1 - \sigma)) </em> x_i + 2\lambda \\begin{bmatrix} 0\\\ w \end{bmatrix} $$</blockquote>
+<p>For $\frac{\partial^2 f}{\partial w \partial w_0} = \frac{\partial^2 f}{\partial w_0 \partial w}$</p>
+<ul>
+<li>$x_i * \sigma(1 - \sigma)$ since it is $\frac{\partial f}{\partial w_0}$</li>
+</ul>
+<blockquote>$$ = - \frac{1}{n} (\sum_{i=1}^n y_i <em> \sigma(1 - \sigma) </em> \\begin{bmatrix} 1\\\ x_i \\end{bmatrix}) + 2\lambda $$</blockquote>
+<blockquote>$$ = - \frac{1}{n} (\sum_{i=1}^n y_i <em> \sigma(1 - \sigma) </em> x_i) + 2\lambda \\begin{bmatrix} 0\\\ w \\end{bmatrix} $$</blockquote>
+<p>or</p>
+<blockquote>$$ = \frac{1}{n} (\sum_{i=1}^n y_i <em> x_i </em> \sigma(1 - \sigma)) * 1 + 2\lambda \\begin{bmatrix} 0\\\ w \\end{bmatrix} $$</blockquote>
+<p>We can put all of the options from the gradients due to the hessian matrix (representing $x_i$):</p>
+<blockquote>$$ \\begin{bmatrix} \frac{\partial^2 f}{\partial w_0^2} \frac{\partial^2 f}{\partial w_0 \partial w} \\\ \frac{\partial^2 f}{\partial w \partial w_0} \frac{\partial^2 f}{\partial w^2} \end{bmatrix} = \\begin{bmatrix} 1 &amp; x_i\\\ x_i &amp; x_i^2 \\end{bmatrix} $$</blockquote>
+<p>Then we can put it together and form:</p>
+<blockquote>A: $$ ∇_{w'}^2f = \frac{1}{n} (\sum_{i=1}^n y_i \sigma(-y_i(w_0 + w^Tx_i))(1 - \sigma(-y_i(w_0 + w^Tx_i))) * \\begin{bmatrix} 1 & x_i\\\ x_i & x_i^2 \\end{bmatrix}) + \\begin{bmatrix} 0 & 0\\\ 0 & 2\lambda \\end{bmatrix} $$</blockquote>
+<h2>L2-Regularized Multinomial Logistic Regression</h2>
+<p>For an extra challenge, here we derive the gradients for the loss function of a l2-regularized multinomial logistic regression</p>
+<blockquote>$$f(W, b) = -\frac{1}{n}\sum_{i=1}^n[y_i^T(Wx_i + b) - log(1^Texp(Wx_i + b))] + \lambda||W||_F^2$$</blockquote>
+<h3>Softmax</h3>
+<p>(To be updated)</p>
+<blockquote>Let us represent the softmax function: $$\text{softmax}(x) = \frac{exp(x)}{1^T exp(x)}$$</blockquote>
+<h3>Computing for f</h3>
+<h4>Finding $\nabla_W f$:</h4>
+<blockquote>$$ f(W, b) = $$</blockquote>
+<p>$$ -\frac{1}{n}\sum_{i=1}^n[(\nabla_W)y_i^T(Wx_i + b) - (\nabla_W)log(1^Texp(Wx_i + b))] + (\nabla_W) \lambda||W||_F^2$$</p>
+<ul>
+<li>Derive $\nabla_W λ||W||_F^2$:</li>
+</ul>
+<blockquote>$$ = 2\lambda W $$</blockquote>
+<ul>
+<li>Derive $\nabla_W y_i^T(Wx_i + b)$:</li>
+</ul>
+<blockquote>$$ = y_i^Tx_i $$</blockquote>
+<ul>
+<li>Derive $\nabla_W log(1^Texp(Wx_i + b))$:</li>
+</ul>
+<blockquote>using the chain rule twice: </blockquote>
+<p>$$ \log'(1^T exp(Wx_i + b)) * \sum_{l = 1}^K \nabla_W [exp(Wx_i + b)_l] $$</p>
+<ul>
+<li>apply the log</li>
+<p>&gt; $$ \frac{1}{1^T exp(Wx_i + b)} <em> \sum_{l = 1}^K [exp(Wx_i + b)_l] </em> \nabla_W [&lt;w_l, x_i&gt;] $$</p>
+</ul>
+<ul>
+<li>note that $ \nabla_W [&lt;w_l, x_i&gt;]$ is equivalent to $x_i$ since we are taking the cross product of a static $x_i$ given for all ls in the sum, and then the gradient of such would result in $x_i$</li>
+<p>&gt; $$ = \frac{1}{1^T exp(Wx_i + b)} <em> \sum_{l = 1}^K [exp(Wx_i + b)_l] </em> x_i$$</p>
+</ul>
+<ul>
+<li>combine</li>
+<p>&gt; $$ = \sum_{l = 1}^K\frac{[exp(Wx_i + b)_l]}{1^T exp(Wx_i + b)} * x_i$$</p>
+</ul>
+<ul>
+<li>use softmax</li>
+<p>&gt; $$ = \sum_{l = 1}^K softmax(Wx_i + b)_l * x_i$$</p>
+</ul>
+<blockquote>$$ = softmax(Wx_i + b) * x_i$$</blockquote>
+<p>plug in for the main equation</p>
+<blockquote>$$ \nabla_W f(W, b) = -\frac{1}{n}\sum_{i=1}^n[y_i^Tx_i - softmax(Wx_i + b) * x_i] + 2\lambda W$$</blockquote>
+<p>$$= -\frac{1}{n}\sum_{i=1}^n(y_i^T - softmax(Wx_i + b)) * x_i + 2\lambda W $$</p>
+<h4>Finding $\nabla_b f$:</h4>
+<ul>
+<li>Derive $\nabla_b λ||W||_F^2$:</li>
+</ul>
+<blockquote>$$ = 0$$</blockquote>
+<ul>
+<li>Derive $\nabla_b y_i^T(Wx_i + b)$:</li>
+</ul>
+<blockquote>$$ = y_i$$</blockquote>
+<ul>
+<li>Derive $\nabla_b log(1^Texp(Wx_i + b))$:</li>
+</ul>
+<blockquote>using the chain rule twice:</blockquote>
+<p>$$ = \log'(1^T exp(Wx_i + b)) * \sum_{l = 1}^K \nabla_W [exp(Wx_i + b)_l] $$</p>
+<ul>
+<li>apply the derivative again due to the exponent</li>
+<p>&gt; $$ \frac{1}{1^T exp(Wx_i + b)} <em> \sum_{l = 1}^K </em> [exp(Wx_i + b)_l] <em> \nabla_W [&lt;w_l, x_i&gt;] $$ since we are finding the gradient in respect to b, we can cancel out terms: $$ \frac{1}{1^T exp(Wx_i + b)} </em> [exp(Wx_i + b)_l] $$</p>
+</ul>
+<ul>
+<li>add the summation back</li>
+<p>&gt; $$ \sum_{l = 1}^K \frac{exp(Wx_i + b)_l}{1^T exp(Wx_i + b)} $$</p>
+</ul>
+<ul>
+<li>use softmax</li>
+<p>&gt; $$ \sum_{l = 1}^K softmax(Wx_i + b)_l $$ $$ softmax(Wx_i + b) $$</p>
+</ul>
+<p>Put it all together</p>
+<blockquote>$$ \nabla_b f(W, b) = -\frac{1}{n}\sum_{i=1}^n y_i - softmax(Wx_i + b) $$</blockquote>
+<h3>Both results</h3>
+<blockquote>$∇_Wf$ $$ = -\frac{1}{n}\sum_{i=1}^n(y_i - softmax(Wx_i + b))x_i^T + 2\lambda W $$</blockquote>
+<blockquote>$∇_bf$ $$ = -\frac{1}{n}\sum_{i=1}^n(y_i - softmax(Wx_i + b)) $$</blockquote>
+<h3>Empirically verify our derivation utilizing PyTorch</h3>
+<p>Here we will use PyTorch as a tool to evaluate the gradient, then we will apply our own solution to get a result.</p>
+<h4>Load and prepare a dataset</h4>
+<p><strong>Using sklearn wine dataset and one hot encode the targets</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><span class="line">2</span><span class="line">3</span><span class="line">4</span><span class="line">5</span><span class="line">6</span><span class="line">7</span><span class="line">8</span><span class="line">9</span><span class="line">10</span><span class="line">11</span><span class="line">12</span><span class="line">13</span><span class="line">14</span><span class="line">15</span><span class="line">16</span><span class="line">17</span><span class="line">18</span><span class="line">19</span><span class="line">20</span><span class="line">21</span><span class="line">22</span><span class="line">23</span><span class="line">24</span><span class="line">25</span><span class="line">26</span><span class="line">27</span><span class="line">28</span><span class="line">29</span><span class="line">30</span><span class="line">31</span><span class="line">32</span><span class="line">33</span><span class="line">34</span><span class="line">35</span><span class="line">36</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> sklearn.datasets </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> load_wine</span></span><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> sklearn.preprocessing </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> OneHotEncoder</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">wine_data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> load_wine()</span></span><span class="line"><span style="color:#E1E4E8">X_wine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> wine_data.data</span></span><span class="line"><span style="color:#E1E4E8">Y_wine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> wine_data.target</span></span><span class="line"></span><span class="line"><span style="color:#6A737D"># add to Y dim</span></span><span class="line"><span style="color:#E1E4E8">Y_wine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Y_wine.reshape(</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">enc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> OneHotEncoder(</span><span style="color:#FFAB70">sparse_output</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">)</span></span><span class="line"><span style="color:#E1E4E8">enc.fit(Y_wine)</span></span><span class="line"><span style="color:#E1E4E8">Y_onehot </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> enc.transform(Y_wine)</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">n, d </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> X_wine.shape</span></span><span class="line"><span style="color:#E1E4E8">n, k </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Y_onehot.shape</span></span><span class="line"></span><span class="line"><span style="color:#6A737D"># convert to pytorch</span></span><span class="line"><span style="color:#E1E4E8">Y_onehot </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.from_numpy(Y_onehot).to(torch.float)</span></span><span class="line"><span style="color:#E1E4E8">X_wine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.from_numpy(X_wine).to(torch.float)</span></span><span class="line"></span><span class="line"><span style="color:#6A737D"># init parameter tensor (w) with bias (w0 = 1)</span></span><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> init_weights_wine</span><span style="color:#E1E4E8">(d, k):</span></span><span class="line"><span style="color:#E1E4E8">  w </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.ones((d, k), </span><span style="color:#FFAB70">device</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">device, </span><span style="color:#FFAB70">requires_grad</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span><span class="line"><span style="color:#E1E4E8">  w </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> w</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">len</span><span style="color:#E1E4E8">(X_wine)) </span><span style="color:#6A737D"># prevent overflow from exp</span></span><span class="line"><span style="color:#E1E4E8">  w.retain_grad()</span></span><span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> w</span></span><span class="line"></span><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> init_bias_wine</span><span style="color:#E1E4E8">(k):</span></span><span class="line"><span style="color:#E1E4E8">  b </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.ones((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, k), </span><span style="color:#FFAB70">device</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">device, </span><span style="color:#FFAB70">requires_grad</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span><span class="line"><span style="color:#E1E4E8">  b </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> b</span><span style="color:#F97583">/</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">len</span><span style="color:#E1E4E8">(X_wine)) </span><span style="color:#6A737D"># prevent overflow from exp</span></span><span class="line"><span style="color:#E1E4E8">  b.retain_grad()</span></span><span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> b</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">W_test </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_weights_wine(d, k)</span></span><span class="line"><span style="color:#E1E4E8">b_test </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_bias_wine(k)</span></span></code></pre></td></tr></tbody></table></figure>
+<h4>Define the loss function for MLR</h4>
+<p>Define the function so that we can call .backward() from pytorch and evaluate it from our answer.</p>
+<p><strong>Loss function</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><span class="line">2</span><span class="line">3</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#6A737D"># the loss function for l2 regularized multinomial logistic regression</span></span><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> f_multi</span><span style="color:#E1E4E8">(X, Y, W, b, lambda_v</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">):</span></span><span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">torch.mean(torch.sum((Y </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> torch.matmul(X, W) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> b), </span><span style="color:#FFAB70">dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> torch.logsumexp(torch.matmul(X, W) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> b, </span><span style="color:#FFAB70">dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> lambda_v </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> torch.norm(W, </span><span style="color:#9ECBFF">'fro'</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">**</span><span style="color:#79B8FF">2</span></span></code></pre></td></tr></tbody></table></figure>
+<h4>Prepare and compare both our solution and pytorch</h4>
+<p><strong>Evaluate the gradient using pytorch</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><span class="line">2</span><span class="line">3</span><span class="line">4</span><span class="line">5</span><span class="line">6</span><span class="line">7</span><span class="line">8</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#E1E4E8">W_pytorch </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_weights_wine(d, k)</span></span><span class="line"><span style="color:#E1E4E8">b_pytorch </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_bias_wine(k)</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">W_pytorch.grad </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> None</span></span><span class="line"><span style="color:#E1E4E8">b_pytorch.grad </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> None</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">loss </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> f_multi(X_wine, Y_onehot, W_pytorch, b_pytorch, </span><span style="color:#FFAB70">lambda_v</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span><span class="line"><span style="color:#E1E4E8">loss.backward()</span></span></code></pre></td></tr></tbody></table></figure>
+<p><strong>Define and evaluate our derivation</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><span class="line">2</span><span class="line">3</span><span class="line">4</span><span class="line">5</span><span class="line">6</span><span class="line">7</span><span class="line">8</span><span class="line">9</span><span class="line">10</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#6A737D"># the loss function for l2 regularized multinomial logistic regression</span></span><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> f_multi_grad_w</span><span style="color:#E1E4E8">(X, Y, W, b, lambda_v </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">):</span></span><span class="line"><span style="color:#E1E4E8">  logits </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.matmul(X, W) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> b</span></span><span class="line"><span style="color:#F97583">  return</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">torch.matmul((Y </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> torch.softmax(logits, </span><span style="color:#FFAB70">dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)).T, X) </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> len</span><span style="color:#E1E4E8">(X) </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> *</span><span style="color:#E1E4E8"> lambda_v </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> W</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">my_W </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_weights_wine(d, k)</span></span><span class="line"><span style="color:#E1E4E8">my_b </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> init_bias_wine(k)</span></span><span class="line"></span><span class="line"><span style="color:#E1E4E8">myWGrad </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> f_multi_grad_w(X_wine, Y_onehot, my_W, my_b, </span><span style="color:#FFAB70">lambda_v</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span><span class="line"><span style="color:#E1E4E8">myBGrad </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> f_multi_grad_b(X_wine, Y_onehot, my_W, my_b)</span></span></code></pre></td></tr></tbody></table></figure>
+<h4>Empirical Results</h4>
+<p><strong>Weight gradients</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#E1E4E8">torch.norm(W_pytorch.grad, </span><span style="color:#9ECBFF">'fro'</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> torch.norm(myWGrad, </span><span style="color:#9ECBFF">'fro'</span><span style="color:#E1E4E8">)</span></span></code></pre></td></tr></tbody></table></figure>
+<blockquote>tensor(4.5776e-05, grad_fn=&lt;SubBackward0&gt;)</blockquote>
+<p><strong>Bias gradients</strong></p>
+<figure class="code-block highlight python" data-language="python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><code class="language-python"><span class="line"><span style="color:#E1E4E8">torch.norm(W_pytorch.grad, </span><span style="color:#9ECBFF">'fro'</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> torch.norm(myWGrad, </span><span style="color:#9ECBFF">'fro'</span><span style="color:#E1E4E8">)</span></span></code></pre></td></tr></tbody></table></figure>
+<blockquote>tensor(-2.9802e-08, grad_fn=&lt;SubBackward0&gt;)</blockquote>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>

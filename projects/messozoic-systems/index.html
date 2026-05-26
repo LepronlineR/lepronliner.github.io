@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gameplay systems work for Messozoic, including serialization, UI, inventory, and skeletal base-building mechanics.">
+    <title>Messozoic Systems | Zhi Zheng</title>
+    <link rel="icon" href="/favicon.ico">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body class="blog-page project-page">
+    <header class="site-header solid">
+      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio">Interactive</a>
+        <a class="is-active" aria-current="page" href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+        </button>
+      </nav>
+    </header>
+    <main class="post-wrap project-detail-wrap">
+      <section class="post-hero post-hero-image project-hero-image">
+        <div class="post-title-box">
+          <p class="eyebrow">Project</p>
+          <h1>Messozoic Systems</h1>
+          <p class="post-meta">March 1, 2024</p>
+        </div>
+      </section>
+      <article class="post-content project-content">
+        <h2>Messozoic Systems</h2>
+<p>At my time in RPI, I worked at a small local indie studio I founded with some friends from the Amplifier Business Camp. We ended up making a dinosaur themed puzzle game called Messozoic. I worked on the gameplay systems, which handled saving and loading, UI, inventory management, and this cool dynamic skeletal building part that's very much like spore. If you'd like to check it out here's a link, all of this is written in blueprints. I'll maybe write something related to the dinosaur bone building thing, I thought it was a pretty cool mechanic in the game.</p>
+<p><a href="https://ratherbefishing.itch.io/messozoic">Play Messozoic</a></p>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <span>&copy; 2026 Zhi Zheng</span>
+    </footer>
+    <script src="/scripts/theme.js" defer></script>
+    
+  </body>
+</html>
