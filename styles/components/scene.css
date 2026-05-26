@@ -1,0 +1,136 @@
+﻿/* Interactive scene overlay components */
+.hero-shell {
+  position: relative;
+  display: grid;
+  min-height: 92svh;
+  align-items: center;
+  padding: 110px clamp(18px, 5vw, 64px) 46px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  user-select: none;
+}
+
+#mountain-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 18%, rgba(244, 211, 94, 0.1), transparent 24%),
+    radial-gradient(circle at 50% 20%, rgba(89, 195, 195, 0.12), transparent 30%),
+    linear-gradient(180deg, #10151f 0%, #0d1016 72%);
+}
+
+.scene-labels,
+.scene-card {
+  position: relative;
+  z-index: 2;
+}
+
+.scene-labels,
+.scene-card {
+  pointer-events: auto;
+}
+
+.scene-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.scene-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-height: 28px;
+  padding: 5px 10px;
+  border: 1px solid rgba(244, 247, 251, 0.38);
+  border-radius: 4px;
+  color: #f6f0df;
+  background: rgba(8, 8, 6, 0.68);
+  box-shadow: 0 0 22px rgba(255, 107, 53, 0.12);
+  backdrop-filter: blur(8px);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.scene-label::after {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 1px;
+  height: 10px;
+  content: "";
+  background: rgba(255, 107, 53, 0.7);
+}
+
+.scene-label:hover,
+.scene-label.is-selected {
+  color: #fff7ea;
+  border-color: rgba(255, 107, 53, 0.9);
+  box-shadow: 0 0 26px rgba(255, 107, 53, 0.28);
+}
+
+.scene-label:hover {
+  margin-top: -2px;
+}
+
+.scene-label.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scene-card {
+  justify-self: end;
+  align-self: end;
+  width: min(340px, 100%);
+  padding: 16px;
+  border: 1px solid rgba(244, 247, 251, 0.16);
+  border-radius: 6px;
+  color: var(--ink);
+  background: rgba(8, 9, 8, 0.58);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 140ms ease, transform 160ms ease;
+  z-index: 40;
+}
+
+.scene-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-labels:has(.scene-label[data-anchor="about"]:hover) + .scene-card,
+.scene-labels:has(.scene-label[data-anchor="about"]:focus) + .scene-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-shell h1 {
+  font-size: clamp(2.25rem, 4.6vw, 3.9rem);
+}
+
+.scene-card h2,
+.scene-card p {
+  margin: 0;
+}
+
+.scene-card h2 {
+  font-size: 1rem;
+  line-height: 1.12;
+}
+
+.scene-card p:not(.panel-kicker) {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}

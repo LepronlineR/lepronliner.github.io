@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive island portfolio for Zhi Zheng.">
+    <title>Zhi Zheng | Interactive Island</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/styles/site.css?v=projects-1">
+  </head>
+  <body class="interactive-page">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Zhi Zheng home">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="/favicon.ico" alt="">
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a class="is-active" href="/portfolio" aria-current="page">Interactive</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-shell" aria-label="Interactive island portfolio">
+        <canvas id="mountain-canvas" aria-label="Drag to turn the interactive island"></canvas>
+        <div class="scene-labels" aria-label="Island links">
+          <button class="scene-label" type="button" data-anchor="about">Zhi Zheng</button>
+          <button class="scene-label" type="button" data-anchor="projects">Projects</button>
+          <button class="scene-label" type="button" data-anchor="blog">Blog</button>
+          <button class="scene-label" type="button" data-anchor="home">Home</button>
+        </div>
+        <div class="scene-card" id="scene-card" aria-live="polite">
+          <p class="panel-kicker">About</p>
+          <h2>Zhi Zheng</h2>
+          <p>Software engineer at 2K Games building tools and systems for AAA games.</p>
+          <a class="scene-card-link" href="/#about-title">Open page</a>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/scripts/main.js?v=site-split-1"></script>
+    <script type="module" src="/scripts/portfolio-scene.js?v=projects-1"></script>
+  </body>
+</html>
