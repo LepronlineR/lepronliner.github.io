@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: Build and Publish Pages
 
 on:
   push:
@@ -7,19 +7,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
-  group: pages
+  group: gh-pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -36,21 +34,18 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
+      - name: Disable Jekyll on published site
+        run: New-Item -ItemType File -Force public/.nojekyll
+        shell: pwsh
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: public
-
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - name: Publish to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages
+          git worktree add gh-pages-worktree origin/gh-pages
+          git -C gh-pages-worktree rm -r --ignore-unmatch .
+          cp -R public/. gh-pages-worktree/
+          git -C gh-pages-worktree add .
+          git -C gh-pages-worktree commit -m "Publish site" || exit 0
+          git -C gh-pages-worktree push origin HEAD:gh-pages
