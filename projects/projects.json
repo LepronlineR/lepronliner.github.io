@@ -14,11 +14,11 @@
     "date": "1970-01-01T00:00:00.000Z"
   },
   {
-    "title": "Terrain Generator using OpenGL",
-    "description": "",
-    "cover": "",
+    "title": "Procedural Terrain Generator",
+    "description": "An interactive OpenGL terrain viewer with deterministic procedural generation, geographic heightmaps, live hydraulic erosion, mesh sampling, and terrain material blending.",
+    "cover": "/assets/projects/terrain-generator/diamond-square.png",
     "url": "/projects/terrain-generator/",
-    "date": "2024-07-23T16:50:53.000Z"
+    "date": "2026-07-30T00:00:00.000Z"
   },
   {
     "title": "Implementing a Constrained Force-directed Graph on The Campfire",

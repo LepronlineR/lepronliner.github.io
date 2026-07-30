@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Zhi Zheng's blog">
-    <title>Terrain Generator using OpenGL | Zhi Zheng</title>
+    <meta name="description" content="An interactive OpenGL terrain viewer with deterministic procedural generation, geographic heightmaps, live hydraulic erosion, mesh sampling, and terrain material blending.">
+    <title>Procedural Terrain Generator | Zhi Zheng</title>
     <link rel="icon" href="/favicon.ico">
     <script>
       (function () {
@@ -44,15 +44,35 @@
       </nav>
     </header>
     <main class="post-wrap project-detail-wrap">
-      <section class="post-hero post-hero-image project-hero-image">
+      <section class="post-hero post-hero-image project-hero-image" style="background-image: url('/assets/projects/terrain-generator/diamond-square.png')">
         <div class="post-title-box">
           <p class="eyebrow">Project</p>
-          <h1>Terrain Generator using OpenGL</h1>
-          <p class="post-meta">July 23, 2024</p>
+          <h1>Procedural Terrain Generator</h1>
+          <p class="post-meta">July 30, 2026</p>
         </div>
       </section>
       <article class="post-content project-content">
-        <iframe class="video-embed" src="https://www.youtube.com/embed/jXcNmnmen_8" title="Video" loading="lazy" allowfullscreen></iframe>
+        <h2>Procedural Terrain Generator</h2>
+<p>This project is an interactive terrain viewer built with C++ and OpenGL. It can generate repeatable landscapes from diamond-square or multi-octave fractal noise, load real geographic heightmaps, and simulate hydraulic erosion either as a one-time pass or continuously while the terrain is running.</p>
+<h3>Procedural generation</h3>
+<p>The two procedural generators are deterministic: the same seed and settings reproduce the same height field. Diamond-square exposes terrain roughness, while fractal noise includes controls for frequency, octaves, lacunarity, persistence, domain warping, and ridge blending.</p>
+<div class="post-grid">
+<p><img class="inline-post-image" src="/assets/projects/terrain-generator/diamond-square.png" alt="Terrain generated with the diamond-square algorithm" loading="lazy"></p>
+<p><img class="inline-post-image" src="/assets/projects/terrain-generator/fractal-noise.png" alt="Terrain generated with multi-octave fractal noise" loading="lazy"></p>
+</div>
+<h3>Geographic heightmaps</h3>
+<p>Image heightmaps are normalized, kept in their original orientation, and resampled to a common maximum footprint while preserving geographic aspect ratio. The viewer includes heightmaps for Australia, the contiguous United States, and Mars, with independent controls for map scale and vertical relief.</p>
+<p><img class="inline-post-image" src="/assets/projects/terrain-generator/USA.png" alt="Contiguous United States heightmap rendered with terrain materials" loading="lazy"></p>
+<h3>Live hydraulic erosion</h3>
+<p>Procedural terrain can be eroded with a droplet-based hydraulic simulation. The system supports both a fixed one-shot pass and a live mode that evolves the landscape over time. Controls cover the droplet rate, time scale, lifetime, erosion radius, inertia, sediment capacity, deposition, evaporation, gravity, and surface relaxation.</p>
+<div class="post-grid">
+<p><img class="inline-post-image" src="/assets/projects/terrain-generator/erosion-1.webp" alt="Live hydraulic erosion reshaping procedural terrain" loading="lazy"></p>
+<p><img class="inline-post-image" src="/assets/projects/terrain-generator/erosion-2.webp" alt="Hydraulic erosion forming a water-filled valley" loading="lazy"></p>
+</div>
+<h3>Version 1.0</h3>
+<p>This is the project in version 1.0, as a proof of concept of the algorithms and visualizer.</p>
+<iframe class="video-embed" src="https://www.youtube.com/embed/jXcNmnmen_8" title="Video" loading="lazy" allowfullscreen></iframe>
+<p><a href="https://github.com/LepronlineR/Terrain-Generator-OpenGL">View the source and latest media on GitHub</a></p>
       </article>
     </main>
     <footer class="site-footer">
