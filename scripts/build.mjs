@@ -271,6 +271,10 @@ function localAssetExists(url = "") {
   return url.startsWith("/") && existsSync(join(root, stripLeadingSlashes(url)));
 }
 
+function isRemoteAsset(url = "") {
+  return url.startsWith("https://") || url.startsWith("http://");
+}
+
 function renderImage(raw, post = {}) {
   const pieces = splitWords(raw);
   const imagePath = pieces.find((piece) => (piece.startsWith("/") || piece.includes(".")) && !piece.includes(":"));
@@ -885,19 +889,23 @@ async function readProjects() {
     const title = data.title || titleFromSlug(slug);
     const description = data.description || "";
     const date = data.date ? new Date(data.date) : new Date(0);
-    const cover = data.cover && existsSync(join(root, stripLeadingSlashes(data.cover))) ? data.cover : "";
+    const cover = data.cover && (isRemoteAsset(data.cover) || existsSync(join(root, stripLeadingSlashes(data.cover))))
+      ? data.cover
+      : "";
+    const featured = Number(data.featured || 0);
     projects.push({
       slug,
       title,
       description,
       date: Number.isNaN(date.valueOf()) ? new Date(0) : date,
       cover,
+      featured,
       data,
       body
     });
   }
 
-  return projects.sort((a, b) => b.date - a.date);
+  return projects.sort((a, b) => b.featured - a.featured || b.date - a.date);
 }
 
 async function buildProjects(projects) {

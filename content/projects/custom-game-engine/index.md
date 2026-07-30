@@ -1,16 +1,18 @@
 ---
-title: Custom Game Engine
-date: 2022-12-01
-description: A multithreaded custom game engine built with C, the Windows API, and Vulkan.
-tags: [c, vulkan, windows-api, engine]
+title: XPBD Simulation
+date: 2026-06-23
+description: A C and C++ extended position-based dynamics simulator with game-engine tooling for compliant constrained physics.
+tags: [c++, c, xpbd, physics, simulation, game-engine]
+cover: https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif
+featured: 2
 ---
 
-# Custom Game Engine
+# XPBD Simulation
 
-This is a multithreaded custom game engine using the Windows API and Vulkan as the graphics backend.
+This project is an implementation of **Extended Position-Based Dynamics (XPBD)** for simulating compliant constrained physics. It has evolved from the earlier custom game-engine work into a focused physics simulator, while retaining engine support that makes the simulation easier to use and extend.
 
-The engine includes memory-leak detection that reports allocation locations, asynchronous file decompression using LZ4, CPU profiling that exports Chrome trace output, and a small demo with bounding boxes.
+![XPBD simulation demo](https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif)
 
-This is still a WIP, hopefully it will be revived soon :)
+The implementation is primarily written in C++ and C. It follows the XPBD approach described in *Position-Based Simulation of Compliant Constrained Dynamics* and includes supporting game-engine systems around the simulator.
 
-[GitHub Link](https://github.com/LepronlineR/pdb-sim)
+[View the source and latest simulation on GitHub](https://github.com/LepronlineR/pdb-sim)
