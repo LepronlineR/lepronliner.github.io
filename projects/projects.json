@@ -1,5 +1,19 @@
 [
   {
+    "title": "XPBD Simulation",
+    "description": "A C and C++ extended position-based dynamics simulator with game-engine tooling for compliant constrained physics.",
+    "cover": "https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif",
+    "url": "/projects/custom-game-engine/",
+    "date": "2026-06-23T00:00:00.000Z"
+  },
+  {
+    "title": "2KDLE",
+    "description": "An NBA 2K player-rating guessing game with multiple difficulty modes, streak tracking, and leaderboards.",
+    "cover": "https://2kdle.vercel.app/nba-2k-logo.png",
+    "url": "/projects/2kdle/",
+    "date": "1970-01-01T00:00:00.000Z"
+  },
+  {
     "title": "Terrain Generator using OpenGL",
     "description": "",
     "cover": "",
@@ -26,12 +40,5 @@
     "cover": "",
     "url": "/projects/messozoic-systems/",
     "date": "2024-03-01T00:00:00.000Z"
-  },
-  {
-    "title": "Custom Game Engine",
-    "description": "A multithreaded custom game engine built with C, the Windows API, and Vulkan.",
-    "cover": "",
-    "url": "/projects/custom-game-engine/",
-    "date": "2022-12-01T00:00:00.000Z"
   }
 ]
