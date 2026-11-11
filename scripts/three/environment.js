@@ -39,11 +39,19 @@ export function createStarField(THREE, starColors) {
   return stars;
 }
 
-export function addSceneLighting(THREE, scene, lighting) {
-  scene.add(new THREE.AmbientLight(lighting.ambient, 2.15));
-  const keyLight = new THREE.DirectionalLight(lighting.key, 0.88);
+// Colors and intensities are set by the scene theme (see scene-theme.js).
+export function addSceneLighting(THREE, scene) {
+  const ambient = new THREE.AmbientLight();
+  scene.add(ambient);
+  const keyLight = new THREE.DirectionalLight();
   keyLight.position.set(-3.8, 5.8, 4.2);
   scene.add(keyLight);
+
+  // A warm glow in the middle of the island, as if the old computers were still on.
+  const glow = new THREE.PointLight("white", 0, 4.2, 1.8);
+  glow.position.set(0.05, 0.25, -0.55);
+  scene.add(glow);
+  return { ambient, key: keyLight, glow };
 }
 
 export function createHorizonHaze(THREE, hazeColors) {

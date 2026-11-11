@@ -16,7 +16,7 @@ A static portfolio and blog source project deployed to GitHub.
 |-- scripts/                # Build scripts and browser JavaScript
 |-- styles/                 # Site CSS
 |-- public/                 # Generated site output (ignored by Git)
-`-- index.html              # Home page source
+`-- index.html              # Home page source (uses build includes)
 ```
 
 ## Run
@@ -28,6 +28,20 @@ npm run serve
 
 # Notes for me: 
 `http://localhost:4173`
+
+## Shared Page Parts
+
+`index.html` and `portfolio/index.html` contain `<!-- include:name -->` comments
+(`head`, `header`, `footer`, `three`, `latest-posts`). The build replaces them with the
+shared header, footer, and font/style tags defined near `pageShell` in `scripts/build.mjs`,
+so the navigation and contact links are edited in one place. The build also inlines the
+`@import` lines of `styles/site.css` into a single stylesheet.
+
+## The Island
+
+The 3D scene lives in `scripts/three/`. Landmarks, their links, colors, and camera
+settings are all data in `scripts/three/scene-design.js`. It runs on its own page at
+`/portfolio/`.
 
 ## Deployment
 

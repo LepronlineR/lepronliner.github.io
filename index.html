@@ -3,190 +3,163 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Portfolio, projects, writing, and resume for Zhi Zheng.">
+    <meta name="description" content="Zhi Zheng is a software engineer at 2K Games. Experience, projects, and writing.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Zhi Zheng | Software Engineer">
-    <meta property="og:description" content="Portfolio, projects, writing, and resume for Zhi Zheng.">
+    <meta property="og:description" content="Software engineer at 2K Games. Experience, projects, and writing.">
     <meta property="og:image" content="https://lepronliner.github.io/og.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Zhi Zheng | Software Engineer">
-    <meta name="twitter:description" content="Portfolio, projects, writing, and resume for Zhi Zheng.">
+    <meta name="twitter:description" content="Software engineer at 2K Games. Experience, projects, and writing.">
     <meta name="twitter:image" content="https://lepronliner.github.io/og.png">
-    <title>Zhi Zheng | Home</title>
-    <link rel="icon" href="/favicon.ico">
-    <script>
-      (function () {
-        try {
-          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
-          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-          document.documentElement.dataset.theme = theme;
-          document.documentElement.style.colorScheme = theme;
-        } catch (error) {}
-      })();
-    </script>
-    <link rel="stylesheet" href="/styles/site.css">
+    <title>Zhi Zheng | Software Engineer</title>
+    <!-- include:head -->
   </head>
-  <body class="simple-page">
-    <header class="site-header solid">
-      <a class="brand" href="/">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="/favicon.ico" alt="">
-        </span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a class="is-active" href="/" aria-current="page">Home</a>
-        <a href="/portfolio">Interactive</a>
-        <a href="/projects/">Projects</a>
-        <a href="/blog/">Blog</a>
-        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
-          <span class="theme-icon" aria-hidden="true">&#9728;</span>
-          <span class="theme-knob" aria-hidden="true"></span>
-          <span class="theme-icon" aria-hidden="true">&#9790;</span>
-        </button>
-      </nav>
-    </header>
+  <body class="home-page">
+    <!-- include:header home -->
 
-    <main class="page-wrap">
-      <section class="simple-hero home-hero">
-        <div class="home-hero-copy">
-          <h1>Zhi Zheng</h1>
-          <p>
-            Software Engineer at 2K Games, previously M.S. and B.S. Computer Science at RPI.
-            Developed various game systems, internal tools, computer graphics, and web applications.
-            Mainly developer tooling.
-          </p>
-          <a class="home-interactive-link" href="/portfolio">
-            <span>Interactive</span>
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
+    <main id="main">
+      <section class="hero wrap">
+        <h1>Zhi Zheng</h1>
+        <p class="hero-role">Software Engineer at 2K Games</p>
+        <p class="lede">
+          Previously M.S. and B.S. in Computer Science at RPI. Developed various game systems,
+          internal tools, computer graphics, and web applications. Mainly developer tooling.
+        </p>
       </section>
 
-      <section class="resume-stack">
-        <article class="resume-section" id="experience">
-          <h2>Experience</h2>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="date">July 2025 - Present</span>
-              <h3>Software Engineer &middot; 2K Games</h3>
+      <section class="section wrap" id="experience" aria-labelledby="experience-title">
+        <header class="section-head reveal">
+          <p class="section-num">01</p>
+          <h2 id="experience-title">Experience</h2>
+        </header>
+        <div class="section-body">
+          <ol class="xp-list">
+            <li class="xp reveal">
+              <div class="xp-top">
+                <h3>Software Engineer</h3>
+                <span class="xp-org">2K Games</span>
+                <span class="xp-when">Jul 2025 &ndash; Present</span>
+              </div>
               <p>
                 Working with 2K Sports Lab and Firaxis on game development tooling and systems,
                 including camera authoring, realtime editing workflows, debugging views,
                 procedural pipelines, and level-design support.
               </p>
-            </div>
-            <div class="timeline-item">
-              <span class="date">Nov. 2024 - May 2025</span>
-              <h3>Associate Software Engineer Intern &middot; Lightriver Software</h3>
+            </li>
+            <li class="xp reveal">
+              <div class="xp-top">
+                <h3>Associate Software Engineer Intern</h3>
+                <span class="xp-org">Lightriver Software</span>
+                <span class="xp-when">Nov 2024 &ndash; May 2025</span>
+              </div>
               <p>
                 Contributed to netFlex, an optical-domain controller for multi-vendor networks.
                 Worked on network performance analytics, REST APIs, authentication improvements,
                 frontend updates, and internal database tooling.
               </p>
-            </div>
-          </div>
-        </article>
+            </li>
+          </ol>
 
-        <article class="resume-section">
-          <h2>Education</h2>
-          <div class="timeline-item">
-            <span class="date">Aug. 2020 - May 2024</span>
-            <h3>Rensselaer Polytechnic Institute</h3>
-            <p>M.S. in Computer Science. B.S. in Computer Science and Games, Simulation, Arts and Sciences.</p>
-          </div>
-        </article>
+          <h3 class="subhead" id="education">Education</h3>
+          <ol class="xp-list">
+            <li class="xp reveal">
+              <div class="xp-top">
+                <h3>Rensselaer Polytechnic Institute</h3>
+                <span class="xp-when">Aug 2020 &ndash; May 2024</span>
+              </div>
+              <p>M.S. in Computer Science. B.S. in Computer Science and Games, Simulation, Arts and Sciences.</p>
+            </li>
+          </ol>
+        </div>
       </section>
 
-      <section class="section-block selected-work" id="work">
-        <h2 class="section-title">Projects</h2>
-        <div class="project-list">
-          <a class="project-card" id="xpbd-simulation" href="/projects/custom-game-engine/">
-            <div class="project-meta">C</div>
-            <h3>XPBD Simulation</h3>
-            <p>
-              Extended position-based dynamics simulator for compliant constrained physics,
-              supported by a custom built game engine.
-            </p>
-            <span class="inline-link">Open project</span>
+      <section class="section wrap" id="work" aria-labelledby="work-title">
+        <header class="section-head reveal">
+          <p class="section-num">02</p>
+          <h2 id="work-title">Projects</h2>
+          <a class="text-link" href="/projects/">All projects <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        </header>
+        <div class="section-body work-grid">
+          <a class="work-card is-feature reveal" id="terrain-generator" href="/projects/terrain-generator/">
+            <span class="work-media">
+              <img src="/assets/projects/terrain-generator/diamond-square.png" alt="Procedurally generated mountain terrain rendered in the viewer" loading="lazy" decoding="async">
+            </span>
+            <span class="work-body">
+              <span class="project-meta">C++ &middot; OpenGL &middot; Procedural generation</span>
+              <h3>Procedural Terrain Generator</h3>
+              <p>
+                Interactive terrain viewer with deterministic generation, geographic heightmaps,
+                live hydraulic erosion, mesh sampling, and material blending.
+              </p>
+              <span class="work-foot">Read the write-up <span class="arrow" aria-hidden="true">&rarr;</span></span>
+            </span>
           </a>
-          <a class="project-card" id="2kdle" href="/projects/2kdle/">
-            <div class="project-meta">Next.js &middot; TypeScript</div>
-            <h3>2KDLE</h3>
-            <p>
-              NBA 2K player-rating guessing game with multiple difficulties and a leaderboard with user authentication.
-            </p>
-            <span class="inline-link">Play project</span>
+          <a class="work-card reveal" id="xpbd-simulation" href="/projects/custom-game-engine/">
+            <span class="work-media">
+              <img src="https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif" alt="XPBD simulation demo" loading="lazy" decoding="async">
+            </span>
+            <span class="work-body">
+              <span class="project-meta">C &middot; C++ &middot; Physics</span>
+              <h3>XPBD Simulation</h3>
+              <p>
+                Extended position-based dynamics simulator for compliant constrained physics,
+                supported by a custom built game engine.
+              </p>
+              <span class="work-foot">Open project <span class="arrow" aria-hidden="true">&rarr;</span></span>
+            </span>
           </a>
-          <a class="project-card" id="terrain-generator" href="/projects/terrain-generator/">
-            <div class="project-meta">C++ &middot; OpenGL &middot; Procedural Generation</div>
-            <h3>Procedural Terrain Generator</h3>
-            <p>
-              Interactive terrain viewer with deterministic generation, geographic heightmaps,
-              live hydraulic erosion, mesh sampling, and material blending.
-            </p>
-            <span class="inline-link">Open project</span>
+          <a class="work-card reveal" id="2kdle" href="/projects/2kdle/">
+            <span class="work-media">
+              <img src="/assets/projects/2kdle/2kdle_example.png" alt="2KDLE game board comparing guessed NBA players by rating" loading="lazy" decoding="async" style="object-position: top">
+            </span>
+            <span class="work-body">
+              <span class="project-meta">Next.js &middot; TypeScript</span>
+              <h3>2KDLE</h3>
+              <p>
+                NBA 2K player-rating guessing game with multiple difficulties and a leaderboard
+                with user authentication.
+              </p>
+              <span class="work-foot">Play it <span class="arrow" aria-hidden="true">&rarr;</span></span>
+            </span>
           </a>
-          <a class="project-card" id="geo-vegetation" href="/projects/geo-vegetation-spatial-information-model/">
-            <div class="project-meta">JavaScript &middot; Vite &middot; React &middot; Python</div>
-            <h3>Geo-Vegetation Spatial Information Model</h3>
-            <p>
-              Agricultural analysis tool that combines NDVI and precipitation data from NASA, NOAA,
-              and USGS into an interactive spatial visualization.
-            </p>
-            <span class="inline-link">Open project</span>
+          <a class="work-card reveal" id="geo-vegetation" href="/projects/geo-vegetation-spatial-information-model/">
+            <span class="work-body">
+              <span class="project-meta">JavaScript &middot; React &middot; Python</span>
+              <h3>Geo-Vegetation Spatial Information Model</h3>
+              <p>
+                Agricultural analysis tool that combines NDVI and precipitation data from NASA, NOAA,
+                and USGS into an interactive spatial visualization.
+              </p>
+              <span class="work-foot">Open project <span class="arrow" aria-hidden="true">&rarr;</span></span>
+            </span>
           </a>
-          <a class="project-card" id="messozoic" href="/projects/messozoic-systems/">
-            <div class="project-meta">Unreal Engine 5</div>
-            <h3>Messozoic Systems</h3>
-            <p>
-              An open world puzzle game where you collect dinosaur skeletons and build your own custom dinosaur skeleton in a museum.
-            </p>
-            <span class="inline-link">Project showcase</span>
+          <a class="work-card reveal" id="messozoic" href="/projects/messozoic-systems/">
+            <span class="work-body">
+              <span class="project-meta">Unreal Engine 5</span>
+              <h3>Messozoic Systems</h3>
+              <p>
+                An open world puzzle game where you collect dinosaur skeletons and build your own
+                custom dinosaur skeleton in a museum.
+              </p>
+              <span class="work-foot">Project showcase <span class="arrow" aria-hidden="true">&rarr;</span></span>
+            </span>
           </a>
         </div>
       </section>
 
-      <section class="section-block blog-rail home-blog" aria-labelledby="blog-rail-title">
-        <div class="rail-header">
-          <h2 id="blog-rail-title">Recent Notes</h2>
+      <section class="section wrap" id="writing" aria-labelledby="writing-title">
+        <header class="section-head reveal">
+          <p class="section-num">03</p>
+          <h2 id="writing-title">Writing</h2>
+          <a class="text-link" href="/blog/">All posts <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        </header>
+        <div class="section-body note-list reveal">
+          <!-- include:latest-posts -->
         </div>
-        <div id="latest-posts" class="rail-posts">
-          <a class="rail-post" href="/blog/peaceful-rooks.html">
-            <span>Peaceful Rooks</span>
-            <small>Math, chess, problem solving</small>
-          </a>
-          <a class="rail-post" href="/blog/swapping-knights.html">
-            <span>Swapping Knights</span>
-            <small>Graph theory on a chessboard</small>
-          </a>
-          <a class="rail-post" href="/blog/l2-regularized-lr-math.html">
-            <span>L2-regularized Logistic Regression</span>
-            <small>Machine learning derivation</small>
-          </a>
-        </div>
-        <a class="button rail-button" href="/blog/">All posts</a>
-      </section>
-
-      <section class="contact-band">
-        <h2>Links</h2>
-        <a class="contact-icon-link" href="mailto:zhizheng835@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h17v11h-17v-11Zm1.4 1.2 7.1 5.1 7.1-5.1H4.9Zm-.1 8.4h14.4V9.2L12 14.4 4.8 9.2v6.9Z"/></svg>
-        </a>
-        <a class="contact-icon-link" href="https://github.com/LepronlineR" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7a9.3 9.3 0 0 0-2.9 18.1c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-4.7 0-1 .4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .9-.3 2.7 1a9.2 9.2 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.7.7 1 1.6 1 2.6 0 3.6-2.4 4.4-4.6 4.7.4.3.8 1 .8 2v2.4c0 .3.2.6.8.5A9.3 9.3 0 0 0 12 2.7Z"/></svg>
-        </a>
-        <a class="contact-icon-link" href="https://www.linkedin.com/in/zhizheng1/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 8.7h3.1v10H5.2v-10Zm1.6-4.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6Zm3.5 4.8h3v1.4h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9v5.4H17v-4.8c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6v4.9h-3.2v-10Z"/></svg>
-        </a>
-        <a class="contact-icon-link" href="https://www.youtube.com/@zhizheng2913" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8.2s-.2-1.5-.8-2.1c-.8-.8-1.7-.8-2.1-.9C15.2 5 12 5 12 5h0s-3.2 0-6.1.2c-.4.1-1.3.1-2.1.9C3.2 6.7 3 8.2 3 8.2s-.2 1.8-.2 3.8v.1c0 1.9.2 3.8.2 3.8s.2 1.5.8 2.1c.8.8 1.9.8 2.4.9 1.8.2 5.8.2 5.8.2s3.2 0 6.1-.2c.4-.1 1.3-.1 2.1-.9.6-.6.8-2.1.8-2.1s.2-1.9.2-3.8V12c0-2-.2-3.8-.2-3.8ZM10.6 14.9V8.8l5.5 3.1-5.5 3Z"/></svg>
-        </a>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <span>&copy; 2026 Zhi Zheng</span>
-    </footer>
-    <script src="/scripts/theme.js" defer></script>
+    <!-- include:footer -->
   </body>
 </html>

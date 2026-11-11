@@ -1,35 +1,25 @@
 import { addSceneLighting, createHorizonHaze, createStarField } from "./environment.js";
-import { createIslandAnchors, addIslandMarkers } from "./island-content.js";
+import { createLandmarks, updateLandmarkHover } from "./island-content.js";
 import {
-  createAnchorPicker,
-  createIslandControls,
+  createControls,
   createLabelProjector,
-  createSceneCardController
+  createLabels,
+  createPicker,
+  createSceneUi
 } from "./interactions.js";
-import { loadPistachioModels } from "./models.js";
-import { createOcean, updateOceanSurface } from "./ocean.js";
-import { CAMERA_DESIGN, SCENE_COLORS, WORLD_DESIGN } from "./scene-design.js";
+import { loadIslandModels } from "./models.js";
+import { createOcean } from "./ocean.js";
+import { CAMERA_DESIGN, SCENE_COLORS, SCENE_THEMES, WORLD_DESIGN } from "./scene-design.js";
+import { createSceneTheme, followPageTheme } from "./scene-theme.js";
 import { buildIsland, makeIslandTexture, makeSurfacePoint } from "./terrain.js";
 
+// "three" resolves through the page's import map. Both modules download in parallel.
 async function loadThreeRuntime() {
-  const THREE = await import("https://esm.sh/three@0.184.0");
-  const { OBJLoader } = await import("https://esm.sh/three@0.184.0/examples/jsm/loaders/OBJLoader.js");
+  const [THREE, { OBJLoader }] = await Promise.all([
+    import("three"),
+    import("three/addons/loaders/OBJLoader.js")
+  ]);
   return { THREE, OBJLoader };
-}
-
-function createRenderer(THREE, canvas) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  return renderer;
-}
-
-function createCamera(THREE) {
-  const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 30000);
-  const cameraTarget = new THREE.Vector3(...CAMERA_DESIGN.target);
-  camera.position.set(...CAMERA_DESIGN.start);
-  camera.lookAt(cameraTarget);
-  return { camera, cameraTarget };
 }
 
 function createIsland(THREE) {
@@ -50,81 +40,217 @@ function createIsland(THREE) {
   return island;
 }
 
-function resizeViewport({ canvas, renderer, camera }) {
-  const rect = canvas.getBoundingClientRect();
-  renderer.setSize(rect.width, rect.height, false);
-  camera.aspect = rect.width / Math.max(rect.height, 1);
+/*
+  Keeps the whole island in frame on narrow screens: widen the lens up to a limit,
+  then make up the rest by pulling the camera back.
+*/
+function fitCamera(camera, aspect) {
+  const baseTan = Math.tan((CAMERA_DESIGN.fov * Math.PI) / 360);
+  const wantedTan = baseTan * Math.max(1, 1.25 / aspect);
+  const lensTan = Math.min(wantedTan, Math.tan((58 * Math.PI) / 360));
+  camera.fov = (Math.atan(lensTan) * 360) / Math.PI;
+  camera.aspect = aspect;
   camera.updateProjectionMatrix();
+  return wantedTan / lensTan;
 }
 
-export async function startIslandScene({ canvas, heroShell, sceneLabels, sceneCard }) {
-  if (!canvas || !heroShell) return;
+/*
+  mode "full":    the full-screen page. Landmarks open an info card; zoom is enabled.
+  mode "preview": the framed window on the home page. Landmarks are plain links and the
+                  scene never takes over page scroll.
+*/
+export async function startIslandScene({ shell, mode = "full" }) {
+  const canvas = shell?.querySelector(".scene-canvas");
+  const labelLayer = shell?.querySelector(".scene-labels");
+  if (!shell || !canvas || !labelLayer) return;
 
-  let runtime;
+  const full = mode === "full";
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let THREE;
+  let renderer;
+  let models;
+  let materials;
   try {
-    runtime = await loadThreeRuntime();
-  } catch {
-    canvas.classList.add("is-static");
+    const runtime = await loadThreeRuntime();
+    THREE = runtime.THREE;
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    ({ models, materials } = await loadIslandModels(THREE, runtime.OBJLoader));
+  } catch (error) {
+    console.warn("Island scene unavailable:", error);
+    renderer?.dispose();
+    shell.classList.add("is-static");
     return;
   }
 
-  const { THREE, OBJLoader } = runtime;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, full ? 2 : 1.5));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
   const scene = new THREE.Scene();
-  const renderer = createRenderer(THREE, canvas);
-  const { camera, cameraTarget } = createCamera(THREE);
+  const camera = new THREE.PerspectiveCamera(CAMERA_DESIGN.fov, 1, 0.1, 3000);
+  const cameraTarget = new THREE.Vector3(...CAMERA_DESIGN.target);
 
   const world = new THREE.Group();
   world.position.set(...WORLD_DESIGN.position);
   scene.add(world);
-
-  scene.add(createStarField(THREE, SCENE_COLORS.stars));
-  addSceneLighting(THREE, scene, SCENE_COLORS.lighting);
+  const stars = createStarField(THREE, SCENE_COLORS.stars);
+  scene.add(stars);
+  const lights = addSceneLighting(THREE, scene);
 
   const surfacePoint = makeSurfacePoint(THREE);
   const island = createIsland(THREE);
   world.add(island);
+  materials.island = island.material;
 
-  const ocean = await createOcean(THREE, {
+  const ocean = createOcean(THREE, {
     design: WORLD_DESIGN.ocean,
-    colors: SCENE_COLORS.ocean
+    colors: SCENE_THEMES.dark.ocean,
+    island: WORLD_DESIGN.island
   });
   world.add(ocean.mesh);
-  world.add(createHorizonHaze(THREE, SCENE_COLORS.haze));
+  const hazes = {
+    dark: createHorizonHaze(THREE, SCENE_THEMES.dark.haze),
+    light: createHorizonHaze(THREE, SCENE_THEMES.light.haze)
+  };
+  world.add(hazes.dark, hazes.light);
+  followPageTheme(createSceneTheme({ lights, ocean, stars, hazes, materials }));
 
-  const models = await loadPistachioModels(THREE, OBJLoader);
-  const anchors = createIslandAnchors(surfacePoint);
-  const interactiveObjects = addIslandMarkers({ THREE, world, models, surfacePoint });
+  const { landmarks, hitTargets } = createLandmarks({ THREE, world, models, surfacePoint });
+  island.updateMatrixWorld(true);
 
-  const cardController = createSceneCardController({ heroShell, sceneLabels, sceneCard, anchors });
-  const pickAnchorKey = createAnchorPicker(THREE, { canvas, camera, interactiveObjects });
-  const updateCamera = createIslandControls({
-    heroShell,
+  const labelEls = createLabels({ layer: labelLayer, landmarks });
+  const projector = createLabelProjector(THREE, { labelEls, landmarks, camera, occluder: island });
+  const pick = createPicker(THREE, { shell, camera, hitTargets });
+
+  let hoverEvent = null;
+  let hoverDirty = false;
+  let hotKey = null;
+  let labelsDirty = true;
+  const activeKeys = new Set();
+  let closedByMotion = false;
+
+  function setHot(key) {
+    if (key === hotKey) return;
+    if (hotKey) labelEls[hotKey].classList.remove("is-hot");
+    hotKey = key;
+    if (hotKey) labelEls[hotKey].classList.add("is-hot");
+    shell.classList.toggle("has-hot-landmark", Boolean(hotKey));
+    syncActiveKeys();
+  }
+
+  function syncActiveKeys() {
+    activeKeys.clear();
+    if (hotKey) activeKeys.add(hotKey);
+    if (ui?.selected) activeKeys.add(ui.selected);
+  }
+
+  const controls = createControls({
+    THREE,
+    shell,
     camera,
     cameraTarget,
-    cameraDesign: CAMERA_DESIGN,
-    anchors,
-    pickAnchorKey,
-    cardController
+    design: CAMERA_DESIGN,
+    full,
+    reducedMotion,
+    onInput: () => shell.classList.add("has-interacted"),
+    onMove: () => {
+      if (!ui?.selected) return;
+      closedByMotion = true;
+      ui.select(null);
+      closedByMotion = false;
+    },
+    onHover: (event) => {
+      hoverEvent = event ? { x: event.clientX, y: event.clientY } : null;
+      hoverDirty = true;
+    },
+    onTap: (event) => {
+      const key = pick(event.clientX, event.clientY);
+      if (full) ui.activate(key);
+      else if (key) window.location.assign(landmarks[key].href);
+    }
   });
-  const updateLabels = createLabelProjector(THREE, {
-    heroShell,
-    sceneLabels,
-    anchors,
-    world,
-    camera,
-    occluder: island
-  });
 
-  cardController.bindLabels();
-  cardController.hide();
+  const ui = full
+    ? createSceneUi({
+        shell,
+        labelEls,
+        landmarks,
+        onSelect: (key) => {
+          if (!key && closedByMotion) controls.release();
+          else controls.focus(key ? landmarks[key].focusPoint : null);
+          syncActiveKeys();
+        }
+      })
+    : null;
 
-  window.addEventListener("resize", () => resizeViewport({ canvas, renderer, camera }));
-  resizeViewport({ canvas, renderer, camera });
+  // Labels are links: hovering one should light up its landmark too.
+  for (const key in labelEls) {
+    labelEls[key].addEventListener("pointerenter", () => setHot(key));
+    labelEls[key].addEventListener("pointerleave", () => setHot(null));
+  }
 
-  renderer.setAnimationLoop((time) => {
-    updateOceanSurface(ocean, time * 0.001);
-    updateCamera();
-    updateLabels();
+  if (full) {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "+" || event.key === "=") controls.nudgeZoom(-0.8);
+      if (event.key === "-" || event.key === "_") controls.nudgeZoom(0.8);
+    });
+  }
+
+  function resize() {
+    const width = shell.clientWidth;
+    const height = shell.clientHeight;
+    if (!width || !height) return;
+    renderer.setSize(width, height, false);
+    controls.setDistanceScale(fitCamera(camera, width / height));
+    projector.setSize(width, height);
+    labelsDirty = true;
+  }
+
+  new ResizeObserver(resize).observe(shell);
+  resize();
+
+  let lastTime = null;
+  let isReady = false;
+
+  function frame(milliseconds) {
+    const now = milliseconds / 1000;
+    const dt = lastTime === null ? 0.016 : Math.min(now - lastTime, 0.05);
+    lastTime = now;
+
+    ocean.uniforms.uTime.value = now;
+    const cameraMoved = controls.update(now, dt);
+
+    // Pointer picking runs at most once per frame, and again while the camera moves under a still cursor.
+    if (hoverDirty || (cameraMoved && hoverEvent)) {
+      hoverDirty = false;
+      setHot(hoverEvent ? pick(hoverEvent.x, hoverEvent.y) : null);
+    }
+
+    updateLandmarkHover(landmarks, activeKeys, dt);
+
+    if (cameraMoved || labelsDirty) {
+      labelsDirty = false;
+      projector.update();
+    }
+
     renderer.render(scene, camera);
-  });
+
+    if (!isReady) {
+      isReady = true;
+      shell.classList.add("is-ready");
+    }
+  }
+
+  // Only spend GPU time while the scene is on screen.
+  let running = false;
+  function setRunning(next) {
+    if (next === running) return;
+    running = next;
+    lastTime = null;
+    renderer.setAnimationLoop(next ? frame : null);
+  }
+
+  new IntersectionObserver((entries) => {
+    setRunning(entries.some((entry) => entry.isIntersecting));
+  }).observe(shell);
 }
