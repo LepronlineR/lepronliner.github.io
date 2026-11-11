@@ -12,7 +12,7 @@ function initHeader() {
   const currentPath = normalizePath(window.location.pathname);
   header.querySelectorAll(".nav-links a").forEach((link) => {
     const linkPath = normalizePath(new URL(link.href, window.location.href).pathname);
-    const isActive = linkPath !== "/" && currentPath.startsWith(linkPath);
+    const isActive = linkPath === "/" ? currentPath === "/" : currentPath.startsWith(linkPath);
     link.classList.toggle("is-active", isActive);
     if (isActive) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");

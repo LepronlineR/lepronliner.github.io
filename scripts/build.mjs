@@ -701,9 +701,10 @@ const contact = {
   resume: "/resume/Zhi_Zheng_Resume.pdf"
 };
 const navItems = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "interactive", label: "Interactive", href: "/portfolio/" },
   { id: "projects", label: "Projects", href: "/projects/" },
   { id: "blog", label: "Blog", href: "/blog/" },
-  { id: "interactive", label: "Island", href: "/portfolio/" },
   { id: "resume", label: "R&eacute;sum&eacute;", href: "/resume/" }
 ];
 

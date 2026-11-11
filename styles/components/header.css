@@ -132,24 +132,28 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
 }
 
 @media (max-width: 600px) {
-  .brand-name {
+  /* Five links need the full width on a phone; "Home" already covers the logo's job. */
+  .brand {
     display: none;
   }
 
   .header-inner {
-    gap: 8px;
+    gap: 6px;
   }
 
   .nav-links {
-    font-size: 0.9rem;
+    gap: 0;
+    margin-right: auto;
+    margin-left: -6px;
+    font-size: 0.84rem;
   }
 
   .nav-links a {
-    padding: 8px 9px;
+    padding: 8px 6px;
   }
 
   .nav-links a.is-active::after {
-    left: 9px;
-    right: 9px;
+    left: 6px;
+    right: 6px;
   }
 }
