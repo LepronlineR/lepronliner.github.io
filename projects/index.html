@@ -3,107 +3,125 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Project showcase for Zhi Zheng.">
+    <meta name="description" content="Projects by Zhi Zheng: simulation, graphics, tools, and games.">
     <title>Projects | Zhi Zheng</title>
     <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap">
     <script>
       (function () {
         try {
           var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
           var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
           document.documentElement.dataset.theme = theme;
-          document.documentElement.style.colorScheme = theme;
         } catch (error) {}
       })();
     </script>
-    <link rel="stylesheet" href="/styles/site.css">
-    <script>
-      window.MathJax = {
-        tex: {
-          inlineMath: [["$", "$"], ["\\(", "\\)"]],
-          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
-          processEscapes: true
-        }
-      };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <link rel="stylesheet" href="/styles/site.css?v=mwcr9w32">
+    
   </head>
   <body class="blog-page project-page">
-    <header class="site-header solid">
-      <a class="brand" href="/" aria-label="Zhi Zheng home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt=""></span></a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="/">Home</a>
-        <a href="/portfolio">Interactive</a>
-        <a class="is-active" aria-current="page" href="/projects/">Projects</a>
-        <a href="/blog/">Blog</a>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Zhi Zheng, home">
+          <span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt="" width="22" height="22"></span>
+          <span class="brand-name">Zhi Zheng</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="/">Home</a>
+          <a href="/portfolio/">Interactive</a>
+          <a class="is-active" aria-current="page" href="/projects/">Projects</a>
+          <a href="/blog/">Blog</a>
+          <a href="/resume/">R&eacute;sum&eacute;</a>
+        </nav>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
-          <span class="theme-icon" aria-hidden="true">&#9728;</span>
-          <span class="theme-knob" aria-hidden="true"></span>
-          <span class="theme-icon" aria-hidden="true">&#9790;</span>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></svg>
         </button>
-      </nav>
+      </div>
     </header>
-    <main class="project-showcase-wrap">
-    <section class="blog-hero project-showcase-hero">
-      <p class="eyebrow">Projects</p>
-      <h1>Project Showcase</h1>
-      <p class="post-summary">A hidden project index for the island experience.</p>
+    <main id="main" class="index-wrap">
+    <section class="index-hero">
+      <h1>Projects</h1>
     </section>
-    <section class="project-showcase-grid" aria-label="Project showcase">
-      <a class="project-showcase-card" href="/projects/custom-game-engine/">
-    <span class="project-showcase-image" style="background-image: url('https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif')"></span>
-    <span class="project-showcase-body">
+    <section class="card-grid" aria-label="Projects">
+      <a class="media-card" href="/projects/custom-game-engine/">
+    <span class="media-card-image"><img src="https://raw.githubusercontent.com/LepronlineR/pdb-sim/master/sim.gif" alt="" loading="eager" decoding="async"></span>
+    <span class="media-card-body">
       <span class="date">Jun 2026</span>
-      <span class="project-showcase-title">XPBD Simulation</span>
+      <span class="media-card-title">XPBD Simulation</span>
       <span class="post-summary">A C and C++ extended position-based dynamics simulator with game-engine tooling for compliant constrained physics.</span>
+      <span class="tag-row"><span>c++</span><span>c</span><span>xpbd</span><span>physics</span></span>
     </span>
   </a>
-<a class="project-showcase-card" href="/projects/2kdle/">
-    <span class="project-showcase-image" style="background-image: url('https://2kdle.vercel.app/nba-2k-logo.png')"></span>
-    <span class="project-showcase-body">
+<a class="media-card" href="/projects/2kdle/">
+    <span class="media-card-image"><img src="https://2kdle.vercel.app/nba-2k-logo.png" alt="" loading="eager" decoding="async"></span>
+    <span class="media-card-body">
       <span class="date">Project</span>
-      <span class="project-showcase-title">2KDLE</span>
+      <span class="media-card-title">2KDLE</span>
       <span class="post-summary">An NBA 2K player-rating guessing game with multiple difficulty modes, streak tracking, and leaderboards.</span>
+      <span class="tag-row"><span>next.js</span><span>typescript</span><span>game</span><span>nba-2k</span></span>
     </span>
   </a>
-<a class="project-showcase-card" href="/projects/terrain-generator/">
-    <span class="project-showcase-image" style="background-image: url('/assets/projects/terrain-generator/diamond-square.png')"></span>
-    <span class="project-showcase-body">
+<a class="media-card" href="/projects/terrain-generator/">
+    <span class="media-card-image"><img src="/assets/projects/terrain-generator/diamond-square.png" alt="" loading="eager" decoding="async"></span>
+    <span class="media-card-body">
       <span class="date">Jul 2026</span>
-      <span class="project-showcase-title">Procedural Terrain Generator</span>
+      <span class="media-card-title">Procedural Terrain Generator</span>
       <span class="post-summary">An interactive OpenGL terrain viewer with deterministic procedural generation, geographic heightmaps, live hydraulic erosion, mesh sampling, and terrain material blending.</span>
+      <span class="tag-row"><span>c++</span><span>opengl</span><span>procedural-generation</span><span>hydraulic-erosion</span></span>
     </span>
   </a>
-<a class="project-showcase-card" href="/projects/campfire/">
-    <span class="project-showcase-image" style="background-image: url('/assets/projects/campfire/fig-1.png')"></span>
-    <span class="project-showcase-body">
+<a class="media-card" href="/projects/campfire/">
+    <span class="media-card-image"><img src="/assets/projects/campfire/fig-1.png" alt="" loading="lazy" decoding="async"></span>
+    <span class="media-card-body">
       <span class="date">Jul 2024</span>
-      <span class="project-showcase-title">Implementing a Constrained Force-directed Graph on The Campfire</span>
+      <span class="media-card-title">Implementing a Constrained Force-directed Graph on The Campfire</span>
       <span class="post-summary">The Campfire is a multi-dimensional visualization tool developed by RPI IDEA, this is a project I worked on that uses a force directed graph in a circular constraint that displays the connection between individual edges.</span>
+      
     </span>
   </a>
-<a class="project-showcase-card" href="/projects/geo-vegetation-spatial-information-model/">
-    <span class="project-showcase-image is-empty"></span>
-    <span class="project-showcase-body">
+<a class="media-card" href="/projects/geo-vegetation-spatial-information-model/">
+    <span class="media-card-image is-empty"></span>
+    <span class="media-card-body">
       <span class="date">Apr 2024</span>
-      <span class="project-showcase-title">Geo-Vegetation Spatial Information Model</span>
+      <span class="media-card-title">Geo-Vegetation Spatial Information Model</span>
       <span class="post-summary">An agricultural analysis tool that visualizes vegetation and precipitation data over time.</span>
+      <span class="tag-row"><span>javascript</span><span>vite</span><span>react</span><span>python</span></span>
     </span>
   </a>
-<a class="project-showcase-card" href="/projects/messozoic-systems/">
-    <span class="project-showcase-image is-empty"></span>
-    <span class="project-showcase-body">
+<a class="media-card" href="/projects/messozoic-systems/">
+    <span class="media-card-image is-empty"></span>
+    <span class="media-card-body">
       <span class="date">Mar 2024</span>
-      <span class="project-showcase-title">Messozoic Systems</span>
+      <span class="media-card-title">Messozoic Systems</span>
       <span class="post-summary">Gameplay systems work for Messozoic, including serialization, UI, inventory, and skeletal base-building mechanics.</span>
+      <span class="tag-row"><span>unreal-engine-5</span><span>gameplay</span><span>c++</span></span>
     </span>
   </a>
     </section>
   </main>
-    <footer class="site-footer">
-      <span>&copy; 2026 Zhi Zheng</span>
+    <footer class="site-footer" id="contact">
+      <div class="footer-inner">
+        <div class="footer-cta">
+          <p class="eyebrow">Contact</p>
+          <a class="footer-email" href="mailto:zhizheng835@gmail.com">zhizheng835@gmail.com</a>
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/LepronlineR" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zhizheng1/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://www.youtube.com/@zhizheng2913" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+          <li><a href="/resume/">R&eacute;sum&eacute;</a></li>
+        </ul>
+        <p class="footer-fine">
+          <span>&copy; 2026 Zhi Zheng</span>
+        </p>
+      </div>
     </footer>
     <script src="/scripts/theme.js" defer></script>
+    <script type="module" src="/scripts/main.js"></script>
     
   </body>
 </html>

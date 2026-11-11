@@ -3,45 +3,75 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Interactive island portfolio for Zhi Zheng.">
-    <title>Zhi Zheng | Interactive Island</title>
+    <meta name="description" content="A small 3D island where every landmark leads to a part of Zhi Zheng's site.">
+    <title>Island Demo | Zhi Zheng</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/styles/site.css?v=projects-1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("siteTheme") || localStorage.getItem("blogTheme");
+          var theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+        } catch (error) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles/site.css?v=mwcr9w32">
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"}}</script>
   </head>
   <body class="interactive-page">
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Zhi Zheng home">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="/favicon.ico" alt="">
-        </span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="/">Home</a>
-        <a class="is-active" href="/portfolio" aria-current="page">Interactive</a>
-        <a href="/projects/">Projects</a>
-        <a href="/blog/">Blog</a>
-      </nav>
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Zhi Zheng, home">
+          <span class="brand-mark" aria-hidden="true"><img src="/favicon.ico" alt="" width="22" height="22"></span>
+          <span class="brand-name">Zhi Zheng</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="/">Home</a>
+          <a class="is-active" aria-current="page" href="/portfolio/">Interactive</a>
+          <a href="/projects/">Projects</a>
+          <a href="/blog/">Blog</a>
+          <a href="/resume/">R&eacute;sum&eacute;</a>
+        </nav>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></svg>
+        </button>
+      </div>
     </header>
 
-    <main>
-      <section class="hero-shell" aria-label="Interactive island portfolio">
-        <canvas id="mountain-canvas" aria-label="Drag to turn the interactive island"></canvas>
-        <div class="scene-labels" aria-label="Island links">
-          <button class="scene-label" type="button" data-anchor="about">Zhi Zheng</button>
-          <button class="scene-label" type="button" data-anchor="projects">Projects</button>
-          <button class="scene-label" type="button" data-anchor="blog">Blog</button>
-          <button class="scene-label" type="button" data-anchor="home">Home</button>
-        </div>
-        <div class="scene-card" id="scene-card" aria-live="polite">
-          <p class="panel-kicker">About</p>
-          <h2>Zhi Zheng</h2>
-          <p>Software engineer at 2K Games building tools and systems for AAA games.</p>
-          <a class="scene-card-link" href="/#about-title">Open page</a>
-        </div>
+    <main id="main">
+      <section class="island-stage" data-island aria-label="Interactive island demo">
+        <canvas class="scene-canvas" aria-hidden="true"></canvas>
+        <div class="scene-labels"></div>
+        <div class="scene-loader" aria-hidden="true">Loading</div>
+        <p class="scene-fallback">
+          The 3D scene could not start in this browser. The landmarks below still work as links.
+        </p>
+
+        <aside class="scene-card" aria-live="polite" hidden></aside>
+
+        <nav class="scene-dock" aria-label="Island landmarks">
+          <p class="scene-hint">Drag to look around &middot; Scroll or pinch to zoom</p>
+          <div class="scene-chips">
+            <a class="scene-chip" data-anchor="about" href="/#experience"><kbd>1</kbd>About</a>
+            <a class="scene-chip" data-anchor="projects" href="/projects/"><kbd>2</kbd>Projects</a>
+            <a class="scene-chip" data-anchor="blog" href="/blog/"><kbd>3</kbd>Blog</a>
+            <a class="scene-chip" data-anchor="resume" href="/resume/"><kbd>4</kbd>R&eacute;sum&eacute;</a>
+          </div>
+        </nav>
+
+        <p class="scene-credit">
+          Models by <a href="https://opengameart.org/users/pistachio" target="_blank" rel="noopener noreferrer">pistachio</a>, CC-BY
+        </p>
       </section>
     </main>
 
-    <script type="module" src="/scripts/main.js?v=site-split-1"></script>
-    <script type="module" src="/scripts/portfolio-scene.js?v=projects-1"></script>
+    <script src="/scripts/theme.js" defer></script>
+    <script type="module" src="/scripts/main.js"></script>
+    <script type="module" src="/scripts/island-page.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-﻿/* Embedded media helpers */
+﻿/* Embedded media helpers used by markdown content */
 .post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -9,20 +9,23 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .media-placeholder {
   display: grid;
-  min-height: 160px;
+  min-height: 140px;
   place-items: center;
+  margin: 24px 0;
   padding: 18px;
-  border: 1px dashed rgba(26, 29, 36, 0.22);
-  border-radius: 8px;
-  background: #f8faf9;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
   text-align: center;
 }
 
 .media-placeholder span {
-  color: var(--paper-muted);
-  font-size: 0.85rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}

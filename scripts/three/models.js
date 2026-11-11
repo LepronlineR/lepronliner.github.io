@@ -10,52 +10,90 @@ export const MODEL_CATALOG = [
 ];
 
 async function loadPistachioModel(THREE, objLoader, textureLoader, objName, textureName, tint = "white") {
-  const texture = await textureLoader.loadAsync(`${PISTACHIO_BASE}${textureName}`);
+  const [texture, model] = await Promise.all([
+    textureLoader.loadAsync(`${PISTACHIO_BASE}${textureName}`),
+    objLoader.loadAsync(`${PISTACHIO_BASE}${objName}`)
+  ]);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.magFilter = THREE.NearestFilter;
   texture.minFilter = THREE.NearestFilter;
+  texture.generateMipmaps = false;
 
-  const model = await objLoader.loadAsync(`${PISTACHIO_BASE}${objName}`);
+  // Cut-out alpha only: no blending, so these draw in the cheap opaque pass.
   const material = new THREE.MeshStandardMaterial({
     map: texture,
     color: tint,
     roughness: 0.9,
     metalness: 0,
-    transparent: true,
     alphaTest: 0.2,
     side: THREE.DoubleSide
   });
 
   model.traverse((child) => {
-    if (!child.isMesh) return;
-    child.material = material;
+    if (child.isMesh) child.material = material;
   });
 
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
   const largest = Math.max(size.x, size.y, size.z);
-  const unitScale = largest ? 1 / largest : 1;
-  model.scale.setScalar(unitScale);
+  model.scale.setScalar(largest ? 1 / largest : 1);
   const normalizedBox = new THREE.Box3().setFromObject(model);
   model.position.y -= normalizedBox.min.y;
-  return model;
+  return { model, material };
 }
 
-export async function loadPistachioModels(THREE, OBJLoader) {
+// A small hand-built signpost, in the same low-poly style as the loaded models.
+function createSignpost(THREE, materials) {
+  const wood = new THREE.MeshStandardMaterial({
+    color: SCENE_COLORS.models.wood,
+    roughness: 0.95,
+    flatShading: true
+  });
+  const plankWood = new THREE.MeshStandardMaterial({
+    color: SCENE_COLORS.models.woodLight,
+    roughness: 0.9,
+    flatShading: true
+  });
+
+  materials.wood = wood;
+  materials.woodLight = plankWood;
+
+  const post = new THREE.Group();
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, 0.92, 6), wood);
+  pole.position.y = 0.46;
+  post.add(pole);
+
+  const upper = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.19, 0.05), plankWood);
+  upper.position.set(0.1, 0.74, 0.03);
+  upper.rotation.z = 0.06;
+  post.add(upper);
+
+  const lower = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.15, 0.05), plankWood);
+  lower.position.set(-0.08, 0.5, 0.03);
+  lower.rotation.z = -0.08;
+  post.add(lower);
+
+  return post;
+}
+
+export async function loadIslandModels(THREE, OBJLoader) {
   const objLoader = new OBJLoader();
   const textureLoader = new THREE.TextureLoader();
-  const models = {};
+  const materials = {};
+  const models = { signpost: createSignpost(THREE, materials) };
 
   await Promise.all(MODEL_CATALOG.map(async ([key, obj, texture, tint]) => {
-    models[key] = await loadPistachioModel(THREE, objLoader, textureLoader, obj, texture, tint);
+    const loaded = await loadPistachioModel(THREE, objLoader, textureLoader, obj, texture, tint);
+    models[key] = loaded.model;
+    materials[key] = loaded.material;
   }));
 
-  return models;
+  return { models, materials };
 }
 
-export function placeModel(THREE, world, models, key, position, scale = 1, rotation = 0) {
+export function placeModel(world, models, key, position, scale = 1, rotation = 0) {
   const model = models[key].clone(true);
-  model.position.copy(position);
+  model.position.add(position);
   model.rotation.y = rotation;
   model.scale.multiplyScalar(scale);
   world.add(model);

@@ -1,23 +1,137 @@
-﻿/* Base reset and elements */
-* {
+﻿/* Reset, elements, and type scale */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
-  overflow-x: hidden;
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 24px);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+body > main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 6vw, 4.4rem);
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.15rem);
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  width: min(var(--wrap), 100% - var(--gutter) * 2);
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Scroll reveal: only hides content once JS has opted in. */
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+}
+
+.js-reveal .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .js-reveal .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
